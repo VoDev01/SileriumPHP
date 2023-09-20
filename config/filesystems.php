@@ -71,6 +71,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('npm_packages') => storage_path('app/node_modules')
     ],
 
 ];
