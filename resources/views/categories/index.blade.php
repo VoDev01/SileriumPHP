@@ -1,15 +1,14 @@
-@extends('layouts.layout')
+<x-layout>
 
-@section('content')
-    @section('title')
+    <x-slot name="title">
         Категории
-    @endsection
+    </x-slot>
     <div class="mx-3">
         <h1>Категории</h1>
         <div class="row">
-            @foreach ($categories as $category)
+            @foreach($categories as $category)
                 <div class="col col-sm-12 col-md-6 col-xl-4">
-                    @if ($category->image != null)
+                    @if($category->image != null)
                         <a class="d-inline-block text-decoration-none text-center text-black" href="/categories/{{$category->id}}/subcategories">
                             <img class="category-image" src="{{asset($category->image)}}" alt="{{$category->name}}">
                             <br>
@@ -25,4 +24,4 @@
             @endforeach
         </div>
     </div>
-@endsection
+</x-layout>

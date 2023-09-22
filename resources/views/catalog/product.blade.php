@@ -1,10 +1,9 @@
-@extends('layouts.layout')
+<x-layout>
 
-@section('title')
-    Товар
-@endsection
+    <x-slot name="title">
+        Товар
+    </x-slot>
 
-@section('content')
 <div class="container-fluid w-75">
     <h1 class="mb-3">{{$product->name}}</h1>
     <div id="productCarousel" class="carousel slide carousel-fade w-100 d-md-block d-none mb-3" data-bs-ride="carousel">
@@ -43,4 +42,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>

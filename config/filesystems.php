@@ -44,6 +44,14 @@ return [
             'throw' => false,
         ],
 
+        'pfp' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/pfp'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -71,7 +79,8 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        public_path('npm_packages') => storage_path('app/node_modules')
+        public_path('npm_packages') => storage_path('app/node_modules'),
+        public_path('pfp') => storage_path('app/public/images/pfp')
     ],
 
 ];

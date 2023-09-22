@@ -1,10 +1,8 @@
-@extends('layouts.layout')
+<x-layout>
 
-@section('content')
-
-    @section('title')
+    <x-slot name="title">
         Товары
-    @endsection
+    </x-slot>
     
     <script type="text/javascript">
         $(".select1").change(function () {
@@ -136,6 +134,8 @@
         <div class="container-fluid mb-5" style="width: 97%;">
             <div class="row">
                 <div class="col-9">
+                    @empty($products)
+                        <p class="text-secondary">По вашему запросу товаров не было найдено.</p>
                     @foreach ($products as $product)
                         <div>
                             <h3>{{$product->name}}</h3>
@@ -157,7 +157,7 @@
                 </div>
                 <div class="col-3 border border-1 p-3">
                     <p>Фильтрация и поиск товаров</p>
-                    <form action="/catalog/products" method="POST">
+                    <form action="/catalog/filter" method="POST">
                         @csrf
                         <label for="category" class="form-label select1">Категория</label>
                         <select id="category" name="category" class="form-select">
@@ -184,4 +184,4 @@
             </div>
         </div>
     </div>
-@endsection
+</x-layout>

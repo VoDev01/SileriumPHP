@@ -1,9 +1,8 @@
-@extends('layouts.layout')
-@section('content')
+<x-layout>
 
-    @section('title')
-        Подкатегории 
-    @endsection
+    <x-slot name="title">
+        Подкатегории
+    </x-slot>
 
     <div class="row mx-3">
         <h1>Подкатегории</h1>
@@ -30,4 +29,4 @@
         @endempty
     </div>
 
-@endsection
+</x-layout>

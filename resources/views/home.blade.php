@@ -1,8 +1,9 @@
-@extends('layouts.layout')
-@section('content')
-    @section('title')
-        Главная страница
-    @endsection
+<x-layout>
+
+    <x-slot name="title">
+        Silerium
+    </x-slot>
+
     <div id="homeCarousel" class="carousel slide carousel-fade w-100 d-md-block d-none" data-bs-ride="carousel">
         <div class="carousel-indicators bg-opacity-25 bg-black mx-auto" style="width: 150px;">
             <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -65,4 +66,4 @@
         </div>
     </div>
     <a class="btn rounded-pill btn-outline-dark m-auto d-block mt-2 category-btn" href="/categories/all">Перейти к покупке</a>
-@endsection
+</x-layout>

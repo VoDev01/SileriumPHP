@@ -4,10 +4,9 @@
     <meta charset="utf-8" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="{{asset("css/site.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{asset("/css/site.css")}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@yield('title')</title>
-    @yield('head')
+    <title>{{$title}}</title>
 </head>
 <body>
     <header>
@@ -29,7 +28,7 @@
                             Админ панель
                             <i class="bi bi-code"></i>
                         </a>
-                        <a class="nav-item nav-link text-black text-decoration-none">
+                        <a class="nav-item nav-link text-black text-decoration-none" href="/user/profile">
                             Личный кабинет
                             <i class="bi bi-box-arrow-in-right"></i>
                         </a>
@@ -40,7 +39,7 @@
     </header>
     <div class="container-fluid g-0">
         <main role="main" class="pb-3">
-            @yield('content')
+            {{$slot}}
         </main>
     </div>
 
@@ -57,6 +56,6 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="{{asset("npm_packages/jquery/dist/jquery.min.js")}}"></script>
+    <script src="{{asset("/npm_packages/jquery/dist/jquery.min.js")}}"></script>
 </body>
 </html>
