@@ -70,8 +70,8 @@ body {
 }
 
 .category-image, .subcategory-image, .product-image {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
 }
 
 .ad-text {

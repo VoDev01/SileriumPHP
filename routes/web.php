@@ -1,6 +1,8 @@
 <?php
+
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+
+Route::get('/categories/all', [CategoriesController::class, 'index']);
+Route::get('/categories/{category}/subcategories', [CategoriesController::class, 'subcategories']);
+
+Route::get('/catalog/products', [CatalogController::class, 'products']);
+Route::get('/catalog/product/{product}', [CatalogController::class, 'product']);

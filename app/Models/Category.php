@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    public int $id;
-    public string $name;
-    public string $pageName;
-    public string $image;
     use HasFactory;
+    public function subcategories()
+    {
+        return $this->hasMany(Subcategory::class);
+    }
 }

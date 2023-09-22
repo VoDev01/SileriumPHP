@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.layout')
 @section('content')
     @section('title')
         Главная страница
@@ -12,15 +12,8 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <a class="d-block">
-                    <img class="d-block w-100" src="{{asset("images/main/27inchmonitors-2048px-9791.jpg")}}" alt="Мониторы и телевизоры">
-                </a>
-                <div class="carousel-caption d-none d-lg-block text-black">
-                    <h3>Мониторы и телевизоры</h3>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <a class="d-block">
+                <?php $category = \App\Models\Category::where('name', 'Смартфоны')->first(); ?>
+                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
                     <img class="d-block w-100" src="{{asset("images/main/9425704_801.jpg")}}" alt="Смартфоны">
                 </a>
                 <div class="carousel-caption d-none d-lg-block text-white">
@@ -28,15 +21,26 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <a class="d-block">
-                    <img class="d-block w-100" src="{{asset("images/main/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg")}}" alt="Комплуктующие ПК">
+                <?php $category = \App\Models\Category::where('name', 'Комплектующие ПК')->first(); ?>
+                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
+                    <img class="d-block w-100" src="{{asset("images/main/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg")}}" alt="Комплектующие ПК">
                 </a>
                 <div class="carousel-caption d-none d-lg-block text-white">
-                    <h3>Комплуктующие ПК</h3>
+                    <h3>Комплектующие ПК</h3>
                 </div>
             </div>
             <div class="carousel-item">
-                <a class="d-block">
+                <?php $category = \App\Models\Category::where('name', 'Мониторы и телевизоры')->first(); ?>
+                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
+                    <img class="d-block w-100" src="{{asset("images/main/27inchmonitors-2048px-9791.jpg")}}" alt="Мониторы и телевизоры">
+                </a>
+                <div class="carousel-caption d-none d-lg-block text-black">
+                    <h3>Мониторы и телевизоры</h3>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <?php $category = \App\Models\Category::where('name', 'Ноутбуки')->first(); ?>
+                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
                     <img class="d-block w-100" src="{{asset("images/main/erick-cerritos-i5UV2HpITYA-unsplash.jpg")}}" alt="Ноутбуки">
                 </a>
                 <div class="carousel-caption d-none d-lg-block text-black">
@@ -60,5 +64,5 @@
             <img class="d-block" src="{{asset("images/main/33818723_m010t0564_b_banner_24oct22.jpg")}}" alt="Скидки" style="height: 800px; width: 100%;" />
         </div>
     </div>
-    <a class="btn rounded-pill btn-outline-dark m-auto d-block mt-2 category-btn">Перейти к покупке</a>
+    <a class="btn rounded-pill btn-outline-dark m-auto d-block mt-2 category-btn" href="/categories/all">Перейти к покупке</a>
 @endsection

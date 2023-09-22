@@ -7,8 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductSpecification extends Model
 {
-    public int $id;
-    public string $name;
-    public string $specification;
     use HasFactory;
 }
