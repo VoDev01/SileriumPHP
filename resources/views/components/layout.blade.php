@@ -6,9 +6,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{asset("/css/site.css")}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://www.cbr-xml-daily.ru/money.js"></script>
     <title>{{$title}}</title>
 </head>
 <body>
+    @yield('scripts')
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow align-content-end">
             <div class="container-fluid">
@@ -19,15 +22,31 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <div class="navbar-nav">
-                        <!-- check if user authenticated and has role for admin panel -->
-                        <a class="nav-item nav-link text-black text-decoration-none">
-                            Корзина
-                            <i class="bi bi-cart"></i>
+                        <a class="nav-item nav-link text-black text-decoration-none" href="/categories/all">
+                            Категории
+                            <i class="bi bi-justify"></i>
                         </a>
-                        <a class="nav-item nav-link text-black text-decoration-none">
-                            Админ панель
-                            <i class="bi bi-code"></i>
-                        </a>
+                        @auth
+                            <a class="nav-item nav-link text-black text-decoration-none" href="/user/shopcart">
+                                Корзина
+                                <i class="bi bi-cart"></i>
+                                @php
+                                    $cartItemsCount = Darryldecode\Cart\Facades\CartFacade::session(Auth::id())->getContent()->count();
+                                    if($cartItemsCount > 9)
+                                        $cartCountStr = "9+";
+                                    else {
+                                        $cartCountStr = $cartItemsCount;
+                                    }
+                                @endphp
+                                @if ($cartCountStr != "0")
+                                    <span class="bg-danger rounded-circle text-white px-2">{{$cartCountStr}}</span>    
+                                @endif
+                            </a>
+                            <a class="nav-item nav-link text-black text-decoration-none">
+                                Админ панель
+                                <i class="bi bi-code"></i>
+                            </a>
+                        @endauth
                         <a class="nav-item nav-link text-black text-decoration-none" href="/user/profile">
                             Личный кабинет
                             <i class="bi bi-box-arrow-in-right"></i>
@@ -56,6 +75,5 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="{{asset("/npm_packages/jquery/dist/jquery.min.js")}}"></script>
 </body>
 </html>

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('description', 1000)->nullable(true);
             $table->float('priceRub', 10, 1);
+            $table->float('priceDol', 10, 1);
             $table->integer('stockAmount');
             $table->boolean('available');
             $table->foreignId('subcategory_id')->constrained('subcategories');
-            $table->foreignId('specification_id')->constrained('products_specs');
         });
     }
 

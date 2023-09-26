@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\OrderStatus;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +68,7 @@ class UserController extends Controller
             'city' => ['min:5', 'max:50', 'required'],
             'homeAdress' => ['min:5', 'max:200', 'required'],
             'phone' => ['min:8', 'max:20', 'nullable'],
-            'profilePicture' => ['mime:png,jpg,jpeg', 'nullable']
+            'pfp' => ['mime:png,jpg,jpeg', 'nullable']
         ]);
         if($request->pfp != null)
         {
@@ -91,9 +95,79 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('login');
     }
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('home');
+    }
     public function profile()
     {
-        $user = User::where('id', Auth::id())->first();
-        return view('user.profile', $user);
+        $user = User::find(Auth::id());
+        return view('user.profile', ['user' => $user]);
+    }
+    public function editProfile(Request $request)
+    {
+        $user_val = $request->validate([
+            'name' => ['min:5', 'max:30', 'required'],
+            'surname' => ['min:5', 'max:30'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'birthDate' => ['nullable', 'date'],
+            'country' => ['min:3', 'max:50', 'required'],
+            'city' => ['min:5', 'max:50', 'required'],
+            'homeAdress' => ['min:5', 'max:200', 'required'],
+            'phone' => ['min:8', 'max:20', 'nullable'],
+            'pfp' => ['mime:png,jpg,jpeg', 'nullable']
+        ]);
+        $user = User::find(Auth::id());
+        $user->name = $user_val['name'];
+        $user->surname = $user_val['surname'];
+        $user->email = $user_val['email'];
+        $user->birthDate = $user_val['birthDate'];
+        $user->country = $user_val['country'];
+        $user->city = $user_val['city'];
+        $user->homeAdress = $user_val['homeAdress'];
+        $user->phone = $user_val['phone'];
+        $user->profilePicture = $user_val['pfp'];
+        $user->updated_at = Carbon::now();
+        $user->save();
+        return redirect()->route('profile');
+    }
+    public function shopCart()
+    {
+        $products = Cart::session(Auth::id())->getContent();
+        return view('user.shopcart', ['products' => $products]);
+    }
+    public function filterShopCart(Request $request)
+    {
+        $orders = Order::all()->where('orderStatus', $request->order_status);
+        return redirect()->route('/user/shopcart', ['orders' => $orders]);
+    }
+    public function removeFromCart(Request $request)
+    {
+        Cart::remove($request->product_id);
+        return redirect()->route('shopcart');
+    }
+    public function editOrder(Order $order)
+    {
+        return view("user.editorder", ['order' => $order]);
+    }
+    public function postEditOrder(Request $request)
+    {
+        $order = Order::find($request->order_id);
+        $order->save();
+        return redirect()->route('shopCart');
+    }
+    public function closeOrder(Request $request)
+    {
+        $order = Order::find($request->order_id);
+        $order->orderStatus = OrderStatus::CLOSED;
+        $order->delete();
+        $order->save();
+        return redirect()->route('shopcart');
+    }
+    public function ordersHistory()
+    {
+        $orders = Order::onlyTrashed()->get();
+        return view('user.ordershistory', ['orders' => $orders]);
     }
 }

@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_specifications', function(Blueprint $table){
-            $table->id();
-            $table->string('name', 100);
-            $table->string('specification', 1000);
+        Schema::create('orders_users', function(Blueprint $table){
+            $table->foreignUuid('order_id')->constrained('orders');
+            $table->foreignId('user_id')->constrained('users');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('product_specifications');
+        Schema::drop('orders_users');
     }
 };

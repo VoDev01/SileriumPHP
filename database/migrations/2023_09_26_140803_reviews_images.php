@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_specifications', function(Blueprint $table){
+        Schema::create('reviews_images', function(Blueprint $table){
             $table->id();
-            $table->string('name', 100);
-            $table->string('specification', 1000);
+            $table->string('imagePath', 1000);
+            $table->foreignId('review_id')->constrained('reviews');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('product_specifications');
+        Schema::drop('reviews_images');
     }
 };

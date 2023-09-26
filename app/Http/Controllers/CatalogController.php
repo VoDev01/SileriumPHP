@@ -2,46 +2,71 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\OrderStatus;
 use App\Enum\SortOrder;
+use App\Facades\Currency as Currency;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Subcategory;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class CatalogController extends Controller
 {
-    public function products(SortOrder $sortOrder = SortOrder::NAME_DESC, int $subcategory = 1, string $product = "", bool $available = true)
+    public function products(int $sortOrder = 1, int $available = 1, string $subcategory = "all", string $product = null)
     {
-        $query = Product::where('subcategory_id', $subcategory)
-        ->where('name', 'like', $product)
-        ->where('available', $available);
+        if($subcategory == "all")
+        {
+            $query = Product::where('name', 'like', $product == null ? "" : $product)
+            ->orwhere('available', $available);
+        }
+        else
+        {
+            $query = Product::where('subcategory_id', $subcategory)
+            ->where('available', $available)
+            ->orWhere('name', 'like', $product == null ? "" : $product);
+        }
         switch($sortOrder)
         {
-            case SortOrder::NAME_ASC;
+            case SortOrder::NAME_ASC->value:
                 $products = $query->orderBy('name', 'asc')->get();
                 break;
-            case SortOrder::NAME_DESC;
+            case SortOrder::NAME_DESC->value:
                 $products = $query->orderBy('name', 'desc')->get();
                 break;
-            case SortOrder::POP_ASC;
+            case SortOrder::POP_ASC->value:
                 $products = $query->orderBy('timesPurchased', 'asc')->get();
                 break;
-            case SortOrder::POP_DESC;
+            case SortOrder::POP_DESC->value:
                 $products = $query->orderBy('timesPurchased', 'desc')->get();
                 break;
-            case SortOrder::PRICE_ASC;
+            case SortOrder::PRICE_ASC->value:
                 $products = $query->orderBy('priceRub', 'asc')->get();
                 break;
-            case SortOrder::PRICE_DESC;
+            case SortOrder::PRICE_DESC->value:
                 $products = $query->orderBy('priceRub', 'desc')->get();
                 break;
         }
-        return view('catalog.products', ['products' => $products, 'sortOrder' => $sortOrder, 'subcategories' => Subcategory::all(), 'categories' => Category::all()]);
+        if(session('products_currency') == 'dol')
+        {
+            foreach ($products as $product) {
+                $product->priceRub = round(Currency::convertToDol($product->priceRub), 1);
+            }
+        }
+        return view('catalog.products', ['products' => $products,
+        'sortOrder' => $sortOrder, 'subcategories' => Subcategory::all(), 
+        'subcategory' => $subcategory, 'product' => $product,
+        'categories' => Category::all(), 'available' => $available]);
     }
     public function filterProducts(Request $request)
     {
-        return redirect()->route('allproducts', ['sortOrder' => $request->sortOrder, 'subcategory' => $request->subcategory, 
-        'product' => $request->product, 'available' => $request->available]);
+        return redirect()->route('allproducts', ['sortOrder' => $request->sort_order, 
+        'available' => $request->available, 'subcategory' => $request->subcategory, 
+        'product' => $request->product]);
     }
     public function product(Product $product)
     {
@@ -49,14 +74,40 @@ class CatalogController extends Controller
     }
     public function addToCart(Product $product)
     {
-        return view('addtocart', ['product' => $product]);
+        return view('catalog.addtocart', ['product' => $product]);
     }
     public function postCart(Request $request)
     {
         $validated = $request->validate([
             'amount' => 'required'
         ]);
-        $totalPrice = $request->amount * Product::find($request->product_id)->priceRub;
+        $user = User::find(Auth::id());
+        if($user->homeAdress === null || $user->city === null)
+            return back()->withErrors([
+                'homeAdress' => 'Заполните данные местоположения перед оформлением заказов'
+            ]);
+        $product = Product::find($request->product_id);
+        $product->amount -= $validated['amount'];
+        $product->timesPurchased += $validated['amount'];
+        if($product->amount <= 0)
+            $product->available = false;
+        Cart::session($user->id)->add(
+            $product->id, 
+            $product->name, 
+            session('products_currency') == "dol" ? round(Currency::convertToDol($product->priceRub), 1) : $product->priceRub,
+            $validated['amount'])->associate('Product', 'App\Models');
+        return redirect()->route('allproducts');
+    }
+    public function rubCurrency()
+    {
+        session(['products_currency' => 'rub']);
+        session(['currency_symb' => '&#8381;']);
+        return redirect()->route('allproducts');
+    }
+    public function dolCurrency()
+    {
+        session(['products_currency' => 'dol']);
+        session(['currency_symb' => '&#36;']);
         return redirect()->route('allproducts');
     }
 }

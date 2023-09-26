@@ -39,8 +39,8 @@
             </div>
         </div>
         <form class="form-inline" action="/user/logout" method="POST">
+            @csrf
             <a class="btn btn-outline-secondary text-decoration-none" href="/user/editprofile">Редактировать профиль</a>
-            <input hidden name="id" value="{{$user->id}}" />
             <button type="submit" class="btn btn-outline-danger text-decoration-none" id="logout">Выйти из профиля</button>
         </form>
     </div>

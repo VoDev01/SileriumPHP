@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_specifications', function(Blueprint $table){
-            $table->id();
-            $table->string('name', 100);
-            $table->string('specification', 1000);
+        Schema::table('orders', function(Blueprint $table){
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('product_specifications');
+        Schema::table('orders', function(Blueprint $table){
+            $table->dropSoftDeletes();
+        });
     }
 };
