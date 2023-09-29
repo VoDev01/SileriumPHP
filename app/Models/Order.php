@@ -19,9 +19,9 @@ class Order extends Model
         'orderStatus'
     ];
     public $timestamps = false;
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'orders_users', 'user_id', 'order_id');
     }
     public function product()
     {

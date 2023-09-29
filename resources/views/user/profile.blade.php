@@ -18,7 +18,7 @@
             <div class="col-10">
                 <h3>{{$user->name}} {{$user->surname}}</h3>
                 @if ($user->birthDate != null)
-                    <p>День рождения: {{$user->birthDate}}</p>
+                    <p>День рождения: {{$user->birthDate->format('Y-m-d')}}</p>
                 @endif
                 @if($user->phone != null)
                     <p>Номер телефона: {{$user->phone}}</p>
@@ -38,10 +38,14 @@
                 @endif
             </div>
         </div>
-        <form class="form-inline" action="/user/logout" method="POST">
-            @csrf
-            <a class="btn btn-outline-secondary text-decoration-none" href="/user/editprofile">Редактировать профиль</a>
-            <button type="submit" class="btn btn-outline-danger text-decoration-none" id="logout">Выйти из профиля</button>
-        </form>
+        <div class="row">
+            <div class="col-3">
+                <a class="btn btn-outline-secondary text-decoration-none" href="/user/editprofile">Редактировать профиль</a>
+            </div>
+            <form class="form-inline col-2" action="/user/logout" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-outline-danger text-decoration-none" id="logout">Выйти из профиля</button>
+            </form>
+        </div>
     </div>
 </x-layout>

@@ -1,7 +1,7 @@
 <x-layout>
 
     <x-slot name="title">
-        Silerium
+       Магазиг электронной техники маркетплейс | Silerium
     </x-slot>
 
     <div id="homeCarousel" class="carousel slide carousel-fade w-100 d-md-block d-none" data-bs-ride="carousel">

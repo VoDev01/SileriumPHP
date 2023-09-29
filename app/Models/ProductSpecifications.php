@@ -10,7 +10,7 @@ class ProductSpecifications extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    public function product()
+    public function products()
     {
         return $this->belongsToMany(Product::class, 'products_specifications', "product_id", "specification_id");
     }

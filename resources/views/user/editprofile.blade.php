@@ -3,7 +3,7 @@
     <x-slot name="title">
         Профиль
     </x-slot>
-    <div class="container w-75">
+    <div class="m-auto" style="width: 500px;">
         <form class="row flex-column" action="/user/editprofile" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="name">Имя</label>
@@ -51,9 +51,9 @@
                 <x-error field="pfp"/>
             </div>
             <div class="row justify-content-center mb-3">
-                <a class="btn btn-outline-danger mb-3 col-4" href="/user/profile">Отменить редактирование</a>
-                <div class="col-2"></div>
-                <button class="btn btn-outline-primary mb-3 col-4" type="submit">Редактировать</button>
+                <a class="btn btn-outline-danger mb-3 col-3" href="/user/profile">Отменить</a>
+                <div class="col-1"></div>
+                <button class="btn btn-outline-primary mb-3 col-3" type="submit">Редактировать</button>
             </div>
             </div>
         </form>

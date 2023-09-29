@@ -21,34 +21,38 @@ class CatalogController extends Controller
     {
         if($subcategory == "all")
         {
-            $query = Product::where('name', 'like', $product == null ? "" : $product)
+            $query = Product::with('images')
+            ->with('productSpecifications')
+            ->where('name', 'like', $product == null ? "" : $product)
             ->orwhere('available', $available);
         }
         else
         {
-            $query = Product::where('subcategory_id', $subcategory)
+            $query = Product::with('images')
+            ->with('productSpecifications')
+            ->where('subcategory_id', $subcategory)
             ->where('available', $available)
             ->orWhere('name', 'like', $product == null ? "" : $product);
         }
         switch($sortOrder)
         {
             case SortOrder::NAME_ASC->value:
-                $products = $query->orderBy('name', 'asc')->get();
+                $products = $query->orderBy('name', 'asc')->paginate(15);
                 break;
             case SortOrder::NAME_DESC->value:
-                $products = $query->orderBy('name', 'desc')->get();
+                $products = $query->orderBy('name', 'desc')->paginate(15);
                 break;
             case SortOrder::POP_ASC->value:
-                $products = $query->orderBy('timesPurchased', 'asc')->get();
+                $products = $query->orderBy('timesPurchased', 'asc')->paginate(15);
                 break;
             case SortOrder::POP_DESC->value:
-                $products = $query->orderBy('timesPurchased', 'desc')->get();
+                $products = $query->orderBy('timesPurchased', 'desc')->paginate(15);
                 break;
             case SortOrder::PRICE_ASC->value:
-                $products = $query->orderBy('priceRub', 'asc')->get();
+                $products = $query->orderBy('priceRub', 'asc')->paginate(15);
                 break;
             case SortOrder::PRICE_DESC->value:
-                $products = $query->orderBy('priceRub', 'desc')->get();
+                $products = $query->orderBy('priceRub', 'desc')->paginate(15);
                 break;
         }
         if(session('products_currency') == 'dol')
@@ -70,7 +74,9 @@ class CatalogController extends Controller
     }
     public function product(Product $product)
     {
-        return view('catalog.product', ['product' => $product]);
+        $productEag = Product::where('id', $product->id)->with('productSpecifications')->with('images')->with('reviews')->get()->first(); 
+        $reviews = $productEag->reviews()->with('user')->paginate(5);
+        return view('catalog.product', ['product' => $productEag, 'reviews' => $reviews]);
     }
     public function addToCart(Product $product)
     {

@@ -26,7 +26,7 @@ Route::get('/catalog/products/{sortOrder?}/{available?}/{subcategory?}/{product?
 Route::post('/catalog/rubcurrency', [CatalogController::class, 'rubCurrency']);
 Route::post('/catalog/dolcurrency', [CatalogController::class, 'dolCurrency']);
 Route::post('/catalog/filter', [CatalogController::class, 'filterProducts']);
-Route::get('/catalog/product/{product}', [CatalogController::class, 'product']);
+Route::get('/catalog/product/{product}', [CatalogController::class, 'product'])->middleware('auth');
 Route::get('/catalog/addtocart/{product}', [CatalogController::class, 'addToCart']);
 Route::post('/catalog/postcart', [CatalogController::class, 'postCart'])->middleware('auth');
 
@@ -39,9 +39,20 @@ Route::get('/user/register', [UserController::class, 'register']);
 Route::post('/user/postregister', [UserController::class, 'postRegister']);
 Route::post('/user/logout', [UserController::class, 'logout']);
 
-Route::get('/user/shopcart', [UserController::class, 'shopCart'])->middleware('auth')->name('shopcart');
-Route::get('/user/editorder/{order}', [UserController::class, 'editOrder']);
-Route::post('/user/posteditorder', [UserController::class, 'postEditOrder']);
-Route::post('/user/closeorder', [UserController::class, 'closeOrder']);
-Route::get('/user/ordershistory', [UserController::class, 'ordersHistory']);
-Route::post('/user/filtershopcart', [UserController::class, 'filterShopCart']);
+Route::get('/user/reviews', [UserController::class, 'userReviews'])->middleware('auth')->name('userReviews');
+Route::get('/user/review/product/{product}', [UserController::class, 'review']);
+Route::post('/user/postreview', [UserController::class, 'postReview']);
+Route::get('/user/review/editreview/{review}', [UserController::class, 'editReview']);
+Route::post('/user/posteditreview', [UserController::class, 'postEditReview']);
+Route::post('/user/deletereview', [UserController::class, 'deleteReview']);
+
+Route::get('/user/cart', [UserController::class, 'cart'])->middleware('auth')->name('cart');
+Route::post('/user/cart/changeamount', [UserController::class, 'changeAmount'])->middleware('auth');
+Route::post('/user/cart/removefromcart', [UserController::class, 'removeFromCart'])->middleware('auth');
+
+Route::get('/user/orders/all', [UserController::class, 'allOrders']);
+Route::get('/user/orders/editorder/{order}', [UserController::class, 'editOrder']);
+Route::post('/user/orders/posteditorder', [UserController::class, 'postEditOrder']);
+Route::post('/user/orders/closeorder', [UserController::class, 'closeOrder']);
+Route::get('/user/orders/ordershistory', [UserController::class, 'ordersHistory']);
+Route::post('/user/orders/filtershopcart', [UserController::class, 'filterShopCart']);

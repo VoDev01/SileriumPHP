@@ -28,8 +28,13 @@ class Product extends Model
     {
         return $this->belongsToMany(ProductSpecifications::class, 'products_specifications', 'specification_id', "product_id");
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
     protected static function newFactory()
     {
         return ProductFactory::new();
     }
+    
 }

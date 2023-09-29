@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import path from 'path';
 
 export default defineConfig(
 {
@@ -16,7 +15,8 @@ export default defineConfig(
     resolve: {
         alias: {
             '$': 'jQuery',
-            'toastr' : 'toastr'
+            'toastr' : 'toastr',
+            'StarRating' : 'star-rating.js/dist/star-rating'
         }
     }
 });

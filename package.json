@@ -5,9 +5,16 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+        "autoprefixer": "^10.4.16",
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.2",
         "lodash": "^4.17.19",
+        "postcss-custom-properties": "^13.3.2",
+        "postcss-hexrgba": "^2.1.0",
+        "postcss-import": "^15.1.0",
+        "postcss-preset-env": "^9.1.4",
+        "postcss-selector-namespace": "^3.0.1",
         "vite": "^4.0.0"
     },
     "dependencies": {
