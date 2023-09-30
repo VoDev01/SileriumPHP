@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Редактирование заказа
+        Редактирование заказа | Silerium
     </x-slot>
     <script type="text/javascript">
         var basePrice =

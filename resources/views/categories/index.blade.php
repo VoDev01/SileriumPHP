@@ -1,7 +1,7 @@
 <x-layout>
 
     <x-slot name="title">
-        Категории
+        Категории | Silerium
     </x-slot>
     <div class="mx-3">
         <h1>Категории</h1>

@@ -3,20 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Enum\OrderStatus;
+use App\Facades\ValidateEmail;
+use App\Facades\ValidatePhone;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password as FacadesPassword;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -26,35 +32,91 @@ class UserController extends Controller
     }
     public function postLogin(Request $request)
     {
-        if(Auth::viaRemember())
-        {
+        if (Auth::viaRemember()) {
             $request->session()->regenerate();
             return redirect()->intended('/user/profile');
-        }
-        else
+        } 
+        else 
         {
-            $user_val = $request->validate([
-                'email' => ['min: 5', 'max: 100', 'required', 'email', 'exists:users'],
+            $validator = Validator::make($request->all(), [
+                'email' => ['required', 'email', 'exists:users', 'min: 5', 'max: 100'],
                 'password' => ['required', 'min: 10']
             ]);
-            $user = User::where('email', $user_val['email'])->first();
-            if($user == null)
-                return back()->withErrors([
-                    'email' => 'Неправильный email.'
-                ]);
-            if(Hash::check($user_val['password'], $user->password))
+            if($validator->fails())
             {
+                return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
+            }
+            $validated = $validator->validated();
+            $user = User::where('email', $validated['email'])->first();
+            if (Hash::check($validated['password'], $user->password)) {
                 $request->session()->regenerate();
                 Auth::login($user, $request->remember_me);
-                return redirect()->intended('/user/profile');
-            }
-            else
+                return response()->json(['success' => true, 'redirect' => '/user/profile'], 200);
+            } 
+            else 
             {
-                return back()->withErrors([
-                    'password' => 'Неправильный пароль.'
-                ])->withInput();
+                return response()->json(['success' => false, 'errors' => 'Пароль не совпадает'], 400);
             }
         }
+    }
+    public function forgotPassword()
+    {
+        return view('user.auth.forgotpassword');
+    }
+    public function postForgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $status = FacadesPassword::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === FacadesPassword::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    }
+    public function resetPassword(string $token)
+    {
+        return view('user.auth.resetpassword', ['token' => $token]);
+    }
+    public function postResetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => ['required', 'email'],
+            'password' => ['required', 'confirmed', Password::min(10)->numbers()]
+        ]);
+
+        $status = FacadesPassword::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === FacadesPassword::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
+    }
+    public function verifyEmail()
+    {
+        return view('user.auth.verifyemail');
+    }
+    public function emailVerificationHandler(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        return redirect()->route('profile');
+    }
+    public function resendEmailVerification(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+        return back();
     }
     public function register()
     {
@@ -74,12 +136,15 @@ class UserController extends Controller
             'phone' => ['min:8', 'max:20', 'nullable'],
             'pfp' => ['mime:png,jpg,jpeg', 'nullable']
         ]);
-        if($request->pfp != null)
-        {
-           $pfpPath = Storage::putFile('pfp', $user_val['pfp']);
+        $apiValidationMessage = "";
+        if (!ValidateEmail::validate($user_val['email'], $apiValidationMessage)) {
+            return back()->withErrors(['email' => $apiValidationMessage]);
+        } else if (!ValidatePhone::validate($user_val['phone'], $apiValidationMessage)) {
+            return back()->withErrors(['phone' => $apiValidationMessage]);
         }
-        else
-        {
+        if ($request->pfp != null) {
+            $pfpPath = Storage::putFile('pfp', $user_val['pfp']);
+        } else {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
         $user = User::create([
@@ -149,12 +214,9 @@ class UserController extends Controller
     public function changeAmount(Request $request)
     {
         $amount = $request->amount;
-        if($request->amount_change == "up")
-        {
+        if ($request->amount_change == "up") {
             $amount++;
-        }
-        else
-        {
+        } else {
             $amount--;
         }
         $cartAmount = Cart::session(Auth::id())->get($request->product_id)->quantity;
@@ -208,7 +270,7 @@ class UserController extends Controller
     }
     public function postReview(Request $request)
     {
-        if($request->review_images != null)
+        if ($request->review_images != null)
             $validator = Validator::make($request->all(), [
                 'title' => ['required', 'min:5', 'max:40'],
                 'pros' => ['required', 'min:5', 'max:1500'],
@@ -226,11 +288,10 @@ class UserController extends Controller
                 'comment' => ['min:5', 'max:1500', 'nullable'],
                 'rating' => ['required']
             ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return back()
-            ->withErrors($validator)
-            ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
         $validated = $validator->validated();
         $review = Review::create([
@@ -242,9 +303,8 @@ class UserController extends Controller
             'product_id' => $request->product_id,
             'user_id' => Auth::id()
         ]);
-        if($request->review_images != null)
-        {
-            for ($i=0; $i < $validated['review_images']->count(); $i++) { 
+        if ($request->review_images != null) {
+            for ($i = 0; $i < $validated['review_images']->count(); $i++) {
                 $review->images()->create([
                     'imagePath' => $validated['review_images'][$i],
                     'review_id' => $review->id
@@ -268,11 +328,10 @@ class UserController extends Controller
             'review_images' => ['array', 'max:5', 'nullable'],
             'review_images.*' => File::image()->min('1kb')->max('15mb')->dimensions(Rule::dimensions()->maxWidth(1500)->maxHeight(1500))
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return back()
-            ->withErrors($validator)
-            ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
         $validated = $validator->validated();
         Review::find($request->review_id)->update([

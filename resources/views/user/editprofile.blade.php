@@ -1,7 +1,7 @@
 <x-layout>
 
     <x-slot name="title">
-        Профиль
+        Профиль | Silerium
     </x-slot>
     <div class="m-auto" style="width: 500px;">
         <form class="row flex-column" action="/user/editprofile" method="POST" enctype="multipart/form-data">

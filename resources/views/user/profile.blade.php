@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Профиль
+        Профиль | Silerium
     </x-slot>
     <style>
         #logout{
@@ -10,6 +10,12 @@
             color: black;
         }
     </style>
+    @if(Session::has('first_phone_warn'))
+        <script type="text/javascript">
+            toastr.options.preventDuplicates = true;
+            toastr.warning(Session::get('first_phone_warn'));
+        </script>
+    @endif
     <div class="container">
         <div class="row mb-3">
             <div class="col-2">
@@ -17,11 +23,18 @@
             </div>
             <div class="col-10">
                 <h3>{{$user->name}} {{$user->surname}}</h3>
+                @php
+                    $emailVerified = $user->email_verified_at == null ? "не подтвержден" : "";
+                @endphp
+                <p>Email: {{$user->email}} <a class="text-danger text-decoration-none" href="/user/email/verify">{{$emailVerified}}</a></p>
                 @if ($user->birthDate != null)
                     <p>День рождения: {{$user->birthDate->format('Y-m-d')}}</p>
                 @endif
+                @php
+                    $phoneVerified = ($user->phoneVerified == 0 && $user->phone != null) ? "не подтвержден" : "";
+                @endphp
                 @if($user->phone != null)
-                    <p>Номер телефона: {{$user->phone}}</p>
+                    <p>Номер телефона: {{$user->phone}} <a class="text-danger text-decoration-none" href="/user/phone/verify">{{$phoneVerified}}</a></p>
                 @else
                     <p>Номер телефона: Не указан</p>
                 @endif

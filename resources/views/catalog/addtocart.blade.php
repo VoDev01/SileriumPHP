@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Добавление товара в корзину
+        Добавление товара в корзину | Silerium
     </x-slot>
 
     @section('scripts')

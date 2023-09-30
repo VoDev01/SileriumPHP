@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Ваши отзывы
+        Ваши отзывы | Silerium
     </x-slot>
     <div class="container m-auto">
         <h1>Ваши отзывы</h1>

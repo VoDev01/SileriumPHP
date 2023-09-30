@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        История заказов
+        История заказов | Silerium
     </x-slot>
     <div class="mx-3 pt-3">
         @if ($orders->count() == 0)

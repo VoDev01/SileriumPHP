@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Отзыв
+        Отзыв | Silerium
     </x-slot>
     <div class="container row flex-column m-auto">
         <h1 class="col">{{ $product->name }}</h1>

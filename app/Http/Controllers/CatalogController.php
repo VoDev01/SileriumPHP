@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enum\OrderStatus;
 use App\Enum\SortOrder;
-use App\Facades\Currency as Currency;
+use App\Facades\ConvertCurrency;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
@@ -58,7 +58,7 @@ class CatalogController extends Controller
         if(session('products_currency') == 'dol')
         {
             foreach ($products as $product) {
-                $product->priceRub = round(Currency::convertToDol($product->priceRub), 1);
+                $product->priceRub = round(ConvertCurrency::convertToDol($product->priceRub), 1);
             }
         }
         return view('catalog.products', ['products' => $products,
@@ -100,7 +100,7 @@ class CatalogController extends Controller
         Cart::session($user->id)->add(
             $product->id, 
             $product->name, 
-            session('products_currency') == "dol" ? round(Currency::convertToDol($product->priceRub), 1) : $product->priceRub,
+            session('products_currency') == "dol" ? round(ConvertCurrency::convertToDol($product->priceRub), 1) : $product->priceRub,
             $validated['amount'])->associate('Product', 'App\Models');
         return redirect()->route('allproducts');
     }

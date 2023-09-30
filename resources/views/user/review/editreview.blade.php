@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Редактировать отзыв
+        Редактировать отзыв | Silerium
     </x-slot>
     <div class="container-fluid row flex-column mx-3">
         <h1 class="col">{{$product->name}}</h1>

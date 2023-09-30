@@ -1,7 +1,7 @@
 <x-layout>
 
     <x-slot name="title">
-        Подкатегории
+        Подкатегории | Silerium
     </x-slot>
 
     <div class="row mx-3">

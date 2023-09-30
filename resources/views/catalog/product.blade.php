@@ -1,7 +1,7 @@
 <x-layout>
 
     <x-slot name="title">
-        Товар
+        Товар {{$product->name}} | Silerium
     </x-slot>
     <div class="container-fluid m-auto w-75">
         <h1 class="mb-3">{{ $product->name }}</h1>

@@ -4,10 +4,10 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Currency extends Facade
+class ValidatePhone extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'ConvertCurrencyService';
+        return 'PhoneValidationService';
     }
 }

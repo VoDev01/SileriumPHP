@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\EmailValidationServiceProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -194,7 +195,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
-        App\Providers\ConvertCurrencyServiceProvider::class
+        App\Providers\ConvertCurrencyServiceProvider::class,
+        App\Providers\PhoneValidationProvider::class,
+        App\Providers\EmailValidationProvider::class
     ],
 
     /*
@@ -211,7 +214,9 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
-        'Currency' => App\Facades\Currency::class
+        'ConvertCurrency' => App\Facades\ConvertCurrency::class,
+        'ValidatePhone' => App\Facades\ValidatePhone::class,
+        'ValidateEmail' => App\Facades\ValidateEmail::class
     ])->toArray(),
 
 ];

@@ -1,7 +1,7 @@
 <x-layout>
 
     <x-slot name="title">
-        Товары
+        Товары | Silerium
     </x-slot>
 
     <script type="text/javascript">
