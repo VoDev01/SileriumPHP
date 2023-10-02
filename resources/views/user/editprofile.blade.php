@@ -3,8 +3,35 @@
     <x-slot name="title">
         Профиль | Silerium
     </x-slot>
+    <script type="module">
+        $('#edit_profile_form').on('submit', function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                url: '/user/editprofile',
+                dataType: 'json',
+                data: $(this).serialize(),
+                success: function()
+                {
+                    window.location.href = '/user/login';
+                    console.log('User validated');
+                },
+                error: function(data) {
+                    var response = data.responseJSON;
+                    var all_errors = response.errors;
+
+                    $.each(all_errors, function(key, value) {
+                        $('#error-'+key).text("");
+                        $('#error-'+key).text(value);
+                    });
+                }
+            });
+        });
+    </script>
     <div class="m-auto" style="width: 500px;">
-        <form class="row flex-column" action="/user/editprofile" method="POST" enctype="multipart/form-data">
+        <form class="row flex-column" id="edit_proifle_form" action="/user/editprofile" method="POST" enctype="multipart/form-data">
+            @csrf
             <div class="mb-3">
                 <label class="form-label" for="name">Имя</label>
                 <input class="form-control" type="text" id="name" name="name" />

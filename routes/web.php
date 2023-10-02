@@ -32,7 +32,7 @@ Route::post('/catalog/postcart', [CatalogController::class, 'postCart'])->middle
 
 Route::get('/user/profile', [UserController::class, 'profile'])->name('profile')->middleware('auth');
 Route::get('/user/editprofile', [UserController::class, 'editProfile'])->middleware('auth');
-Route::post('/user/posteditprofile', [UserController::class, 'postEditProfile']);
+Route::post('/user/editprofile', [UserController::class, 'postEditProfile']);
 Route::get('/user/login', [UserController::class, 'login'])->name('login');
 Route::post('/user/postlogin', [UserController::class, 'postLogin']);
 Route::get('/user/register', [UserController::class, 'register']);

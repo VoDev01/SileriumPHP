@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Subcategory;
 use App\Models\User;
+use App\Services\OrderProductsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,27 +35,7 @@ class CatalogController extends Controller
             ->where('available', $available)
             ->orWhere('name', 'like', $product == null ? "" : $product);
         }
-        switch($sortOrder)
-        {
-            case SortOrder::NAME_ASC->value:
-                $products = $query->orderBy('name', 'asc')->paginate(15);
-                break;
-            case SortOrder::NAME_DESC->value:
-                $products = $query->orderBy('name', 'desc')->paginate(15);
-                break;
-            case SortOrder::POP_ASC->value:
-                $products = $query->orderBy('timesPurchased', 'asc')->paginate(15);
-                break;
-            case SortOrder::POP_DESC->value:
-                $products = $query->orderBy('timesPurchased', 'desc')->paginate(15);
-                break;
-            case SortOrder::PRICE_ASC->value:
-                $products = $query->orderBy('priceRub', 'asc')->paginate(15);
-                break;
-            case SortOrder::PRICE_DESC->value:
-                $products = $query->orderBy('priceRub', 'desc')->paginate(15);
-                break;
-        }
+        $products = OrderProductsService::orderProduct($query, $sortOrder, 15);
         if(session('products_currency') == 'dol')
         {
             foreach ($products as $product) {

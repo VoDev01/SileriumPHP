@@ -9,6 +9,8 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
+use App\Services\MakeUserService;
+use App\Services\ValidatePasswordHashService;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -48,15 +50,7 @@ class UserController extends Controller
             }
             $validated = $validator->validated();
             $user = User::where('email', $validated['email'])->first();
-            if (Hash::check($validated['password'], $user->password)) {
-                $request->session()->regenerate();
-                Auth::login($user, $request->remember_me);
-                return response()->json(['success' => true, 'redirect' => '/user/profile'], 200);
-            } 
-            else 
-            {
-                return response()->json(['success' => false, 'errors' => 'Пароль не совпадает'], 400);
-            }
+            ValidatePasswordHashService::validate($request, $validated['password'], $user);
         }
     }
     public function forgotPassword()
@@ -147,20 +141,7 @@ class UserController extends Controller
         } else {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
-        $user = User::create([
-            'name' => $user_val['name'],
-            'surname' => $user_val['surname'],
-            'email' => $user_val['email'],
-            'password' => Hash::make($user_val['password']),
-            'country' => $user_val['country'],
-            'birthDate' => $user_val['birthDate'],
-            'city' => $user_val['city'],
-            'homeAdress' => $user_val['homeAdress'],
-            'phone' => $user_val['phone'],
-            'profilePicture' => $pfpPath,
-            'created_at' => Carbon::now(),
-            'update_at' => Carbon::now()
-        ]);
+        $user = MakeUserService::make($user_val, $pfpPath);
         $user->save();
         return redirect()->route('login');
     }
@@ -182,28 +163,17 @@ class UserController extends Controller
     public function postEditProfile(Request $request)
     {
         $user_val = $request->validate([
-            'name' => ['min:5', 'max:30', 'required'],
+            'name' => ['min:5', 'max:30'],
             'surname' => ['min:5', 'max:30'],
             'email' => ['required', 'email', 'unique:users'],
             'birthDate' => ['nullable', 'date'],
             'country' => ['min:3', 'max:50', 'required'],
             'city' => ['min:5', 'max:50', 'required'],
-            'homeAdress' => ['min:5', 'max:200', 'required'],
+            'homeAdress' => ['min:5', 'max:200', 'nullable'],
             'phone' => ['min:8', 'max:20', 'nullable'],
             'pfp' => ['mime:png,jpg,jpeg', 'nullable']
         ]);
-        $user = User::find(Auth::id());
-        $user->name = $user_val['name'];
-        $user->surname = $user_val['surname'];
-        $user->email = $user_val['email'];
-        $user->birthDate = $user_val['birthDate'];
-        $user->country = $user_val['country'];
-        $user->city = $user_val['city'];
-        $user->homeAdress = $user_val['homeAdress'];
-        $user->phone = $user_val['phone'];
-        $user->profilePicture = $user_val['pfp'];
-        $user->updated_at = Carbon::now();
-        $user->save();
+        User::find(Auth::id())->update($user_val);
         return redirect()->route('profile');
     }
     public function cart()
