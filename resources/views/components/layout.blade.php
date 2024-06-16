@@ -73,10 +73,6 @@
                                 Отзывы
                                 <i class="bi bi-chat-dots"></i>
                             </a>
-                            <a class="nav-item nav-link text-black text-decoration-none">
-                                Админ панель
-                                <i class="bi bi-code"></i>
-                            </a>
                         @endauth
                         <a class="nav-item nav-link text-black text-decoration-none" href="/user/profile">
                             Личный кабинет
