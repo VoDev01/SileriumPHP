@@ -25,6 +25,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -46,11 +47,31 @@ class UserController extends Controller
             ]);
             if($validator->fails())
             {
-                return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
+                return redirect()->back()->withErrors($validator);
             }
             $validated = $validator->validated();
             $user = User::where('email', $validated['email'])->first();
-            ValidatePasswordHashService::validate($request, $validated['password'], $user);
+            if(ValidatePasswordHashService::validate($request, $validated['password'], $user))
+            {
+                if(Gate::allows('access-admin-panel', $user))
+                {
+                    return redirect()->route('admin-home');
+                }
+                else
+                {
+                    return redirect()->route('profile');
+                }
+            }
+            else
+            {
+                return redirect()->back()->withErrors(['password' => 'Неверный пароль']);
+            }
+            /*
+            /*$response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
+            if(!$response['success'])
+                return response()->json($response);
+            else
+                return redirect()->route('profile');*/
         }
     }
     public function forgotPassword()

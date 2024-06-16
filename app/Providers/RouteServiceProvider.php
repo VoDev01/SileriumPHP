@@ -27,15 +27,37 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
+    }
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
-
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
+    public function map()
+    {
+        $this->mapApiRoutes();
+        $this->mapWebRoutes();
+        $this->mapAdminRoutes();
+        $this->mapUserRoutes();
+    }
+    public function mapApiRoutes()
+    {
+        Route::middleware('api')
+            ->prefix('api')
+            ->group(base_path('routes/api/api.php'));
+    }
+    public function mapWebRoutes()
+    {
+        Route::middleware('web')
+            ->group(base_path('routes/web/web.php'));
+    }
+    public function mapAdminRoutes()
+    {
+        Route::middleware('web')
+            ->prefix('admin')
+            ->group(base_path('routes/web/admin.php'));
+    }
+    public function mapUserRoutes()
+    {
+        Route::middleware('web')
+            ->prefix('user')
+            ->group(base_path('routes/web/user.php'));
     }
 
     /**

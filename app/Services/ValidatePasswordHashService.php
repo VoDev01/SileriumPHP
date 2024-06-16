@@ -13,11 +13,15 @@ class ValidatePasswordHashService
         if (Hash::check($inputPassword, $user->password)) {
             $request->session()->regenerate();
             Auth::login($user, $request->remember_me);
-            return response()->json(['success' => true, 'redirect' => '/user/profile'], 200);
+            return true;
+        }
+        else
+            return false;
+            /*return ['success' => true];
         } 
         else 
         {
-            return response()->json(['success' => false, 'errors' => 'Пароль не совпадает'], 400);
-        }
+            return ['success' => false, 'errors' => 'Пароль не совпадает'];
+        }*/
     }
 }

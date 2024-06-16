@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -33,6 +34,16 @@ class AuthServiceProvider extends ServiceProvider
                 ->subject('Подтверждение email')
                 ->line('Нажмите на ссылку для подтвеждения email')
                 ->action('Подтвердить', $url);
+        });
+        Gate::define('access-admin-panel', function(User $user){
+            foreach($user->roles as $role)
+            {
+                if($role->role == 'admin' || $role->role == 'moderator')
+                    return true;
+                else
+                    continue;
+            }
+            return false;
         });
     }
 }
