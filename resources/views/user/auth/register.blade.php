@@ -2,7 +2,7 @@
     <x-slot name="title">
         Регистрация | Silerium
     </x-slot>
-    <script type="module">
+    <!--<script type="module">
         $('#register_form').on('submit', function(event) {
             event.preventDefault();
 
@@ -27,7 +27,7 @@
                 }
             });
         });
-    </script>
+    </script>-->
 
     <h2 class="text-center">Регистрация</h2>
     <div class="container" style="width: 500px;">
@@ -36,57 +36,57 @@
             <div class="mb-3">
                 <label class="form-label" for="name">Имя</label>
                 <input class="form-control" type="text" id="name" name="name" />
-                <x-errorajax id="error-name" />
+                <x-error field="name" id="error-name" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="surname">Фамилия</label>
                 <input class="form-control" type="text" id="surname" name="surname" />
-                <x-errorajax id="error-surname" />
+                <x-error field="surname" id="error-surname" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>
                 <input class="form-control" type="email" id="email" name="email" />
-                <x-errorajax id="error-email" />
+                <x-error field="email" id="error-email" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="password">Пароль</label>
                 <input class="form-control" type="password" id="password" name="password" />
-                <x-errorajax id="error-password" />
+                <x-error field="password" id="error-password" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="password_confirmation">Повторите пароль</label>
                 <input class="form-control" type="password" id="password_confirmation" name="password_confirmation" />
-                <x-errorajax id="error-password_confirmation" />
+                <x-error field="password_confirmation" id="error-password_confirmation" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="birthDate">День рождения</label>
                 <input class="form-control" type="date" id="birthDate" name="birthDate" />
-                <x-errorajax id="error-birthDate" />
+                <x-error field="birthDate" id="error-birthDate" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="country">Страна проживания</label>
                 <input class="form-control" type="text" id="country" name="country" />
-                <x-errorajax id="error-country" />
+                <x-error field="country" id="error-country" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="city">Город</label>
                 <input class="form-control" type="text" id="city" name="city" />
-                <x-errorajax id="error-city" />
+                <x-error field="city" id="error-city" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="homeAdress">Адрес для доствки</label>
                 <input class="form-control" type="text" id="homeAdress" name="homeAdress" />
-                <x-errorajax id="error-homeAdress" />
+                <x-error field="homeAdress" id="error-homeAdress" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="phone">Номер телефона</label>
                 <input class="form-control" type="text" id="phone" name="phone" />
-                <x-errorajax id="error-phone" />
+                <x-error field="phone" id="error-phone" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="pfp">Картинка профиля</label>
                 <input class="form-control" type="file" id="pfp" name="pfp" />
-                <x-errorajax id="error-pfp" />
+                <x-error field="pfp" id="error-pfp" />
             </div>
             <button class="btn btn-outline-primary mb-3" type="submit">Зарегистрироваться</button>
         </form>

@@ -10,12 +10,12 @@
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>
                 <input class="form-control" type="email" id="email" name="email" />
-                <x-error field="email" :message="$errors->first('email')" id="error-email" />
+                <x-error field="email" id="error-email" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="password">Пароль</label>
                 <input class="form-control" type="password" id="password" name="password" />
-                <x-error field="password" :message="$errors->first('password')" id="error-password"/>
+                <x-error field="password" id="error-password"/>
             </div>
             <div class="mb-3 row">
                 <div class="col-6">

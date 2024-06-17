@@ -29,7 +29,7 @@
                             Категории
                             <i class="bi bi-justify"></i>
                         </a>
-                        <a class="nav-item nav-link text-black text-decoration-none">
+                        <a class="nav-item nav-link text-black text-decoration-none" href="/admin/home">
                             Админ панель
                             <i class="bi bi-code"></i>
                         </a>
