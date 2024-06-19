@@ -10,8 +10,11 @@
                 Товары
             </a>
 
-            <nav class="navbar">
-                
+            <nav>
+                <a href="products/index">Все</a>
+                <a href="products/create">Добавить</a>
+                <a href="products/update?id=1">Изменить</a>
+                <a href="products/delete?id=1">Удалить</a>
             </nav>
 
             <a class="btn col" data-bs-toggle="collapse" data-bs-target="#users" href="#users" role="button" aria-expanded="false" aria-controls="users">

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FallbackController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +31,5 @@ Route::controller(CatalogController::class)->prefix('catalog')->group(function()
     Route::get('addtocart/{product}','addToCart')->middleware('verified');
     Route::post('postcart', 'postCart')->middleware('auth');
 });
+
+Route::fallback(FallbackController::class);

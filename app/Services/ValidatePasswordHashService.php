@@ -17,11 +17,10 @@ class ValidatePasswordHashService
         }
         else
             return false;
-            /*return ['success' => true];
-        } 
+        /*return ['success' => true];
+        }
         else 
-        {
             return ['success' => false, 'errors' => 'Пароль не совпадает'];
-        }*/
+        */
     }
 }
