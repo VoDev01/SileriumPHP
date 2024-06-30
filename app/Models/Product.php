@@ -12,6 +12,16 @@ class Product extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $casts = [
+        'available' => 'boolean'
+    ];
+    protected $fillable = [
+        'name',
+        'description',
+        'priceRub',
+        'stockAmount',
+        'available',
+    ];
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);

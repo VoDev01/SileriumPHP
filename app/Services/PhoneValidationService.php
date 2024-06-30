@@ -5,9 +5,15 @@ use Dadata\DadataClient;
 
 class PhoneValidationService
 {
-    private $dadata = new DadataClient(env('DADATA_TOKEN '), env('DADATA_SECRET '));
+    private $dadata;
     private $code;
-    public function validate(string $phone, string &$message)
+
+    function __construct()
+    {
+        $this->dadata = new DadataClient(env('DADATA_TOKEN'), env('DADATA_SECRET'));
+    }
+
+    public function validate(string $phone, string $message)
     {
         $result = $this->dadata->clean("phone", $phone);
         if($result['qc'] == 0 || $result['qc'] == 7)

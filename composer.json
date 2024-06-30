@@ -9,7 +9,7 @@
         "darryldecode/cart": "^4.2",
         "guzzlehttp/guzzle": "^7.2",
         "hflabs/dadata": "^22.3",
-        "laravel/framework": "^10.0",
+        "laravel/framework": "^9.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.2",

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\Product\CatalogController;
+use App\Http\Controllers\Product\CategoriesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FallbackController;
 use Illuminate\Support\Facades\Route;

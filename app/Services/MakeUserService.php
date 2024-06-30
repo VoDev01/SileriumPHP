@@ -20,6 +20,8 @@ class MakeUserService
             'homeAdress' => $validated_input['homeAdress'],
             'phone' => $validated_input['phone'],
             'profilePicture' => $pfp,
+            'phoneVerified' => false,
+            'emailVerified' => false,
             'created_at' => Carbon::now(),
             'update_at' => Carbon::now()
         ]);

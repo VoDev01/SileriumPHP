@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\API\V1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\V1\APIHomeController;
+use App\Http\Controllers\API\V1\APIProductsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +15,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('home', [APIHomeController::class, 'index']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], function(){
-    Route::apiResource('products', ProductsController::class);
+Route::controller(APIProductsController::class)->group(function(){
+    Route::get('products/index/{items_per_page}/', 'index');
 });

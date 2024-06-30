@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
     public function mapApiRoutes()
     {
         Route::middleware('api')
-            ->prefix('api')
+            ->prefix('api/v1')
             ->group(base_path('routes/api/api.php'));
     }
     public function mapWebRoutes()
@@ -49,7 +49,7 @@ class RouteServiceProvider extends ServiceProvider
     }
     public function mapAdminRoutes()
     {
-        Route::middleware('web')
+        Route::middleware(['web', 'auth'])
             ->prefix('admin')
             ->group(base_path('routes/web/admin.php'));
     }

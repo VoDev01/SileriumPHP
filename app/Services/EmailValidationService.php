@@ -6,7 +6,13 @@ use Dadata\DadataClient;
 
 class EmailValidationService
 {
-    private DadataClient $dadata = new DadataClient(env('DADATA_TOKEN '), env('DADATA_SECRET '));
+    private DadataClient $dadata;
+
+    function __construct()
+    {
+        $this->dadata = new DadataClient(env('DADATA_TOKEN'), env('DADATA_SECRET'));
+    }
+
     public function validate(string $email, string &$message)
     {
         $response = $this->dadata->clean("email", $email);
