@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE `users` CHANGE `email_verified` `emailVerified` TINYINT(1) NOT NULL');
+        DB::statement('ALTER TABLE `users` CHANGE `email_verified` `emailVerified` TINYINT(1) NOT NULL DEFAULT 0');
+        DB::statement('ALTER TABLE `users` CHANGE `phoneVerified` `phoneVerified` TINYINT(1) NOT NULL DEFAULT 0');
     }
 
     /**
@@ -24,5 +25,6 @@ return new class extends Migration
     public function down()
     {
         DB::statement('ALTER TABLE `users` CHANGE `emailVerified` `email_verified` TINYINT(1) NULL');
+        DB::statement('ALTER TABLE `users` CHANGE `phoneVerified` `phoneVerified` TINYINT(1) NULL');
     }
 };

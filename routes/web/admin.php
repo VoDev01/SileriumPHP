@@ -22,6 +22,11 @@ Route::middleware('authorize.admin')->group(function () {
     });
     Route::controller(UsersAdminPanelController::class)->group(function () {
         Route::get('users/index', 'index')->name('users_index');
+        Route::get('users/roles', 'roles')->name('user_roles');
+        Route::get('users/orders', 'orders')->name('user_orders');
+        Route::get('users/reviews', 'reviews')->name('user_reviews');
+        Route::get('users/find/{load_with}/{email}/{redirect?}/{name?}/{surname?}/{id?}/{phone?}', 'findUsers')->name('find_user');
+        Route::post('users/post_user_search', 'postUserSearch');
     });
 
 });

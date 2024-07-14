@@ -44,7 +44,7 @@ class UserAuthController extends Controller
             {
                 if(Gate::allows('access-admin-panel', $user))
                 {
-                    return redirect()->route('admin-home');
+                    return redirect()->route('admin_home');
                 }
                 else
                 {

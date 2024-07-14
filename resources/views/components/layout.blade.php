@@ -95,8 +95,8 @@
             <br />
             <span class="text-secondary">
                 Изображения -
-                <a class="text-decoration-none text-secondary" href="https://unsplash.com/">Unsplash</a>
-                <a class="text-decoration-none text-secondary" href="https://www.freepik.com/">Freepik</a>
+                <a class="text-decoration-none text-secondary" href="https://unsplash.com/">Unsplash, </a>
+                <a class="text-decoration-none text-secondary" href="https://www.freepik.com/">Freepik, </a>
                 <a class="text-decoration-none text-secondary"
                     href="https://cdn.thewirecutter.com/wp-content/media/2022/10/27inchmonitors-2048px-9791.jpg">Dave
                     Gershgorn</a>

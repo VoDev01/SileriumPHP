@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('email_verified_at');
-            $table->boolean('emailVerified')->nullable()->default(0);
+        Schema::drop('users_roles');
+        Schema::create('users_roles', function(Blueprint $table){
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('role_id')->constrained();
         });
     }
 
@@ -26,9 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('email_verified_at')->nullable();
-            $table->dropColumn('emailVerified');
-        });
+        Schema::drop('users_roles');
     }
 };

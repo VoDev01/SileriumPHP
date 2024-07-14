@@ -26,12 +26,12 @@
                         <td>{{$user->name}}</td>
                         <td>{{$user->surname}}</td>
                         <td>{{$user->email}}</td>
-                        <td>{{$user->email_verified}}</td>
+                        <td>{{$user->emailVerified}}</td>
                         <td>{{$user->country}}</td>
                         <td>{{$user->city}}</td>
-                        <td>{{$user->adress}}</td>
+                        <td>{{$user->homeAdress}}</td>
                         <td>{{$user->phone}}</td>
-                        <td>{{$user->phone_verified}}</td>
+                        <td>{{$user->phoneVerified}}</td>
                     </tr>
                 @endforeach
             </tbody>

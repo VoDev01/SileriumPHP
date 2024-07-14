@@ -3,10 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthorizeAdminMiddleware
+class AuthorizeAdminPanelMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,8 +20,8 @@ class AuthorizeAdminMiddleware
     {
         if(Auth::check())
         {
-            $user = User::with('role')->where('id', Auth::user())->get()->first();
-            if($user->role->role == "admin")
+            $user = User::find(Auth::id());
+            if($user->roles->first()->role == "admin")
             {
                 return $next($request);
             }

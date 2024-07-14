@@ -55,6 +55,6 @@ class APIProductsController extends Controller
     public function product_by_nameid(int $id, string $name = null)
     {
         $product = Product::where('id', $id)->orWhere('name', $name)->get()->first();
-        return response()->json(['response' => $product]);
+        return response()->json(['product' => $product]);
     }
 }

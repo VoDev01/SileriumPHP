@@ -10,22 +10,22 @@ class OrderProductsService
         switch($sortOrder)
         {
             case SortOrder::NAME_ASC->value:
-                $products = $query->orderBy('name', 'asc')->paginate(15);
+                $products = $query->orderBy('name', 'asc')->paginate($onPage);
                 break;
             case SortOrder::NAME_DESC->value:
-                $products = $query->orderBy('name', 'desc')->paginate(15);
+                $products = $query->orderBy('name', 'desc')->paginate($onPage);
                 break;
             case SortOrder::POP_ASC->value:
-                $products = $query->orderBy('timesPurchased', 'asc')->paginate(15);
+                $products = $query->orderBy('timesPurchased', 'asc')->paginate($onPage);
                 break;
             case SortOrder::POP_DESC->value:
-                $products = $query->orderBy('timesPurchased', 'desc')->paginate(15);
+                $products = $query->orderBy('timesPurchased', 'desc')->paginate($onPage);
                 break;
             case SortOrder::PRICE_ASC->value:
-                $products = $query->orderBy('priceRub', 'asc')->paginate(15);
+                $products = $query->orderBy('priceRub', 'asc')->paginate($onPage);
                 break;
             case SortOrder::PRICE_DESC->value:
-                $products = $query->orderBy('priceRub', 'desc')->paginate(15);
+                $products = $query->orderBy('priceRub', 'desc')->paginate($onPage);
                 break;
         }
         return $products;

@@ -27,9 +27,9 @@
 
                 <nav>
                     <a class="text-decoration-none" href="users/index">Все</a>
-                    <a class="text-decoration-none" href="users/find/orders">Заказы</a>
-                    <a class="text-decoration-none" href="users/find/reviews">Отзывы</a>
-                    <a class="text-decoration-none" href="users/find/roles">Роли</a>
+                    <a class="text-decoration-none" href="users/orders">Заказы</a>
+                    <a class="text-decoration-none" href="users/reviews">Отзывы</a>
+                    <a class="text-decoration-none" href="users/roles">Роли</a>
                     <a class="text-decoration-none" href="users/ban/1">Заблокировать</a>
                     <a class="text-decoration-none" href="users/delete/1">Удалить</a>
                 </nav>
