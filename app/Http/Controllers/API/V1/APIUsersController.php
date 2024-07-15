@@ -45,7 +45,7 @@ class APIUsersController extends Controller
         else if($load_with == "roles")
             $users = User::with("roles:role")->where("email", $email)->get();
         else if($load_with == "reviews")
-            $users = User::with("reviews")->where("email", $email)->get();
+            $users = User::with("reviews.product")->where("email", $email)->get();
         else
             $users = User::where("email", $email)->get();
         return response()->json(["users" => $users]);

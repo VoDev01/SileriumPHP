@@ -2,7 +2,8 @@
     <x-slot name="title">
         Админ панель - Отзывы пользователя | Silerium
     </x-slot>
-    <h4>Поиск отзывов</h4>
+    <div class="container">
+        <h4>Поиск отзывов</h4>
         <form class="container" method="POST" action="/admin/users/post_user_search">
             @csrf
             <input hidden name="load_with" id="load_with" value="reviews" />
@@ -34,15 +35,18 @@
 
                 <th></th>
 
-                <h5>Заказы пользователя {{ $user['name'] }} {{ $user['surname'] }}</>
-                @foreach ($user['orders'] as $order)
-                    <p>Заказ {{ $order['id'] }}</p>
-                    <p>Сумма {{ $order['totalPrice'] }}</p>
-                    <p>Дата осуществления заказа {{ $order['orderDate'] }}</p>
-                    <p>Адрес доставки {{ $order['orderAdress'] }}</p>
-                    <p>Состояние заказа {{ $order['orderStatus'] }}</p>
-                    <p>Дата завершения заказа {{ $order['deleted_at'] }}</p>
-                @endforeach
+                <h5>Отзывы пользователя {{ $user['name'] }} {{ $user['surname'] }}</h5>
+                    @foreach ($user['reviews'] as $review)
+                        <p>Название отзыва: {{ $review['title'] }}</p>
+                        <p>Плюсы: {{ $review['pros'] }}</p>
+                        <p>Минусы: {{ $review['cons'] }}</p>
+                        <p>Комментарий: {{ $review['comment'] }}</p>
+                        <p>Оценка: {{ $review['rating'] }}</p>
+                        <p>Создан: {{ $review['createdAt'] }}</p>
+                        <p>Изменен: {{ $review['updatedAt'] }}</p>
+                        <p>Отзыв на товар: {{ $review['product']['name'] }}</p>
+                    @endforeach
             </div>
         @endif
+    </div>
 </x-admin-layout>
