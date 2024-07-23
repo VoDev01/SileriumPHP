@@ -3,14 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Seller;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasUlids, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +20,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'ulid',
         'name',
         'surname',
         'email',
@@ -29,6 +32,10 @@ class User extends Authenticatable
         'profilePicture'
     ];
 
+    protected $guarded = [
+        'id'
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -37,6 +44,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'id'
     ];
 
     /**
@@ -51,7 +59,7 @@ class User extends Authenticatable
 
     public function orders()
     {
-       return $this->belongsToMany(Order::class, 'orders_users', 'order_id', 'user_id');
+       return $this->hasMany(Order::class);
     }
     public function reviews()
     {
@@ -60,5 +68,9 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'users_roles', 'role_id', 'user_id');
+    }
+    public function sellers()
+    {
+        return $this->belongsToMany(Seller::class, 'sellers_users', 'seller_id', 'user_id');
     }
 }

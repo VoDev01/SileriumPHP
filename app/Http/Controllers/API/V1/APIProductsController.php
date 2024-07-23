@@ -7,6 +7,7 @@ use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\ApiFilters\V1\ProductFilter;
 use App\Http\Controllers\Controller;
+use App\Services\MakeProductService;
 use App\Http\Resources\V1\ProductsResource;
 use App\Http\Resources\V1\ProductsCollection;
 
@@ -24,15 +25,7 @@ class APIProductsController extends Controller
     }
     public function create(Request $request)
     {
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'priceRub' => $request->priceRub,
-            'stockAmount' => $request->stockAmount,
-            'available' => $request->available,
-            'subcategory' => $request->subcategory,
-        ]);
-        $product->save();
+        MakeProductService::make($request->name, $request->description, $request->priceRub, $request->stockAmount, $request->avilable, $request->subcategory_id);
         return response()->json(null, 200);
     }
     public function update(int $id)

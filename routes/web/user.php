@@ -27,7 +27,7 @@ Route::controller(UserAuthController::class)->group(function(){
 });
 Route::controller(UserReviewController::class)->group(function(){
     Route::get('reviews', 'userReviews')->middleware(['auth', 'verified'])->name('userReviews');
-    Route::get('review/product/{product}', 'review')->middleware(['auth', 'verified']);
+    Route::get('review/product/{productId}', 'review')->middleware(['auth', 'verified']);
     Route::post('postreview', 'postReview');
     Route::get('review/editreview/{review}', 'editReview');
     Route::post('posteditreview', 'postEditReview');

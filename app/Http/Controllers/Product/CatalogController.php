@@ -54,11 +54,11 @@ class CatalogController extends Controller
         'available' => $request->available, 'subcategory' => $request->subcategory, 
         'product' => $request->product]);
     }
-    public function product(Product $product)
+    public function product(int $productId)
     {
-        $productEag = Product::where('id', $product->id)->with('productSpecifications')->with('images')->with('reviews')->get()->first(); 
-        $reviews = $productEag->reviews()->with('user')->paginate(5);
-        return view('catalog.product', ['product' => $productEag, 'reviews' => $reviews]);
+        $product = Product::where('id', $productId)->with('productSpecifications')->with('images')->with('reviews')->get()->first(); 
+        $reviews = $product->reviews()->with('user')->paginate(5);
+        return view('catalog.product', ['product' => $product, 'reviews' => $reviews]);
     }
     public function addToCart(Product $product)
     {

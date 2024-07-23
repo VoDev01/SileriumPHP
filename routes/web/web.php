@@ -27,7 +27,7 @@ Route::controller(CatalogController::class)->prefix('catalog')->group(function()
     Route::post('rubcurrency', 'rubCurrency');
     Route::post('dolcurrency','dolCurrency');
     Route::post('filter','filterProducts');
-    Route::get('product/{product}', 'product')->middleware('auth');
+    Route::get('product/{productId}', 'product')->middleware('auth');
     Route::get('addtocart/{product}','addToCart')->middleware('verified');
     Route::post('postcart', 'postCart')->middleware('auth');
 });

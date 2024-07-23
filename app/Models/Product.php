@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use Database\Factories\ProductFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUlids;
     public $timestamps = false;
     protected $casts = [
         'available' => 'boolean'
@@ -41,6 +42,10 @@ class Product extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+    public function sellers()
+    {
+        return $this->belongsToMany(Seller::class, 'sellers_users', 'seller_id', 'product_id');
     }
     protected static function newFactory()
     {

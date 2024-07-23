@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\ConvertCurrencyService;
 use Illuminate\Support\ServiceProvider;
+use App\Services\ManualPaginatorService;
 
-class ConvertCurrencyServiceProvider extends ServiceProvider
+class ManualPaginatorProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +14,8 @@ class ConvertCurrencyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('ConvertCurrencyService', function(){
-            return new ConvertCurrencyService();
+        $this->app->singleton('ManualPaginatorService', function(){
+            return new ManualPaginatorService();
         });
     }
 
@@ -26,5 +26,6 @@ class ConvertCurrencyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //
     }
 }

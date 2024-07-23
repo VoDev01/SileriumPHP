@@ -2,6 +2,25 @@
     <x-slot name="title">
         Админ панель - Товары | Silerium
     </x-slot>
+    <div class="d-flex">
+        <form method="POST" action="/admin/products/post_product_search" style="width: 300px;">
+            <h4>Поиск товаров</h4>
+            @csrf
+            <input hidden name="load_with" id="load_with" value="subcategory" />
+            <input hidden name="redirect" id="redirect" value="products" />
+            <div class="mb-3">
+                <label for="name" class="form-label">Название товара</label>
+                <input type="text" class="form-control" name="name" id="name" required/>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Продавец</label>
+                <input type="text" class="form-control" name="seller" id="seller" required/>
+            </div>
+            <button type="submit" class="btn btn-primary" id="find_products">
+                Найти
+            </button>
+        </form>
+    </div>
     <h1 class="text-center">Товары</h1>
     <div class="container-fluid">
         <table class="table table-bordered">

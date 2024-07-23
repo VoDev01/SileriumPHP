@@ -55,7 +55,7 @@
                 Роли
             </a>
         </p>
-        <div class="collapse">
+        <div class="collapse" id="roles">
             <table class="table table-bordered">
                 <thead>
                     <tr>

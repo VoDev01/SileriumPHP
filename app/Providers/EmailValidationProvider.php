@@ -14,7 +14,9 @@ class EmailValidationProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        return $this->app->bind('EmailValidationService', function(){
+            return new EmailValidationService();
+        });
     }
 
     /**
@@ -24,8 +26,5 @@ class EmailValidationProvider extends ServiceProvider
      */
     public function boot()
     {
-        return $this->app->bind('EmailValidationService', function(){
-            return new EmailValidationService();
-        });
     }
 }

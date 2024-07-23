@@ -15,6 +15,9 @@ class PhoneValidationProvider extends ServiceProvider
      */
     public function register()
     {
+        return $this->app->bind('PhoneValidationService', function(){
+            return new PhoneValidationService();
+        });
 
     }
 
@@ -25,8 +28,5 @@ class PhoneValidationProvider extends ServiceProvider
      */
     public function boot()
     {
-        return $this->app->bind('PhoneValidationService', function(){
-            return new PhoneValidationService();
-        });
     }
 }

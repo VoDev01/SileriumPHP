@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Review;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Services\MakeReviewService;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserReviewController extends Controller
 {
@@ -12,8 +17,9 @@ class UserReviewController extends Controller
         $reviews = Review::with('images')->with('user')->with('product')->where('user_id', Auth::id())->paginate(5);
         return view('user.review.userreviews', ['reviews' => $reviews]);
     }
-    public function review(Product $product)
+    public function review(int $productId)
     {
+        $product = Product::find($productId);
         return view('user.review.reviewproduct', ['product' => $product]);
     }
     public function postReview(Request $request)
@@ -42,24 +48,7 @@ class UserReviewController extends Controller
                 ->withInput();
         }
         $validated = $validator->validated();
-        $review = Review::create([
-            'title' => $validated['title'],
-            'pros' => $validated['pros'],
-            'cons' => $validated['cons'],
-            'comment' => $validated['comment'],
-            'rating' => $validated['rating'],
-            'product_id' => $request->product_id,
-            'user_id' => Auth::id()
-        ]);
-        if ($request->review_images != null) {
-            for ($i = 0; $i < $validated['review_images']->count(); $i++) {
-                $review->images()->create([
-                    'imagePath' => $validated['review_images'][$i],
-                    'review_id' => $review->id
-                ]);
-            }
-        }
-        $review->save();
+        $review = MakeReviewService::make($validated, Auth::id(), $request->product_id, $request->review_images);
         return redirect()->route('userReviews');
     }
     public function editReview(Review $review)
