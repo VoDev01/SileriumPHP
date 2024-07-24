@@ -3,20 +3,14 @@
         Админ панель - Отзывы товара | Silerium
     </x-slot>
     <div class="container">
-        <x-api-search-form action-url="/admin/products/post_product_search" load-with="reviews" redirect="product_reviews" header="Поиск товара">
-            <div class="mb-3">
-                <label for="name" class="form-label">Название товара</label>
-                <input type="text" class="form-control" name="name" id="name" required />
-            </div>
-            <div class="mb-3">
-                <label for="name" class="form-label">Продавец</label>
-                <input type="text" class="form-control" name="seller" id="seller" required />
-            </div>
-            <button type="submit" class="btn btn-primary" id="find_reviews">
-                Найти
-            </button>
-        </x-api-search-form>
-
+        
+        @php
+            $inputs = array(
+                array('inputName' => 'seller', 'displayName' => 'Продавец', 'required' => true),
+                array('inputName' => 'product', 'displayName' => 'Товар', 'required' => true)
+            )
+        @endphp
+        <x-api-search-form actionUrl="/admin/users/post_product_search" loadWith="reviews" redirect="product_reviews" header="Поиск отзывов на товар" submit_id="find_review" :$inputs/>
         @if ($productInfoReceived)
             <div class="container border border-dark" id="product_reviews">
                 <h5>{{ $user['name'] }} {{ $user['surname'] }}</h5>

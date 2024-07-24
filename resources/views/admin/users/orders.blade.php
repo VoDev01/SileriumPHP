@@ -4,24 +4,14 @@
     </x-slot>
     <div class="container">
         <div class="d-flex">
-            <x-api-search-form action_url="/admin/users/post_user_search" load_with="orders" redirect="user_orders"
-                header="Поиск пользователей">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Имя</label>
-                    <input type="text" class="form-control" name="name" id="name" />
-                </div>
-                <div class="mb-3">
-                    <label for="surname" class="form-label">Фамилия</label>
-                    <input type="text" class="form-control" name="surname" id="surname" />
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" />
-                </div>
-                <button type="submit" class="btn btn-primary" id="find_user">
-                    Найти
-                </button>
-            </x-api-search-form>
+            @php
+                $inputs = array(
+                    array('inputName' => 'name', 'displayName' => 'Имя'),
+                    array('inputName' => 'surname', 'displayName' => 'Фамилия'),
+                    array('inputName' => 'email', 'displayName' => 'Email', 'required' => true)
+                )
+            @endphp
+            <x-api-search-form actionUrl="/admin/users/post_user_search" loadWith="reviews" redirect="user_reviews" header="Поиск пользователей" submit_id="find_user" :$inputs/>
         </div>
         @if ($userInfoReceived)
             <div class="container" id="user_reviews">

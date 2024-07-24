@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminPanelController extends Controller
 {
-    public function home()
+    public function index()
     {
-        return view("admin.home");
+        return view("admin.index");
     }
     public function profile()
     {

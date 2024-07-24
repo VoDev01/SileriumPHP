@@ -35,6 +35,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
         $this->mapAdminRoutes();
         $this->mapUserRoutes();
+        $this->mapSellerRoutes();
     }
     public function mapApiRoutes()
     {
@@ -59,7 +60,12 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix('user')
             ->group(base_path('routes/web/user.php'));
     }
-
+    public function mapSellerRoutes()
+    {
+        Route::middleware('web')
+            ->prefix('seller')
+            ->group(base_path('routes/web/seller.php'));
+    }
     /**
      * Configure the rate limiters for the application.
      *

@@ -15,12 +15,18 @@ class ApiSearchForm extends Component
     public string $header;
     public string $loadWith;
     public string $redirect;
-    public function __construct(string $actionUrl, string $header, string $loadWith, string $redirect)
+    public array $inputs;
+    public string $submit_id;
+    public bool $required;
+    public function __construct(string $actionUrl, string $header, string $loadWith, string $redirect, array $inputs, string $submit_id = '', bool $required = false)
     {
         $this->actionUrl = $actionUrl;
         $this->header = $header;
         $this->loadWith = $loadWith;
         $this->redirect = $redirect;
+        $this->inputs = $inputs;
+        $this->submit_id = $submit_id;
+        $this->required = $required;
     }
 
     /**

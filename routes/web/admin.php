@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\ProductsAdminPanelController;
 
 Route::middleware('authorize.admin')->group(function () {
 
-    Route::get('home', [AdminPanelController::class, 'home'])->name('admin_home');
+    Route::get('/', [AdminPanelController::class, 'index'])->name('admin_index');
     Route::get('profile', [AdminPanelController::class, 'profile']);
 
     Route::controller(ProductsAdminPanelController::class)->group(function () {
