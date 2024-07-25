@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'development'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -197,7 +197,8 @@ return [
         Darryldecode\Cart\CartServiceProvider::class,
         App\Providers\ConvertCurrencyServiceProvider::class,
         App\Providers\PhoneValidationProvider::class,
-        App\Providers\EmailValidationProvider::class
+        App\Providers\EmailValidationProvider::class,
+        App\Providers\CheckUserRoleProvider::class
     ],
 
     /*
@@ -214,9 +215,10 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
-        'ConvertCurrency' => App\Facades\ConvertCurrency::class,
-        'ValidatePhone' => App\Facades\ValidatePhone::class,
-        'ValidateEmail' => App\Facades\ValidateEmail::class
+        'ConvertCurrency' => App\Facades\ConvertCurrencyFacade::class,
+        'ValidatePhone' => App\Facades\ValidatePhoneFacade::class,
+        'ValidateEmail' => App\Facades\ValidateEmailFacade::class,
+        'CheckUserRole' => App\Facades\CheckUserRoleFacade::class,
     ])->toArray(),
 
 ];

@@ -27,7 +27,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <div class="navbar-nav">
-                        @if(Auth::id())
+                        @if(CheckUserRole::check('seller'))
                             <a class="nav-item nav-link text-black text-decoration-none" href="/seller/orders/all">
                                 Заказы
                                 <i class="bi bi-truck"></i>

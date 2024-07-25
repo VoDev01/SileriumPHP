@@ -11,4 +11,12 @@ class SellerAuthController extends Controller
     {
         return view('seller.auth.login');
     }
+    public function register()
+    {
+        return view('seller.auth.register');
+    }
+    public function post_register(Request $request)
+    {
+        
+    }
 }
