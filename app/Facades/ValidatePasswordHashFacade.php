@@ -4,10 +4,10 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class ConvertCurrencyFacade extends Facade
+class ValidatePasswordHashFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'ConvertCurrency';
+        return 'ValidatePasswordHashService';
     }
 }

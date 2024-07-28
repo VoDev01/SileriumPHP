@@ -1,0 +1,129 @@
+# Diff Details
+
+Date : 2024-07-28 15:46:46
+
+Directory c:\\Users\\admin\\source\\repos\\Silerium_laravel
+
+Total : 114 files,  1450 codes, -61 comments, 74 blanks, all 1463 lines
+
+[Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [.osp/Apache/info-silerium.com.conf](/.osp/Apache/info-silerium.com.conf) | Properties | 9 | 0 | 0 | 9 |
+| [app/Enum/OrganizationType.php](/app/Enum/OrganizationType.php) | PHP | 8 | 0 | 1 | 9 |
+| [app/Enum/TaxSystem.php](/app/Enum/TaxSystem.php) | PHP | 8 | 0 | 1 | 9 |
+| [app/Facades/CheckUserRoleFacade.php](/app/Facades/CheckUserRoleFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/ConvertCurrency.php](/app/Facades/ConvertCurrency.php) | PHP | -10 | 0 | -3 | -13 |
+| [app/Facades/ConvertCurrencyFacade.php](/app/Facades/ConvertCurrencyFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/FilterItemsFacade.php](/app/Facades/FilterItemsFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/ManualPaginatorFacade.php](/app/Facades/ManualPaginatorFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/OrderServiceFacade.php](/app/Facades/OrderServiceFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/ProductServiceFacade.php](/app/Facades/ProductServiceFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/ReviewServiceFacade.php](/app/Facades/ReviewServiceFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/UserServiceFacade.php](/app/Facades/UserServiceFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/ValidateEmail.php](/app/Facades/ValidateEmail.php) | PHP | -10 | 0 | -3 | -13 |
+| [app/Facades/ValidateEmailFacade.php](/app/Facades/ValidateEmailFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/ValidatePasswordHashFacade.php](/app/Facades/ValidatePasswordHashFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Facades/ValidatePhone.php](/app/Facades/ValidatePhone.php) | PHP | -10 | 0 | -3 | -13 |
+| [app/Facades/ValidatePhoneFacade.php](/app/Facades/ValidatePhoneFacade.php) | PHP | 10 | 0 | 3 | 13 |
+| [app/Http/Controllers/API/V1/APIProductsController.php](/app/Http/Controllers/API/V1/APIProductsController.php) | PHP | -7 | 0 | 0 | -7 |
+| [app/Http/Controllers/API/V1/APIUsersController.php](/app/Http/Controllers/API/V1/APIUsersController.php) | PHP | 22 | 6 | 5 | 33 |
+| [app/Http/Controllers/Admin/UsersAdminPanelController.php](/app/Http/Controllers/Admin/UsersAdminPanelController.php) | PHP | 85 | 0 | 0 | 85 |
+| [app/Http/Controllers/Product/CatalogController.php](/app/Http/Controllers/Product/CatalogController.php) | PHP | -23 | 0 | -1 | -24 |
+| [app/Http/Controllers/Seller/SellerAuthController.php](/app/Http/Controllers/Seller/SellerAuthController.php) | PHP | 18 | 0 | 5 | 23 |
+| [app/Http/Controllers/Seller/SellerController.php](/app/Http/Controllers/Seller/SellerController.php) | PHP | 11 | 0 | 4 | 15 |
+| [app/Http/Controllers/User/UserAuthController.php](/app/Http/Controllers/User/UserAuthController.php) | PHP | -18 | 0 | 0 | -18 |
+| [app/Http/Controllers/User/UserController.php](/app/Http/Controllers/User/UserController.php) | PHP | -9 | 0 | 0 | -9 |
+| [app/Http/Controllers/User/UserOrderController.php](/app/Http/Controllers/User/UserOrderController.php) | PHP | -9 | 0 | 0 | -9 |
+| [app/Http/Controllers/User/UserReviewController.php](/app/Http/Controllers/User/UserReviewController.php) | PHP | -19 | 0 | 0 | -19 |
+| [app/Http/Middleware/AuthorizeAdminMiddleware.php](/app/Http/Middleware/AuthorizeAdminMiddleware.php) | PHP | -23 | -7 | -4 | -34 |
+| [app/Http/Middleware/AuthorizeAdminPanelMiddleware.php](/app/Http/Middleware/AuthorizeAdminPanelMiddleware.php) | PHP | 24 | 7 | 4 | 35 |
+| [app/Http/Requests/UserEditProfileRequest.php](/app/Http/Requests/UserEditProfileRequest.php) | PHP | 24 | 10 | 5 | 39 |
+| [app/Http/Requests/UserLoginRequest.php](/app/Http/Requests/UserLoginRequest.php) | PHP | 17 | 10 | 5 | 32 |
+| [app/Http/Requests/UserRegisterRequest.php](/app/Http/Requests/UserRegisterRequest.php) | PHP | 25 | 10 | 5 | 40 |
+| [app/Models/Order.php](/app/Models/Order.php) | PHP | 4 | 0 | 0 | 4 |
+| [app/Models/Product.php](/app/Models/Product.php) | PHP | 5 | 0 | 0 | 5 |
+| [app/Models/Review.php](/app/Models/Review.php) | PHP | 1 | 0 | 0 | 1 |
+| [app/Models/Role.php](/app/Models/Role.php) | PHP | 1 | 0 | 0 | 1 |
+| [app/Models/Seller.php](/app/Models/Seller.php) | PHP | 34 | 0 | 6 | 40 |
+| [app/Models/User.php](/app/Models/User.php) | PHP | 12 | 0 | 1 | 13 |
+| [app/Providers/CheckUserRoleProvider.php](/app/Providers/CheckUserRoleProvider.php) | PHP | 16 | 11 | 5 | 32 |
+| [app/Providers/ConvertCurrencyServiceProvider.php](/app/Providers/ConvertCurrencyServiceProvider.php) | PHP | 0 | -1 | 0 | -1 |
+| [app/Providers/EmailValidationProvider.php](/app/Providers/EmailValidationProvider.php) | PHP | 0 | -1 | 0 | -1 |
+| [app/Providers/FilterItemsProvider.php](/app/Providers/FilterItemsProvider.php) | PHP | 16 | 11 | 5 | 32 |
+| [app/Providers/ManualPaginatorProvider.php](/app/Providers/ManualPaginatorProvider.php) | PHP | 16 | 11 | 5 | 32 |
+| [app/Providers/OrderProvider.php](/app/Providers/OrderProvider.php) | PHP | 15 | 11 | 5 | 31 |
+| [app/Providers/ProductProvider.php](/app/Providers/ProductProvider.php) | PHP | 15 | 11 | 5 | 31 |
+| [app/Providers/ReviewProvider.php](/app/Providers/ReviewProvider.php) | PHP | 15 | 11 | 5 | 31 |
+| [app/Providers/RouteServiceProvider.php](/app/Providers/RouteServiceProvider.php) | PHP | 7 | 0 | -1 | 6 |
+| [app/Providers/UserProvider.php](/app/Providers/UserProvider.php) | PHP | 15 | 11 | 5 | 31 |
+| [app/Providers/ValidatePasswordHashProvider.php](/app/Providers/ValidatePasswordHashProvider.php) | PHP | 16 | 11 | 5 | 32 |
+| [app/Services/ChangeCartAmount.php](/app/Services/ChangeCartAmount.php) | PHP | 18 | 0 | 1 | 19 |
+| [app/Services/CheckUserRoleService.php](/app/Services/CheckUserRoleService.php) | PHP | 20 | 0 | 3 | 23 |
+| [app/Services/DeleteClosedOrdersService.php](/app/Services/DeleteClosedOrdersService.php) | PHP | 17 | 0 | 3 | 20 |
+| [app/Services/FilterItemsService.php](/app/Services/FilterItemsService.php) | PHP | 31 | 0 | 2 | 33 |
+| [app/Services/MakeUserService.php](/app/Services/MakeUserService.php) | PHP | -28 | 0 | -2 | -30 |
+| [app/Services/ManualPaginatorService.php](/app/Services/ManualPaginatorService.php) | PHP | 12 | 0 | 3 | 15 |
+| [app/Services/OrderProductsService.php](/app/Services/OrderProductsService.php) | PHP | -31 | 0 | -2 | -33 |
+| [app/Services/OrderService.php](/app/Services/OrderService.php) | PHP | 25 | 0 | 2 | 27 |
+| [app/Services/ProductService.php](/app/Services/ProductService.php) | PHP | 66 | 0 | 2 | 68 |
+| [app/Services/ReviewService.php](/app/Services/ReviewService.php) | PHP | 44 | 0 | 2 | 46 |
+| [app/Services/UserService.php](/app/Services/UserService.php) | PHP | 31 | 0 | 2 | 33 |
+| [app/View/Components/CustomPagination.php](/app/View/Components/CustomPagination.php) | PHP | -14 | -11 | -5 | -30 |
+| [app/View/Components/FilterForm.php](/app/View/Components/FilterForm.php) | PHP | 21 | 10 | 4 | 35 |
+| [app/View/Components/SearchForm.php](/app/View/Components/SearchForm.php) | PHP | 25 | 10 | 5 | 40 |
+| [app/View/Components/SellerLayout.php](/app/View/Components/SellerLayout.php) | PHP | 13 | 11 | 5 | 29 |
+| [composer.json](/composer.json) | JSON | 1 | 0 | 0 | 1 |
+| [composer.lock](/composer.lock) | JSON | 391 | 0 | 0 | 391 |
+| [config/app.php](/config/app.php) | PHP | 15 | 0 | 0 | 15 |
+| [database/migrations/2014_10_12_000000_create_users_table.php](/database/migrations/2014_10_12_000000_create_users_table.php) | PHP | -23 | -10 | -4 | -37 |
+| [database/migrations/2014_10_12_100000_create_password_resets_table.php](/database/migrations/2014_10_12_100000_create_password_resets_table.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2019_08_19_000000_create_failed_jobs_table.php](/database/migrations/2019_08_19_000000_create_failed_jobs_table.php) | PHP | -23 | -10 | -4 | -37 |
+| [database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php](/database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php) | PHP | -24 | -10 | -4 | -38 |
+| [database/migrations/2023_09_21_065918_category_table.php](/database/migrations/2023_09_21_065918_category_table.php) | PHP | -20 | -10 | -4 | -34 |
+| [database/migrations/2023_09_21_073241_subcategory_table.php](/database/migrations/2023_09_21_073241_subcategory_table.php) | PHP | -19 | -11 | -4 | -34 |
+| [database/migrations/2023_09_21_073752_products_specs_table.php](/database/migrations/2023_09_21_073752_products_specs_table.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2023_09_21_074216_product_table.php](/database/migrations/2023_09_21_074216_product_table.php) | PHP | -24 | -10 | -4 | -38 |
+| [database/migrations/2023_09_21_075930_order_table.php](/database/migrations/2023_09_21_075930_order_table.php) | PHP | -24 | -10 | -4 | -38 |
+| [database/migrations/2023_09_21_082113_alter_user_table.php](/database/migrations/2023_09_21_082113_alter_user_table.php) | PHP | -23 | -10 | -4 | -37 |
+| [database/migrations/2023_09_21_135800_product_images_table.php](/database/migrations/2023_09_21_135800_product_images_table.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2023_09_22_083505_product_popularity.php](/database/migrations/2023_09_22_083505_product_popularity.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2023_09_25_145454_soft_delete_orders.php](/database/migrations/2023_09_25_145454_soft_delete_orders.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2023_09_26_114122_product_specification_relation.php](/database/migrations/2023_09_26_114122_product_specification_relation.php) | PHP | -18 | -10 | -4 | -32 |
+| [database/migrations/2023_09_26_140110_reviews.php](/database/migrations/2023_09_26_140110_reviews.php) | PHP | -26 | -10 | -4 | -40 |
+| [database/migrations/2023_09_26_140803_reviews_images.php](/database/migrations/2023_09_26_140803_reviews_images.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2023_09_26_144807_shopcart.php](/database/migrations/2023_09_26_144807_shopcart.php) | PHP | -13 | -12 | -4 | -29 |
+| [database/migrations/2023_09_26_145700_order_products.php](/database/migrations/2023_09_26_145700_order_products.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2023_09_26_145712_order_users.php](/database/migrations/2023_09_26_145712_order_users.php) | PHP | -18 | -10 | -4 | -32 |
+| [database/migrations/2023_09_29_155907_user_phone_verification.php](/database/migrations/2023_09_29_155907_user_phone_verification.php) | PHP | -19 | -10 | -4 | -33 |
+| [database/migrations/2024_06_16_152404_users_roles.php](/database/migrations/2024_06_16_152404_users_roles.php) | PHP | -23 | -10 | -4 | -37 |
+| [database/migrations/2024_06_28_192044_users_email_verified.php](/database/migrations/2024_06_28_192044_users_email_verified.php) | PHP | -21 | -10 | -4 | -35 |
+| [database/migrations/2024_06_30_180731_user_emailverified_nullable.php](/database/migrations/2024_06_30_180731_user_emailverified_nullable.php) | PHP | -17 | -10 | -4 | -31 |
+| [database/migrations/2024_07_23_171125_create_sellers.php](/database/migrations/2024_07_23_171125_create_sellers.php) | PHP | 84 | 10 | 6 | 100 |
+| [database/migrations/2024_07_28_104445_change_seller.php](/database/migrations/2024_07_28_104445_change_seller.php) | PHP | 27 | 10 | 4 | 41 |
+| [database/migrations/2024_07_28_121910_orders_live_time.php](/database/migrations/2024_07_28_121910_orders_live_time.php) | PHP | 22 | 10 | 4 | 36 |
+| [database/schema/mysql-schema.sql](/database/schema/mysql-schema.sql) | SQL | 277 | 0 | 3 | 280 |
+| [php_info.php](/php_info.php) | PHP | 2 | 0 | 0 | 2 |
+| [resources/views/admin/home.blade.php](/resources/views/admin/home.blade.php) | PHP | -43 | 0 | -4 | -47 |
+| [resources/views/admin/index.blade.php](/resources/views/admin/index.blade.php) | PHP | 43 | 0 | 4 | 47 |
+| [resources/views/admin/products/index.blade.php](/resources/views/admin/products/index.blade.php) | PHP | 19 | 0 | 0 | 19 |
+| [resources/views/admin/products/reviews.blade.php](/resources/views/admin/products/reviews.blade.php) | PHP | 38 | 0 | 4 | 42 |
+| [resources/views/admin/users/orders.blade.php](/resources/views/admin/users/orders.blade.php) | PHP | 44 | 0 | 3 | 47 |
+| [resources/views/admin/users/reviews.blade.php](/resources/views/admin/users/reviews.blade.php) | PHP | 48 | 0 | 2 | 50 |
+| [resources/views/admin/users/roles.blade.php](/resources/views/admin/users/roles.blade.php) | PHP | 117 | 0 | 3 | 120 |
+| [resources/views/catalog/products.blade.php](/resources/views/catalog/products.blade.php) | PHP | -174 | 0 | -5 | -179 |
+| [resources/views/components/custom-pagination.blade.php](/resources/views/components/custom-pagination.blade.php) | PHP | -3 | 0 | 0 | -3 |
+| [resources/views/components/filter-form.blade.php](/resources/views/components/filter-form.blade.php) | PHP | 173 | 0 | 7 | 180 |
+| [resources/views/components/search-form.blade.php](/resources/views/components/search-form.blade.php) | PHP | 18 | 0 | 0 | 18 |
+| [resources/views/components/seller-layout.blade.php](/resources/views/components/seller-layout.blade.php) | PHP | 80 | 0 | 5 | 85 |
+| [resources/views/pagination/custom.blade.php](/resources/views/pagination/custom.blade.php) | PHP | 6 | 0 | 0 | 6 |
+| [resources/views/seller/auth/login.blade.php](/resources/views/seller/auth/login.blade.php) | PHP | 0 | 0 | 1 | 1 |
+| [resources/views/seller/auth/register.blade.php](/resources/views/seller/auth/register.blade.php) | PHP | 46 | 0 | 2 | 48 |
+| [resources/views/seller/index.blade.php](/resources/views/seller/index.blade.php) | PHP | 6 | 0 | 0 | 6 |
+| [routes/api/api.php](/routes/api/api.php) | PHP | 4 | 0 | 0 | 4 |
+| [routes/web/admin.php](/routes/web/admin.php) | PHP | 5 | 0 | 0 | 5 |
+| [routes/web/seller.php](/routes/web/seller.php) | PHP | 11 | 0 | 2 | 13 |
+
+[Summary](results.md) / [Details](details.md) / [Diff Summary](diff.md) / Diff Details

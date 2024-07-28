@@ -1,0 +1,181 @@
+Date : 2024-07-28 15:46:46
+Directory : c:\Users\admin\source\repos\Silerium_laravel
+Total : 114 files,  1450 codes, -61 comments, 74 blanks, all 1463 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| PHP        |        110 |        772 |        -61 |         71 |        782 |
+| JSON       |          2 |        392 |          0 |          0 |        392 |
+| SQL        |          1 |        277 |          0 |          3 |        280 |
+| Properties |          1 |          9 |          0 |          0 |          9 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                          |        114 |      1,450 |        -61 |         74 |      1,463 |
+| . (Files)                                                                                                                  |          3 |        394 |          0 |          0 |        394 |
+| .osp                                                                                                                       |          1 |          9 |          0 |          0 |          9 |
+| .osp\Apache                                                                                                                |          1 |          9 |          0 |          0 |          9 |
+| app                                                                                                                        |         63 |        652 |        142 |        125 |        919 |
+| app\Enum                                                                                                                   |          2 |         16 |          0 |          2 |         18 |
+| app\Facades                                                                                                                |         14 |         80 |          0 |         24 |        104 |
+| app\Http                                                                                                                   |         15 |        118 |         36 |         28 |        182 |
+| app\Http\Controllers                                                                                                       |         10 |         51 |          6 |         13 |         70 |
+| app\Http\Controllers\API                                                                                                   |          2 |         15 |          6 |          5 |         26 |
+| app\Http\Controllers\API\V1                                                                                                |          2 |         15 |          6 |          5 |         26 |
+| app\Http\Controllers\Admin                                                                                                 |          1 |         85 |          0 |          0 |         85 |
+| app\Http\Controllers\Product                                                                                               |          1 |        -23 |          0 |         -1 |        -24 |
+| app\Http\Controllers\Seller                                                                                                |          2 |         29 |          0 |          9 |         38 |
+| app\Http\Controllers\User                                                                                                  |          4 |        -55 |          0 |          0 |        -55 |
+| app\Http\Middleware                                                                                                        |          2 |          1 |          0 |          0 |          1 |
+| app\Http\Requests                                                                                                          |          3 |         66 |         30 |         15 |        111 |
+| app\Models                                                                                                                 |          6 |         57 |          0 |          7 |         64 |
+| app\Providers                                                                                                              |         11 |        131 |         86 |         39 |        256 |
+| app\Services                                                                                                               |         11 |        205 |          0 |         16 |        221 |
+| app\View                                                                                                                   |          4 |         45 |         20 |          9 |         74 |
+| app\View\Components                                                                                                        |          4 |         45 |         20 |          9 |         74 |
+| config                                                                                                                     |          1 |         15 |          0 |          0 |         15 |
+| database                                                                                                                   |         27 |        -58 |       -203 |        -75 |       -336 |
+| database\migrations                                                                                                        |         26 |       -335 |       -203 |        -78 |       -616 |
+| database\schema                                                                                                            |          1 |        277 |          0 |          3 |        280 |
+| resources                                                                                                                  |         16 |        418 |          0 |         22 |        440 |
+| resources\views                                                                                                            |         16 |        418 |          0 |         22 |        440 |
+| resources\views\admin                                                                                                      |          7 |        266 |          0 |         12 |        278 |
+| resources\views\admin (Files)                                                                                              |          2 |          0 |          0 |          0 |          0 |
+| resources\views\admin\products                                                                                             |          2 |         57 |          0 |          4 |         61 |
+| resources\views\admin\users                                                                                                |          3 |        209 |          0 |          8 |        217 |
+| resources\views\catalog                                                                                                    |          1 |       -174 |          0 |         -5 |       -179 |
+| resources\views\components                                                                                                 |          4 |        268 |          0 |         12 |        280 |
+| resources\views\pagination                                                                                                 |          1 |          6 |          0 |          0 |          6 |
+| resources\views\seller                                                                                                     |          3 |         52 |          0 |          3 |         55 |
+| resources\views\seller (Files)                                                                                             |          1 |          6 |          0 |          0 |          6 |
+| resources\views\seller\auth                                                                                                |          2 |         46 |          0 |          3 |         49 |
+| routes                                                                                                                     |          3 |         20 |          0 |          2 |         22 |
+| routes\api                                                                                                                 |          1 |          4 |          0 |          0 |          4 |
+| routes\web                                                                                                                 |          2 |         16 |          0 |          2 |         18 |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                   | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\admin\source\repos\Silerium_laravel\.osp\Apache\info-silerium.com.conf                                            | Properties |          9 |          0 |          0 |          9 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Enum\OrganizationType.php                                                 | PHP        |          8 |          0 |          1 |          9 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Enum\TaxSystem.php                                                        | PHP        |          8 |          0 |          1 |          9 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\CheckUserRoleFacade.php                                           | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ConvertCurrency.php                                               | PHP        |        -10 |          0 |         -3 |        -13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ConvertCurrencyFacade.php                                         | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\FilterItemsFacade.php                                             | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ManualPaginatorFacade.php                                         | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\OrderServiceFacade.php                                            | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ProductServiceFacade.php                                          | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ReviewServiceFacade.php                                           | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\UserServiceFacade.php                                             | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ValidateEmail.php                                                 | PHP        |        -10 |          0 |         -3 |        -13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ValidateEmailFacade.php                                           | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ValidatePasswordHashFacade.php                                    | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ValidatePhone.php                                                 | PHP        |        -10 |          0 |         -3 |        -13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Facades\ValidatePhoneFacade.php                                           | PHP        |         10 |          0 |          3 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\API\V1\APIProductsController.php                         | PHP        |         -7 |          0 |          0 |         -7 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\API\V1\APIUsersController.php                            | PHP        |         22 |          6 |          5 |         33 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Admin\UsersAdminPanelController.php                      | PHP        |         85 |          0 |          0 |         85 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Product\CatalogController.php                            | PHP        |        -23 |          0 |         -1 |        -24 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Seller\SellerAuthController.php                          | PHP        |         18 |          0 |          5 |         23 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Seller\SellerController.php                              | PHP        |         11 |          0 |          4 |         15 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\User\UserAuthController.php                              | PHP        |        -18 |          0 |          0 |        -18 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\User\UserController.php                                  | PHP        |         -9 |          0 |          0 |         -9 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\User\UserOrderController.php                             | PHP        |         -9 |          0 |          0 |         -9 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\User\UserReviewController.php                            | PHP        |        -19 |          0 |          0 |        -19 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Middleware\AuthorizeAdminMiddleware.php                              | PHP        |        -23 |         -7 |         -4 |        -34 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Middleware\AuthorizeAdminPanelMiddleware.php                         | PHP        |         24 |          7 |          4 |         35 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\UserEditProfileRequest.php                                  | PHP        |         24 |         10 |          5 |         39 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\UserLoginRequest.php                                        | PHP        |         17 |         10 |          5 |         32 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\UserRegisterRequest.php                                     | PHP        |         25 |         10 |          5 |         40 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Models\Order.php                                                          | PHP        |          4 |          0 |          0 |          4 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Models\Product.php                                                        | PHP        |          5 |          0 |          0 |          5 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Models\Review.php                                                         | PHP        |          1 |          0 |          0 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Models\Role.php                                                           | PHP        |          1 |          0 |          0 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Models\Seller.php                                                         | PHP        |         34 |          0 |          6 |         40 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Models\User.php                                                           | PHP        |         12 |          0 |          1 |         13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\CheckUserRoleProvider.php                                       | PHP        |         16 |         11 |          5 |         32 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\ConvertCurrencyServiceProvider.php                              | PHP        |          0 |         -1 |          0 |         -1 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\EmailValidationProvider.php                                     | PHP        |          0 |         -1 |          0 |         -1 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\FilterItemsProvider.php                                         | PHP        |         16 |         11 |          5 |         32 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\ManualPaginatorProvider.php                                     | PHP        |         16 |         11 |          5 |         32 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\OrderProvider.php                                               | PHP        |         15 |         11 |          5 |         31 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\ProductProvider.php                                             | PHP        |         15 |         11 |          5 |         31 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\ReviewProvider.php                                              | PHP        |         15 |         11 |          5 |         31 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\RouteServiceProvider.php                                        | PHP        |          7 |          0 |         -1 |          6 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\UserProvider.php                                                | PHP        |         15 |         11 |          5 |         31 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Providers\ValidatePasswordHashProvider.php                                | PHP        |         16 |         11 |          5 |         32 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\ChangeCartAmount.php                                             | PHP        |         18 |          0 |          1 |         19 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\CheckUserRoleService.php                                         | PHP        |         20 |          0 |          3 |         23 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\DeleteClosedOrdersService.php                                    | PHP        |         17 |          0 |          3 |         20 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\FilterItemsService.php                                           | PHP        |         31 |          0 |          2 |         33 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\MakeUserService.php                                              | PHP        |        -28 |          0 |         -2 |        -30 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\ManualPaginatorService.php                                       | PHP        |         12 |          0 |          3 |         15 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\OrderProductsService.php                                         | PHP        |        -31 |          0 |         -2 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\OrderService.php                                                 | PHP        |         25 |          0 |          2 |         27 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\ProductService.php                                               | PHP        |         66 |          0 |          2 |         68 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\ReviewService.php                                                | PHP        |         44 |          0 |          2 |         46 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\UserService.php                                                  | PHP        |         31 |          0 |          2 |         33 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\CustomPagination.php                                      | PHP        |        -14 |        -11 |         -5 |        -30 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\FilterForm.php                                            | PHP        |         21 |         10 |          4 |         35 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\SearchForm.php                                            | PHP        |         25 |         10 |          5 |         40 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\SellerLayout.php                                          | PHP        |         13 |         11 |          5 |         29 |
+| c:\Users\admin\source\repos\Silerium_laravel\composer.json                                                                 | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\composer.lock                                                                 | JSON       |        391 |          0 |          0 |        391 |
+| c:\Users\admin\source\repos\Silerium_laravel\config\app.php                                                                | PHP        |         15 |          0 |          0 |         15 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2014_10_12_000000_create_users_table.php                  | PHP        |        -23 |        -10 |         -4 |        -37 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2014_10_12_100000_create_password_resets_table.php        | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2019_08_19_000000_create_failed_jobs_table.php            | PHP        |        -23 |        -10 |         -4 |        -37 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2019_12_14_000001_create_personal_access_tokens_table.php | PHP        |        -24 |        -10 |         -4 |        -38 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_21_065918_category_table.php                      | PHP        |        -20 |        -10 |         -4 |        -34 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_21_073241_subcategory_table.php                   | PHP        |        -19 |        -11 |         -4 |        -34 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_21_073752_products_specs_table.php                | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_21_074216_product_table.php                       | PHP        |        -24 |        -10 |         -4 |        -38 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_21_075930_order_table.php                         | PHP        |        -24 |        -10 |         -4 |        -38 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_21_082113_alter_user_table.php                    | PHP        |        -23 |        -10 |         -4 |        -37 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_21_135800_product_images_table.php                | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_22_083505_product_popularity.php                  | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_25_145454_soft_delete_orders.php                  | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_26_114122_product_specification_relation.php      | PHP        |        -18 |        -10 |         -4 |        -32 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_26_140110_reviews.php                             | PHP        |        -26 |        -10 |         -4 |        -40 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_26_140803_reviews_images.php                      | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_26_144807_shopcart.php                            | PHP        |        -13 |        -12 |         -4 |        -29 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_26_145700_order_products.php                      | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_26_145712_order_users.php                         | PHP        |        -18 |        -10 |         -4 |        -32 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2023_09_29_155907_user_phone_verification.php             | PHP        |        -19 |        -10 |         -4 |        -33 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2024_06_16_152404_users_roles.php                         | PHP        |        -23 |        -10 |         -4 |        -37 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2024_06_28_192044_users_email_verified.php                | PHP        |        -21 |        -10 |         -4 |        -35 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2024_06_30_180731_user_emailverified_nullable.php         | PHP        |        -17 |        -10 |         -4 |        -31 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2024_07_23_171125_create_sellers.php                      | PHP        |         84 |         10 |          6 |        100 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2024_07_28_104445_change_seller.php                       | PHP        |         27 |         10 |          4 |         41 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\migrations\2024_07_28_121910_orders_live_time.php                    | PHP        |         22 |         10 |          4 |         36 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\schema\mysql-schema.sql                                              | SQL        |        277 |          0 |          3 |        280 |
+| c:\Users\admin\source\repos\Silerium_laravel\php_info.php                                                                  | PHP        |          2 |          0 |          0 |          2 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\home.blade.php                                          | PHP        |        -43 |          0 |         -4 |        -47 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\index.blade.php                                         | PHP        |         43 |          0 |          4 |         47 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\products\index.blade.php                                | PHP        |         19 |          0 |          0 |         19 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\products\reviews.blade.php                              | PHP        |         38 |          0 |          4 |         42 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\users\orders.blade.php                                  | PHP        |         44 |          0 |          3 |         47 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\users\reviews.blade.php                                 | PHP        |         48 |          0 |          2 |         50 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\users\roles.blade.php                                   | PHP        |        117 |          0 |          3 |        120 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\catalog\products.blade.php                                    | PHP        |       -174 |          0 |         -5 |       -179 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\components\custom-pagination.blade.php                        | PHP        |         -3 |          0 |          0 |         -3 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\components\filter-form.blade.php                              | PHP        |        173 |          0 |          7 |        180 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\components\search-form.blade.php                              | PHP        |         18 |          0 |          0 |         18 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\components\seller-layout.blade.php                            | PHP        |         80 |          0 |          5 |         85 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\pagination\custom.blade.php                                   | PHP        |          6 |          0 |          0 |          6 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\auth\login.blade.php                                   | PHP        |          0 |          0 |          1 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\auth\register.blade.php                                | PHP        |         46 |          0 |          2 |         48 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\index.blade.php                                        | PHP        |          6 |          0 |          0 |          6 |
+| c:\Users\admin\source\repos\Silerium_laravel\routes\api\api.php                                                            | PHP        |          4 |          0 |          0 |          4 |
+| c:\Users\admin\source\repos\Silerium_laravel\routes\web\admin.php                                                          | PHP        |          5 |          0 |          0 |          5 |
+| c:\Users\admin\source\repos\Silerium_laravel\routes\web\seller.php                                                         | PHP        |         11 |          0 |          2 |         13 |
+| Total                                                                                                                      |            |      1,450 |        -61 |         74 |      1,463 |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

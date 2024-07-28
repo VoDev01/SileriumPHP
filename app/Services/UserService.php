@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
-class MakeUserService 
+class UserService 
 {
-    public static function make(array $validated_input, string $pfp)
+    public function make(array $validated_input, string $pfp)
     {
         $userId = User::insertGetId([
             'ulid' => Str::ulid()->toBase32(),

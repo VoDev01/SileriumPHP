@@ -71,15 +71,7 @@ class UserReviewController extends Controller
                 ->withInput();
         }
         $validated = $validator->validated();
-        Review::find($request->review_id)->update([
-            'title' => $validated['title'],
-            'pros' => $validated['pros'],
-            'cons' => $validated['cons'],
-            'comment' => $validated['comment'],
-            'review_images' => $validated['review_images'],
-            'product_id' => $request->product_id,
-            'user_id' => Auth::id()
-        ]);
+        ReviewService::update($request->reviewId, $validated, $request->productId, Auth::id());
         return redirect()->route('userReviews');
     }
     public function deleteReview(Request $request)

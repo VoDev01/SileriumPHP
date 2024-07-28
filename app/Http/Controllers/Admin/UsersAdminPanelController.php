@@ -74,7 +74,7 @@ class UsersAdminPanelController extends Controller
             $params = $params . "/" . $request->id;
         if($request->phone != null)
             $params = $params . "/" . $request->phone;
-        $response = Http::get('https://silerium.com/api/v1/users/find/' .  $params)['users'];
+        $response = Http::get('/api/v1/users/find/' .  $params)['users'];
         if($request->ajax())
         {
             return response()->json(['users' => $response]);

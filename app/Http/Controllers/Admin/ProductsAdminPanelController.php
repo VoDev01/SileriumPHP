@@ -68,7 +68,7 @@ class ProductsAdminPanelController extends Controller
     {
         if($request->ajax())
         {
-            $response = Http::get('https://silerium.com/api/v1/products/by_nameid/' . $id . '/' . $name)['product'];
+            $response = Http::get('/api/v1/products/by_nameid/' . $id . '/' . $name)['product'];
             return response()->json(['product' => $response]);
         }
     }

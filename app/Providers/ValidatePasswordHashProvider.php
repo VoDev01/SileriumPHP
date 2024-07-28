@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\ConvertCurrencyService;
 use Illuminate\Support\ServiceProvider;
+use App\Services\ValidatePasswordHashService;
 
-class ConvertCurrencyServiceProvider extends ServiceProvider
+class ValidatePasswordHashProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +14,8 @@ class ConvertCurrencyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('ConvertCurrency', function(){
-            return new ConvertCurrencyService();
+        $this->app->singleton('ValidatePasswordHashService', function(){
+            return new ValidatePasswordHashService();
         });
     }
 
@@ -26,5 +26,6 @@ class ConvertCurrencyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //
     }
 }

@@ -25,7 +25,7 @@ return [
     |
     | This value determines the "environment" your application is currently
     | running in. This may determine how you prefer to configure various
-    | services the application utilizes. Set this in your ".env" file.
+    | services the application Serviceizes. Set this in your ".env" file.
     |
     */
 
@@ -198,7 +198,13 @@ return [
         App\Providers\ConvertCurrencyServiceProvider::class,
         App\Providers\PhoneValidationProvider::class,
         App\Providers\EmailValidationProvider::class,
-        App\Providers\CheckUserRoleProvider::class
+        App\Providers\CheckUserRoleProvider::class,
+        App\Providers\OrderItemsProvider::class,
+        App\Providers\ValidatePasswordHashProvider::class,
+        App\Providers\ProductProvider::class,
+        App\Providers\ReviewProvider::class,
+        App\Providers\UserProvider::class,
+        App\Providers\OrderProvider::class,
     ],
 
     /*
@@ -219,6 +225,13 @@ return [
         'ValidatePhone' => App\Facades\ValidatePhoneFacade::class,
         'ValidateEmail' => App\Facades\ValidateEmailFacade::class,
         'CheckUserRole' => App\Facades\CheckUserRoleFacade::class,
+        'OrderItems' => App\Facades\OrderItemsFacade::class,
+        'ManualPaginator' => App\Facades\ManualPaginatorFacade::class,
+        'ValidatePasswordHash' => App\Facades\ValidatePasswordHashFacade::class,
+        'OrderService' => App\Facades\OrderServiceFacade::class,
+        'UserService' => App\Facades\UserServiceFacade::class,
+        'ProductService' => App\Facades\ProductServiceFacade::class,
+        'ReviewService' => App\Facades\ReviewServiceFacade::class,
     ])->toArray(),
 
 ];

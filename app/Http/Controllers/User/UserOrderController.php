@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
 
 class UserOrderController extends Controller
 {
@@ -14,27 +15,17 @@ class UserOrderController extends Controller
     }
     public function changeAmount(Request $request)
     {
-        $amount = $request->amount;
-        if ($request->amount_change == "up") {
-            $amount++;
-        } else {
-            $amount--;
-        }
-        $cartAmount = Cart::session(Auth::id())->get($request->product_id)->quantity;
-        $totalAmount = $amount - $cartAmount;
-        Cart::session(Auth::id())->update($request->product_id, array(
-            'quantity' => $totalAmount
-        ));
+        ChangeCartAmount::changeAmount($request->amount, $request->amountChange, $request->productId, Auth::id());
         return redirect()->route('cart');
     }
     public function filterCart(Request $request)
     {
-        $orders = Order::all()->where('orderStatus', $request->order_status);
+        $orders = Order::all()->where('orderStatus', $request->orderStatus);
         return redirect()->route('/user/cart', ['orders' => $orders]);
     }
     public function removeFromCart(Request $request)
     {
-        Cart::session(Auth::id())->remove($request->product_id);
+        Cart::session(Auth::id())->remove($request->productId);
         return redirect()->route('cart');
     }
     public function editOrder(Order $order)
@@ -43,21 +34,21 @@ class UserOrderController extends Controller
     }
     public function postEditOrder(Request $request)
     {
-        $order = Order::find($request->order_id);
+        $order = Order::find($request->orderId);
         $order->save();
         return redirect()->route('cart');
     }
     public function closeOrder(Request $request)
     {
-        $order = Order::find($request->order_id);
+        $order = Order::find($request->orderId);
         $order->orderStatus = OrderStatus::CLOSED;
         $order->delete();
-        $order->save();
         return redirect()->route('cart');
     }
     public function ordersHistory()
     {
-        $orders = Order::onlyTrashed()->get();
+        $orders = Order::withTrashed()->get();
+        DeleteClosedOrders::delete();
         return view('user.ordershistory', ['orders' => $orders]);
     }
 }

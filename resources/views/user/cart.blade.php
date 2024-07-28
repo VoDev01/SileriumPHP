@@ -34,7 +34,7 @@
                         <p class="col text-secondary">{{ $product->quantity }} шт.</p>
                         <form action="/user/cart/removefromcart" method="POST">
                             @csrf
-                            <input hidden name="product_id" value="{{ $product->id }}">
+                            <input hidden name="productId" value="{{ $product->id }}">
                             <button type="submit" class="border-0 bg-white text-danger col">
                                 <i class="bi bi-trash"></i>
                             </button>
@@ -62,7 +62,7 @@
                             @csrf
                             <div class="btn-group">
                                 <input hidden name="product_id" value="{{$product->id}}" />
-                                <input hidden id="amount_change" name="amount_change"/>
+                                <input hidden id="amountChange" name="amountChange"/>
                                 <button type="submit" class="btn" onclick="decreaseAmount()">-</button>
                                 <input class="form-control" style="width: 50px;" type="number" name="amount" id="amount" 
                                 value="{{$product->quantity}}" onchange="this.form.submit()">

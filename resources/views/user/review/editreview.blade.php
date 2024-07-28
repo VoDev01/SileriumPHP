@@ -38,12 +38,12 @@
               <x-error field="comment"/>
             </div>
             <div class="mb-3">
-              <label for="review_images" class="form-label">Изображения к отзыву</label>
-              <input type="file" class="form-control" name="review_images" id="review_images" multiple>
-              <x-error field="review_images"/>
+              <label for="reviewImages" class="form-label">Изображения к отзыву</label>
+              <input type="file" class="form-control" name="reviewImages" id="reviewImages" multiple>
+              <x-error field="reviewImages"/>
             </div>
-            <input hidden name="product_id" value="{{$product->id}}">
-            <input hidden name="review_id" value="{{$review->id}}">
+            <input hidden name="productId" value="{{$product->id}}">
+            <input hidden name="reviewId" value="{{$review->id}}">
             <button type="submit" class="btn btn-primary">Отправить</button>
         </form>
     </div>
