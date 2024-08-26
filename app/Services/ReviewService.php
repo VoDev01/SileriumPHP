@@ -5,11 +5,10 @@ use Carbon\Carbon;
 use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
 
 class ReviewService 
 {
-    public function make(array $validatedInput, int $userId, int $productId, array $images = null)
+    public static function make(array $validatedInput, int $userId, int $productId, array $images = null)
     {
         $reviewId = Review::insertGetId([
             'ulid' => Str::ulid()->toBase32(),
@@ -32,7 +31,7 @@ class ReviewService
         $review = Review::find($reviewId);
         return $review;
     }
-    public function update(int $id, array $validatedInput, int $productId, int $userId)
+    public static function update(int $id, array $validatedInput, int $productId, int $userId)
     {
         Review::where('id', $id)->update([
             'title' => $validatedInput['title'],

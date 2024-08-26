@@ -39,15 +39,17 @@ class APIUsersController extends Controller
     public function find(string $email, string $load_with = "", string $name = null, string $surname = null, string $id = null, string $phone = null)
     {
         if($load_with == "")
+        {
             $users = User::where("email", $email)->get();
+            return response()->json($users, 200);
+        }
         else if ($load_with == "orders")
-            $users = User::with("orders")->where("email", $email)->get();
+            $usersQuery = User::with("orders");
         else if($load_with == "roles")
-            $users = User::with("roles:role")->where("email", $email)->get();
+            $usersQuery = User::with("roles");
         else if($load_with == "reviews")
-            $users = User::with("reviews.product")->where("email", $email)->get();
-        else
-            $users = User::where("email", $email)->get();
+            $usersQuery = User::with("reviews.product");
+        $users = $usersQuery->where("email", $email)->get();
         return response()->json($users, 200);
     }
 

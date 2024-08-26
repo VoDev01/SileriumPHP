@@ -4,7 +4,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use App\Models\Review;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class MakeReviewService 
 {
@@ -24,7 +24,7 @@ class MakeReviewService
         ]);
         if($images != null)
         {
-            for ($i=0; $i < $images->count(); $i++) { 
+            for ($i=0; $i < count($images); $i++) { 
                 DB::insert('INSERT INTO reviews_images (imagePath, review_id) VALUES (?, ?)', [$images[$i], $reviewId]);
             }
         }

@@ -1,11 +1,9 @@
 <?php
 namespace App\Services;
 
-use Carbon\Carbon;
 use App\Models\Product;
-use App\Enum\OrderStatus;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class MakeProductService 
 {
@@ -15,7 +13,7 @@ class MakeProductService
         $productId = Product::insertGetId($insert);
         if($images != null)
         {
-            for ($i=0; $i < $images->count(); $i++) { 
+            for ($i=0; $i < count($images); $i++) { 
                 DB::insert('INSERT INTO products_images (imagePath, product_id) VALUES (?, ?)', [$images[$i], $productId]);
             }
         }

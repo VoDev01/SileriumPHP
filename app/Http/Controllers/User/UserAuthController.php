@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Services\MakeUserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -15,7 +16,6 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\UserRegisterRequest;
 use App\Services\ValidatePasswordHashService;
-use App\Facades\UserServiceFacade as UserService;
 use App\Facades\ValidateEmailFacade as ValidateEmail;
 use App\Facades\ValidatePhoneFacade as ValidatePhone;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -138,7 +138,7 @@ class UserAuthController extends Controller
         } else {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
-        $user = UserService::make($validated, $pfpPath);
+        $user = MakeUserService::make($validated, $pfpPath);
         $user->save();
         return redirect()->route('login');
     }

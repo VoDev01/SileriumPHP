@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Product;
-use App\Models\Subcategory;
 use Illuminate\Http\Request;
-use App\ApiFilters\V1\ProductFilter;
+use App\Services\ProductService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\ProductsResource;
 use App\Http\Requests\API\APIProductsRequest;
-use App\Http\Resources\V1\ProductsCollection;
-use App\Facades\ProductServiceFacade as ProductService;
 
 class APIProductsController extends Controller
 {

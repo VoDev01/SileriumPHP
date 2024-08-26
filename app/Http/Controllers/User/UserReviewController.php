@@ -5,11 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Models\Review;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Facades\ReviewServiceFacade as ReviewService;
+use App\Services\ReviewService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserReviewRequest;
-use Illuminate\Support\Facades\Validator;
 
 class UserReviewController extends Controller
 {
