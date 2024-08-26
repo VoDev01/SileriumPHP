@@ -4,11 +4,7 @@
         Товары | Silerium
     </x-slot>
 
-<<<<<<< Updated upstream
-    <script type="text/javascript">
-=======
     {{-- <script type="module">
->>>>>>> Stashed changes
         $(".select1").change(function() {
             if ($(this).data('options') == undefined) {
                 /*Taking an array of all options-2 and kind of embedding it on the select1*/
@@ -21,159 +17,6 @@
     </script> --}}
 
     <div class="mx-3">
-<<<<<<< Updated upstream
-        <h1>Товары</h1>
-        <nav class="navbar navbar-expand-md">
-            <div class="container-fluid g-3">
-                <span class="navbar-text">Сортировать по:</span>
-                <div class="navbar-collapse">
-                    <div class="navbar-nav">
-                        @php
-                            $productParam = $product == null ? '' : '/' . $product;
-                            $orderLink = '/catalog/products/';
-                            $orderParams = '/' . $available . '/' . $subcategory . $productParam;
-                        @endphp
-                        @switch($sortOrder)
-                            @case(App\Enum\SortOrder::NAME_ASC->value)
-                                <a class="nav-link active text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::NAME_DESC->value . $orderParams }}">
-                                    Названию
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::POP_DESC->value . $orderParams }}">
-                                    Популярности
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::PRICE_DESC->value . $orderParams }}">
-                                    Цене
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                            @break
-
-                            @case(App\Enum\SortOrder::NAME_DESC->value)
-                                <a class="nav-link active text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::NAME_ASC->value . $orderParams }}">
-                                    Названию
-                                    <i class="bi bi-arrow-down"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::POP_DESC->value . $orderParams }}">
-                                    Популярности
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::PRICE_DESC->value . $orderParams }}">
-                                    Цене
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                            @break
-
-                            @case(App\Enum\SortOrder::POP_ASC->value)
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::NAME_DESC->value . $orderParams }}">
-                                    Названию
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link active text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::POP_DESC->value . $orderParams }}">
-                                    Популярности
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::PRICE_DESC->value . $orderParams }}">
-                                    Цене
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                            @break
-
-                            @case(App\Enum\SortOrder::POP_DESC->value)
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::NAME_DESC->value . $orderParams }}">
-                                    Названию
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link active text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::POP_ASC->value . $orderParams }}">
-                                    Популярности
-                                    <i class="bi bi-arrow-down" href="{{ $orderLink }}"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::PRICE_DESC->value . $orderParams }}">
-                                    Цене
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                            @break
-
-                            @case(App\Enum\SortOrder::PRICE_ASC->value)
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::NAME_DESC->value . $orderParams }}">
-                                    Названию
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::POP_DESC->value . $orderParams }}">
-                                    Популярности
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link active text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::PRICE_DESC->value . $orderParams }}">
-                                    Цене
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                            @break
-
-                            @case(App\Enum\SortOrder::PRICE_DESC->value)
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::NAME_DESC->value . $orderParams }}">
-                                    Названию
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::POP_DESC->value . $orderParams }}">
-                                    Популярности
-                                    <i class="bi bi-arrow-down text-secondary"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                                <a class="nav-link active text-black"
-                                    href="{{ $orderLink . App\Enum\SortOrder::PRICE_ASC->value . $orderParams }}">
-                                    Цене
-                                    <i class="bi bi-arrow-down"></i>
-                                    <i class="bi bi-arrow-up text-secondary"></i>
-                                </a>
-                            @break
-                        @endswitch
-                        <form action="/catalog/rubcurrency" method="POST">
-                            @csrf
-                            <button type="submit" class="btn">&#8381;</button>
-                        </form>
-                        <form action="/catalog/dolcurrency" method="POST">
-                            @csrf
-                            <button type="submit" class="btn">&#36;</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <div class="container-fluid mb-5" style="width: 97%;">
-=======
         @php
             $inputs = [['displayName' => 'Название товара', 'inputName' => 'name', 'field' => 'name', 'required' => false]];
             $checkboxInputs = [['displayName' => 'В продаже', 'inputId' => 'available', 'inputName' => 'available', 'required' => false]];
@@ -194,7 +37,6 @@
                     submit_id="filterProducts" />
 
             </x-filter-form>
->>>>>>> Stashed changes
             <div class="row flex-column flex-lg-row">
                 <div class="col-12 col-lg-9">
                     @empty($products)

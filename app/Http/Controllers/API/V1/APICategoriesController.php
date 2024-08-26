@@ -58,7 +58,7 @@ class APICategoriesController extends Controller
         $category = Category::find($request->id);
         $category->name = $request->name;
         $category->image = $request->image;
-        $categories->save();
+        $category->save();
         return response()->json(null, 200);
     }
 

@@ -28,11 +28,7 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>
-<<<<<<< Updated upstream
-                <input class="form-control" type="email" id="email" name="email" />
-=======
                 <input class="form-control" type="email" id="email" name="email" value="{{ old('email') }}" />
->>>>>>> Stashed changes
                 <x-error field="email" id="error-email" />
             </div>
             <div class="mb-3">

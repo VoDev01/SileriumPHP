@@ -3,20 +3,23 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Facades\ValidateEmailFacade as ValidateEmail;
-use App\Facades\ValidatePhoneFacade as ValidatePhone;
-use App\Facades\UserServiceFacade as UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserLoginRequest;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\UserRegisterRequest;
 use App\Services\ValidatePasswordHashService;
+use App\Facades\UserServiceFacade as UserService;
+use App\Facades\ValidateEmailFacade as ValidateEmail;
+use App\Facades\ValidatePhoneFacade as ValidatePhone;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Password as FacadesPassword;
 
 class UserAuthController extends Controller
 {
@@ -24,7 +27,7 @@ class UserAuthController extends Controller
     {
         return view('user.auth.login');
     }
-    public function postLogin(Request $request)
+    public function postLogin(UserLoginRequest $request)
     {
         if (Auth::viaRemember()) {
             $request->session()->regenerate();
@@ -32,15 +35,7 @@ class UserAuthController extends Controller
         } 
         else 
         {
-            $validator = Validator::make($request->all(), [
-                'email' => ['required', 'email', 'exists:users', 'min: 5', 'max: 100'],
-                'password' => ['required', 'min: 10']
-            ]);
-            if($validator->fails())
-            {
-                return redirect()->back()->withErrors($validator);
-            }
-            $validated = $validator->validated();
+            $validated = $request->validated();
             $user = User::where('email', $validated['email'])->first();
             if(ValidatePasswordHashService::validate($request, $validated['password'], $user))
             {
@@ -128,45 +123,22 @@ class UserAuthController extends Controller
     {
         return view('user.auth.register');
     }
-    public function postRegister(Request $request)
+    public function postRegister(UserRegisterRequest $request)
     {
-        $user_val = $request->validate([
-            'name' => ['min:5', 'max:30', 'required'],
-            'surname' => ['min:5', 'max:30'],
-            'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::min(10)->numbers()],
-            'birthDate' => ['nullable', 'date'],
-            'country' => ['min:3', 'max:50', 'required'],
-            'city' => ['min:5', 'max:50', 'required'],
-            'homeAdress' => ['min:5', 'max:200', 'required'],
-            'phone' => ['min:8', 'max:20', 'nullable'],
-            'pfp' => ['mime:png,jpg,jpeg', 'nullable']
-        ]);
+        $validated = $request->validate();
         $apiValidationMessage = "";
-        if (!ValidateEmail::validate($user_val['email'], $apiValidationMessage)) {
+        if (!ValidateEmail::validate($validated['email'], $apiValidationMessage)) {
             return back()->withErrors(['email' => $apiValidationMessage]);
         } 
-<<<<<<< Updated upstream
-        if($user_val['phone'] != null)
-        {
-            if (!ValidatePhone::validate($user_val['phone'], $apiValidationMessage)) {
-                return back()->withErrors(['phone' => $apiValidationMessage]);
-            }
-=======
         if (!ValidatePhone::validate($validated['phone'], $apiValidationMessage)) {
             return back()->withErrors(['phone' => $apiValidationMessage]);
->>>>>>> Stashed changes
         }
         if ($request->pfp != null) {
-            $pfpPath = Storage::putFile('pfp', $user_val['pfp']);
+            $pfpPath = Storage::putFile('pfp', $validated['pfp']);
         } else {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
-<<<<<<< Updated upstream
-        $user = MakeUserService::make($user_val, $pfpPath);
-=======
         $user = UserService::make($validated, $pfpPath);
->>>>>>> Stashed changes
         $user->save();
         return redirect()->route('login');
     }
