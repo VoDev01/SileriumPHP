@@ -65,16 +65,14 @@ class UsersAdminPanelController extends Controller
     }
     public function findUsers(Request $request)
     {
-        $params = $request->load_with . "/" . $request->email;
-        if($request->name != null)
-            $params = $params . "/" . $request->name; 
-        if($request->surname != null)
-            $params = $params . "/" . $request->surname;
-        if($request->id != null)
-            $params = $params . "/" . $request->id;
-        if($request->phone != null)
-            $params = $params . "/" . $request->phone;
-        $response = Http::get('/api/v1/users/find/' .  $params)['users'];
+        $response = Http::post('/api/v1/users/find', [
+            'load_with' => $request->load_with,
+            'email' => $request->email,
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'id' => $request->id,
+            'phone' => $request->phone
+        ])['users'];
         if($request->ajax())
         {
             return response()->json(['users' => $response]);
