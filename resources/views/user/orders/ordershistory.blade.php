@@ -8,10 +8,15 @@
         @else
             @foreach ($orders as $order)
                 <p>Номер заказа - {{ $order->id }}</p>
-                <img alt="картинка товара" width="250" height="250"
-                    src="{{ asset($order->product->images->first()) }}">
+                <p>Товары</p>
+                <div class="scroll-container">
+                    @foreach ($order->products as $product)
+                        <img width="128" height="128" src="{{asset($product->images->first()->imagePath)}}" alt="картинка товара {{$product->name}}"/>
+                        <span class="text-dark">{{$product->name}}</span>
+                    @endforeach
+                </div>
                 <p>Цена итого: {{ $order->totalPrice }} &#8381;</p>
-                <p>Составлен: {{$order->orderDate}}</p>
+                <p>Оформлен: {{$order->orderDate}}</p>
                 @php
                     $orderStatusDB = $order->orderStatus;
                     $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);

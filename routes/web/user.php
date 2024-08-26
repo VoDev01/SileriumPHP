@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserAuthController;
+use App\Http\Controllers\User\UserCartController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserReviewController;
 
@@ -30,18 +32,21 @@ Route::controller(UserReviewController::class)->group(function(){
     Route::get('review/product/{productId}', 'review')->middleware(['auth', 'verified']);
     Route::post('postreview', 'postReview');
     Route::get('review/editreview/{review}', 'editReview');
-    Route::post('posteditreview', 'postEditReview');
-    Route::post('deletereview', 'deleteReview');
+    Route::put('posteditreview', 'postEditReview');
+    Route::delete('deletereview', 'deleteReview');
 });
-Route::controller(UserOrderController::class)->group(function(){    
-    Route::get('cart', 'cart')->middleware(['auth', 'verified'])->name('cart');
-    Route::post('cart/changeamount', 'changeAmount')->middleware('auth');
-    Route::post('cart/removefromcart', 'removeFromCart')->middleware('auth');
-    
+Route::controller(UserOrderController::class)->group(function(){
     Route::get('orders/all', 'allOrders')->middleware(['auth', 'verified']);
     Route::get('orders/editorder/{order}', 'editOrder');
-    Route::post('orders/posteditorder', 'postEditOrder');
-    Route::post('orders/closeorder', 'closeOrder');
-    Route::get('orders/ordershistory', 'ordersHistory');
+    Route::put('orders/posteditorder', 'postEditOrder');
+    Route::delete('orders/closeorder', 'closeOrder');
+    Route::get('orders/history', 'ordersHistory');
     Route::post('orders/filtershopcart', 'filterShopCart');
+});
+Route::controller(UserCartController::class)->group(function(){    
+    Route::get('cart', 'cart')->middleware(['auth', 'verified'])->name('cart');
+    Route::get('cart/addtocart/{product}','addToCart')->middleware('verified');
+    Route::post('cart/postcart', 'postCart')->middleware('auth');
+    Route::post('cart/changeamount', 'changeAmount')->middleware('auth');
+    Route::delete('cart/removefromcart', 'removeFromCart')->middleware('auth');
 });

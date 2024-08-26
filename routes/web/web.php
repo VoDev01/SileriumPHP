@@ -28,8 +28,6 @@ Route::controller(CatalogController::class)->prefix('catalog')->group(function()
     Route::post('dolcurrency','dolCurrency');
     Route::post('filter','filterProducts');
     Route::get('product/{productId}', 'product')->middleware('auth');
-    Route::get('addtocart/{product}','addToCart')->middleware('verified');
-    Route::post('postcart', 'postCart')->middleware('auth');
 });
 
 Route::fallback(FallbackController::class);

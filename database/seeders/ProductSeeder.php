@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ProductSeeder extends Seeder
 {
@@ -15,16 +16,6 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('products')->insert(
-            [
-                'name' => 'Iphone X Pro',
-                'description' => 'Iphone X Pro',
-                'priceRub' => 50000,
-                'stockAmount' => 5,
-                'available' => true,
-                'subcategory_id' => 1,
-                'specification_id' => 1
-            ]
-        );
+        Product::factory()->count(30)->create();
     }
 }

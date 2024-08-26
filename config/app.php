@@ -194,11 +194,27 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        /*
+        * Custom Service Providers...
+        */
+
         Darryldecode\Cart\CartServiceProvider::class,
         App\Providers\ConvertCurrencyServiceProvider::class,
         App\Providers\PhoneValidationProvider::class,
         App\Providers\EmailValidationProvider::class,
+<<<<<<< Updated upstream
         App\Providers\CheckUserRoleProvider::class
+=======
+        App\Providers\CheckUserRoleProvider::class,
+        App\Providers\OrderItemsProvider::class,
+        App\Providers\ValidatePasswordHashProvider::class,
+        App\Providers\ProductProvider::class,
+        App\Providers\ReviewProvider::class,
+        App\Providers\UserProvider::class,
+        App\Providers\OrderProvider::class,
+        App\Providers\ProductCartServiceProvider::class,
+>>>>>>> Stashed changes
     ],
 
     /*
@@ -213,12 +229,22 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
         'ConvertCurrency' => App\Facades\ConvertCurrencyFacade::class,
         'ValidatePhone' => App\Facades\ValidatePhoneFacade::class,
         'ValidateEmail' => App\Facades\ValidateEmailFacade::class,
         'CheckUserRole' => App\Facades\CheckUserRoleFacade::class,
+<<<<<<< Updated upstream
+=======
+        'OrderItems' => App\Facades\OrderItemsFacade::class,
+        'ManualPaginator' => App\Facades\ManualPaginatorFacade::class,
+        'ValidatePasswordHash' => App\Facades\ValidatePasswordHashFacade::class,
+        'OrderService' => App\Facades\OrderServiceFacade::class,
+        'UserService' => App\Facades\UserServiceFacade::class,
+        'ProductService' => App\Facades\ProductServiceFacade::class,
+        'ReviewService' => App\Facades\ReviewServiceFacade::class,
+        'ProductCart' => App\Facades\ProductCartServiceFacade::class,
+>>>>>>> Stashed changes
     ])->toArray(),
 
 ];

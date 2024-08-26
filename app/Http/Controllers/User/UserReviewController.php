@@ -5,9 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Models\Review;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Services\MakeReviewService;
+use App\Facades\ReviewServiceFacade as ReviewService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UserReviewRequest;
 use Illuminate\Support\Facades\Validator;
 
 class UserReviewController extends Controller
@@ -22,41 +23,19 @@ class UserReviewController extends Controller
         $product = Product::find($productId);
         return view('user.review.reviewproduct', ['product' => $product]);
     }
-    public function postReview(Request $request)
+    public function postReview(UserReviewRequest $request)
     {
-        if ($request->review_images != null)
-            $validator = Validator::make($request->all(), [
-                'title' => ['required', 'min:5', 'max:40'],
-                'pros' => ['required', 'min:5', 'max:1500'],
-                'cons' => ['required', 'min:5', 'max:1500'],
-                'comment' => ['min:5', 'max:1500', 'nullable'],
-                'rating' => ['required'],
-                'review_images' => ['array', 'max:5'],
-                'review_images.*' => [File::image()->min('1kb')->max('15mb')->dimensions(Rule::dimensions()->maxWidth(1500)->maxHeight(1500))]
-            ]);
-        else
-            $validator = Validator::make($request->all(), [
-                'title' => ['required', 'min:5', 'max:40'],
-                'pros' => ['required', 'min:5', 'max:1500'],
-                'cons' => ['required', 'min:5', 'max:1500'],
-                'comment' => ['min:5', 'max:1500', 'nullable'],
-                'rating' => ['required']
-            ]);
-        if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-        $validated = $validator->validated();
-        $review = MakeReviewService::make($validated, Auth::id(), $request->product_id, $request->review_images);
+        $validated = $request->validated();
+        $review = ReviewService::make($validated, Auth::id(), $request->product_id, $request->review_images);
         return redirect()->route('userReviews');
     }
     public function editReview(Review $review)
     {
         return view('user.review.reviewproduct', ['review' => $review, 'product' => $review->product]);
     }
-    public function postEditReview(Request $request)
+    public function postEditReview(UserReviewRequest $request)
     {
+<<<<<<< Updated upstream
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'min:5', 'max:40'],
             'pros' => ['required', 'min:5', 'max:1500'],
@@ -80,6 +59,10 @@ class UserReviewController extends Controller
             'product_id' => $request->product_id,
             'user_id' => Auth::id()
         ]);
+=======
+        $validated = $request->validated();
+        ReviewService::update($request->review_id, $validated, $request->product_id, Auth::id());
+>>>>>>> Stashed changes
         return redirect()->route('userReviews');
     }
     public function deleteReview(Request $request)

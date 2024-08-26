@@ -2,14 +2,18 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
+    protected static int $id = 0;
     /**
      * Define the model's default state.
      *
@@ -17,11 +21,24 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        if(self::$id == 0)
+            self::$id = intval(User::max('id')) ?? 0;
+        self::$id++; 
         return [
-            'name' => fake()->name(),
+            'ulid' => Str::ulid()->toBase32(),
+            'id' => self::$id,
+            'name' => fake()->firstName(),
+            'surname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2a$10$HRNZMsa.OY1Z0/hJz0Kgg.OZ7eu5QW24gjgPE0xY3.l4OWbOFtOyG',
+            'created_at' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s'),
+            'birthDate' => fake()->dateTime()->format('Y-m-d H:i:s'),
+            'country' => fake()->country(),
+            'city' => fake()->city(),
+            'homeAdress' => fake()->address(),
+            'phone' => fake()->phoneNumber(),
+            'profilePicture' => 'images/pfp/default_user.png',
+            'password' => Hash::make('1122334455'),
             'remember_token' => Str::random(10),
         ];
     }

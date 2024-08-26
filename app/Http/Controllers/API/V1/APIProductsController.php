@@ -7,47 +7,68 @@ use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\ApiFilters\V1\ProductFilter;
 use App\Http\Controllers\Controller;
-use App\Services\MakeProductService;
 use App\Http\Resources\V1\ProductsResource;
+use App\Http\Requests\API\APIProductsRequest;
 use App\Http\Resources\V1\ProductsCollection;
+use App\Facades\ProductServiceFacade as ProductService;
 
 class APIProductsController extends Controller
 {
-    public function index(int $items_per_page)
+    public function index(int $itemsPerPage = 15)
     {
-        $products = Product::paginate($items_per_page);
-        return response()->json(['response' => $products]);
+        $products = Product::orderBy('id')->paginate($itemsPerPage);
+        return response()->json($products, 200);
     }
     public function show(int $id)
     {
-        $products = Product::find($id);
-        return response()->json(['response' => $products]);
+        $product = Product::where('id', $id)->orderBy('id')->get();
+        if($product != null)
+            return response()->json($product, 200);
+        else
+            return response()->json(['message' => 'No product was found with this id'], 400);
     }
-    public function create(Request $request)
+    public function create(APIProductsRequest $request)
     {
-        MakeProductService::make($request->name, $request->description, $request->priceRub, $request->stockAmount, $request->avilable, $request->subcategory_id);
-        return response()->json(null, 200);
+        $validated = $request->validated();
+        $product = ProductService::make(
+            $validated['name'], 
+            $validated['description'], 
+            $validated['priceRub'], 
+            $validated['stockAmount'], 
+            $validated['available'], 
+            $validated['subcategory_id']);
+        return response()->json(['Url' => 'https://silerium.com/catalog/product/' . $product->ulid], 200);
     }
-    public function update(int $id)
+    public function update(APIProductsRequest $request)
     {
-        $product = Product::find($id);
-        $product->name = $request->name;
-        $product->decsription = $request->description;
-        $product->priceRub = $request->priceRub;
-        $product->stockAmount = $request->stockAmount;
-        $product->available = $request->available;
-        $product->subcategory = $request->subcategory;
-        $product->save();
-        return response()->json(null, 200);
+        $validated = $request->validated();
+        Product::where('id', $request->id)->orderBy('id')->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'priceRub' => $validated['priceRub'],
+            'stockAmount' => $validated['stockAmount'],
+            'available' => $validated['available'],
+            'subcategory_id' =>  $validated['subcategory_id']
+        ]);
+        return response()->json(['Url' => 'https://silerium.com/catalog/product/' . $validated['name']], 200);
     }
-    public function delete(int $id)
+    public function delete(Request $request)
     {
-        Product::destroy($id);
-        return response()->json(null, 200);
+        if(!Product::where('id', $request->id)->exists())
+            return response()->json(['message' => 'Trying to delete non-existent entity'], 403);
+        Product::destroy($request->id);
+        if(!Product::where('id', $request->id)->exists())
+            return response()->json(null, 200);
+        else
+            return response()->json(null, 400);
+
     }
-    public function product_by_nameid(int $id, string $name = null)
+    public function productsByNameId(string $name, int $id = null)
     {
-        $product = Product::where('id', $id)->orWhere('name', $name)->get()->first();
-        return response()->json(['product' => $product]);
+        $products = Product::where('name', 'like', '%'.$name.'%')->orWhere('id', $id)->orderBy('id')->get();
+        if($products != null)
+            return response()->json($products, 200);
+        else
+            return response()->json(['message' => 'No products were found with this name or id'], 400);
     }
 }

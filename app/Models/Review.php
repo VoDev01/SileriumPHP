@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin IdeHelperReview
+ */
 class Review extends Model
 {
     use HasFactory, HasUlids;
-
-    public $timestamps = false;
+    
+    //protected $primaryKey = 'ulid';
 
     protected $casts = [
         'createdAt' => 'datetime',

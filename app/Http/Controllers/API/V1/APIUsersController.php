@@ -36,7 +36,7 @@ class APIUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function find(string $load_with = "", string $email = "", string $id = null, string $phone = null)
+    public function find(string $email, string $load_with = "", string $name = null, string $surname = null, string $id = null, string $phone = null)
     {
         if($load_with == "")
             $users = User::where("email", $email)->get();
@@ -48,7 +48,7 @@ class APIUsersController extends Controller
             $users = User::with("reviews.product")->where("email", $email)->get();
         else
             $users = User::where("email", $email)->get();
-        return response()->json(["users" => $users]);
+        return response()->json($users, 200);
     }
 
     /**

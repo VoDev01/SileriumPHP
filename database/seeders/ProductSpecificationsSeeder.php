@@ -15,7 +15,7 @@ class ProductSpecificationsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('products_specs')->insert(
+        DB::table('product_specifications')->insert(
             [
                 'name' => 'Разрешение экрана',
                 'specification' => '2436x1125 px'

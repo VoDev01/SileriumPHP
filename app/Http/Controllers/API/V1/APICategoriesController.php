@@ -13,10 +13,10 @@ class APICategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(int $itemsPerPage = 15)
     {
-        $categories = Category::paginate(15);
-        return response()->json(['categories' => $categories]);
+        $categories = Category::paginate($itemsPerPage);
+        return response()->json($categories);
     }
 
     /**
@@ -25,13 +25,12 @@ class APICategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function create(Request $request)
     {
         $categories = Category::create([
             'name' => $request->name,
             'image' => $request->image
         ]);
-        $categories->save();
         return response()->json(null, 200);
     }
 
@@ -41,10 +40,10 @@ class APICategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $category = Category::find($id);
-        return response()->json(['category' => $category]);
+        return response()->json($category);
     }
 
     /**
@@ -54,9 +53,9 @@ class APICategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $category = Category::find($id);
+        $category = Category::find($request->id);
         $category->name = $request->name;
         $category->image = $request->image;
         $categories->save();
@@ -69,7 +68,7 @@ class APICategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(int $id)
     {
         Category::destroy($id);
         return response()->json(null, 200);

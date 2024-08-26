@@ -9,7 +9,6 @@
         "darryldecode/cart": "^4.2",
         "doctrine/dbal": "3.5.1",
         "guzzlehttp/guzzle": "^7.2",
-        "hflabs/dadata": "^22.3",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
@@ -17,6 +16,7 @@
         "symfony/console": "^4.0|^5.0|^6.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.13",
         "fakerphp/faker": "^1.9.1",
         "laravel-lang/common": "^4.0",
         "laravel-lang/lang": "^13.2",

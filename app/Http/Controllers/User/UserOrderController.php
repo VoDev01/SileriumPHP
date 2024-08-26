@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+<<<<<<< Updated upstream
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,15 @@ class UserOrderController extends Controller
         Cart::session(Auth::id())->remove($request->product_id);
         return redirect()->route('cart');
     }
+=======
+use App\Models\Order;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\DeleteClosedOrdersService;
+
+class UserOrderController extends Controller
+{
+>>>>>>> Stashed changes
     public function editOrder(Order $order)
     {
         return view("user.editorder", ['order' => $order]);
@@ -49,15 +59,25 @@ class UserOrderController extends Controller
     }
     public function closeOrder(Request $request)
     {
+<<<<<<< Updated upstream
         $order = Order::find($request->order_id);
         $order->orderStatus = OrderStatus::CLOSED;
         $order->delete();
         $order->save();
+=======
+        Order::where('ulid', $request->orderId)->first()->delete();
+>>>>>>> Stashed changes
         return redirect()->route('cart');
     }
     public function ordersHistory()
     {
+<<<<<<< Updated upstream
         $orders = Order::onlyTrashed()->get();
         return view('user.ordershistory', ['orders' => $orders]);
+=======
+        $orders = Order::with(['products', 'products.images'])->withTrashed()->get();
+        DeleteClosedOrdersService::delete();
+        return view('user.orders.ordershistory', ['orders' => $orders]);
+>>>>>>> Stashed changes
     }
 }

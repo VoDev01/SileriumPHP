@@ -9,9 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin IdeHelperSeller
+ */
 class Seller extends Model
 {
     use HasFactory, HasUlids;
+
+    //protected $primaryKey = 'ulid';
 
     protected $fillable = [
         'ulid',
@@ -23,6 +28,8 @@ class Seller extends Model
         'email',
         'email_verified'
     ];
+
+    public $timestamps = false;
 
     public function orders()
     {

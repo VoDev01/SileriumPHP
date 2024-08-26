@@ -9,10 +9,17 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin IdeHelperProduct
+ */
 class Product extends Model
 {
     use HasFactory, HasUlids;
+
+    //protected $primaryKey = 'ulid';
+
     public $timestamps = false;
+
     protected $casts = [
         'available' => 'boolean'
     ];
@@ -33,7 +40,7 @@ class Product extends Model
     }
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Order::class, 'orders_products', 'product_id', 'order_id');
     }
     public function productSpecifications()
     {

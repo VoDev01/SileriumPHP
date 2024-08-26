@@ -4,15 +4,17 @@ namespace App\Http\Controllers\User;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Facades\ValidateEmail;
-use App\Facades\ValidatePhone;
-use App\Services\MakeUserService;
+use App\Facades\ValidateEmailFacade as ValidateEmail;
+use App\Facades\ValidatePhoneFacade as ValidatePhone;
+use App\Facades\UserServiceFacade as UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\UserLoginRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use App\Http\Requests\UserRegisterRequest;
 use App\Services\ValidatePasswordHashService;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -144,18 +146,27 @@ class UserAuthController extends Controller
         if (!ValidateEmail::validate($user_val['email'], $apiValidationMessage)) {
             return back()->withErrors(['email' => $apiValidationMessage]);
         } 
+<<<<<<< Updated upstream
         if($user_val['phone'] != null)
         {
             if (!ValidatePhone::validate($user_val['phone'], $apiValidationMessage)) {
                 return back()->withErrors(['phone' => $apiValidationMessage]);
             }
+=======
+        if (!ValidatePhone::validate($validated['phone'], $apiValidationMessage)) {
+            return back()->withErrors(['phone' => $apiValidationMessage]);
+>>>>>>> Stashed changes
         }
         if ($request->pfp != null) {
             $pfpPath = Storage::putFile('pfp', $user_val['pfp']);
         } else {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
+<<<<<<< Updated upstream
         $user = MakeUserService::make($user_val, $pfpPath);
+=======
+        $user = UserService::make($validated, $pfpPath);
+>>>>>>> Stashed changes
         $user->save();
         return redirect()->route('login');
     }

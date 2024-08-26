@@ -4,7 +4,11 @@
         Товары | Silerium
     </x-slot>
 
+<<<<<<< Updated upstream
     <script type="text/javascript">
+=======
+    {{-- <script type="module">
+>>>>>>> Stashed changes
         $(".select1").change(function() {
             if ($(this).data('options') == undefined) {
                 /*Taking an array of all options-2 and kind of embedding it on the select1*/
@@ -14,9 +18,10 @@
             var options = $(this).data('options').filter('[data-name=' + id + ']');
             $('.select2').html(options);
         });
-    </script>
+    </script> --}}
 
     <div class="mx-3">
+<<<<<<< Updated upstream
         <h1>Товары</h1>
         <nav class="navbar navbar-expand-md">
             <div class="container-fluid g-3">
@@ -168,6 +173,28 @@
             </div>
         </nav>
         <div class="container-fluid mb-5" style="width: 97%;">
+=======
+        @php
+            $inputs = [['displayName' => 'Название товара', 'inputName' => 'name', 'field' => 'name', 'required' => false]];
+            $checkboxInputs = [['displayName' => 'В продаже', 'inputId' => 'available', 'inputName' => 'available', 'required' => false]];
+            $hiddenInputs = [
+                ['inputName' => 'sortOrder', 'inputId' => 'sortOrder', 'inputValue' => $sortOrder],
+                ['inputName' => 'available', 'inputId' => null, 'inputValue' => 0],
+                ['inputName' => 'subcategory', 'inputId' => 'subcategory', 'inputValue' => $subcategory],
+            ];
+            $filterActionParams = '/' . $available . '/' . $subcategory;
+        @endphp
+        <div class="container-fluid mt-2">
+            <x-filter-form filterActionLink="/catalog/products/" :$filterActionParams
+                filterRubCurrencyLink="/catalog/rubcurrency" filterDolCurrencyLink="/catalog/dolcurrency" :$sortOrder
+                popularity="true" price="true" currency="true">
+
+                <x-search-form searchActionUrl="/catalog/filter" header="Поиск товаров"
+                    loadWith="images, productSpecifications" :$hiddenInputs :$inputs :$checkboxInputs
+                    submit_id="filterProducts" />
+
+            </x-filter-form>
+>>>>>>> Stashed changes
             <div class="row flex-column flex-lg-row">
                 <div class="col-12 col-lg-9">
                     @empty($products)
@@ -179,11 +206,11 @@
                                 <h3> {{ $product->name }}</h3>
 
                                 @if ($product->images->first() == null)
-                                    <img src="#" class="col" alt="картинка товара" width="250"
-                                        height="250">
+                                    <img src="#" class="col" alt="картинка товара" width="128"
+                                        height="256">
                                 @else
                                     <img src="{{ asset($product->images->first()->imagePath) }}" class="col"
-                                        alt="картинка товара" width="250" height="250">
+                                        alt="картинка товара" width="128" height="256">
                                 @endif
                             </div>
                             @php

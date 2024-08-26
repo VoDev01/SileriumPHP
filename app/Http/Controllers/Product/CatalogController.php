@@ -3,19 +3,22 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
-use App\Enum\OrderStatus;
-use App\Enum\SortOrder;
-use App\Facades\ConvertCurrency;
 use App\Models\Category;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\Subcategory;
+<<<<<<< Updated upstream
 use App\Models\User;
 use App\Services\OrderProductsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
+=======
+use Illuminate\Http\Request;
+use App\Facades\OrderItemsFacade as OrderItems;
+use App\Facades\ProductServiceFacade as ProductService;
+use App\Facades\ProductCartServiceFacade as ProductCart;
+>>>>>>> Stashed changes
 
 class CatalogController extends Controller
 {
@@ -39,9 +42,13 @@ class CatalogController extends Controller
         $products = OrderProductsService::orderProduct($query, $sortOrder, 15);
         if(session('products_currency') == 'dol')
         {
+<<<<<<< Updated upstream
             foreach ($products as $product) {
                 $product->priceRub = round(ConvertCurrency::convertToDol($product->priceRub), 1);
             }
+=======
+            ProductCart::convertCurrency($products);
+>>>>>>> Stashed changes
         }
         return view('catalog.products', ['products' => $products,
         'sortOrder' => $sortOrder, 'subcategories' => Subcategory::all(), 
@@ -50,7 +57,12 @@ class CatalogController extends Controller
     }
     public function filterProducts(Request $request)
     {
+<<<<<<< Updated upstream
         return redirect()->route('allproducts', ['sortOrder' => $request->sort_order, 
+=======
+        session(['loadWith' => $request->loadWith]);
+        return redirect()->route('allproducts', ['sortOrder' => $request->sortOrder, 
+>>>>>>> Stashed changes
         'available' => $request->available, 'subcategory' => $request->subcategory, 
         'product' => $request->product]);
     }
@@ -60,6 +72,7 @@ class CatalogController extends Controller
         $reviews = $product->reviews()->with('user')->paginate(5);
         return view('catalog.product', ['product' => $product, 'reviews' => $reviews]);
     }
+<<<<<<< Updated upstream
     public function addToCart(Product $product)
     {
         return view('catalog.addtocart', ['product' => $product]);
@@ -86,6 +99,8 @@ class CatalogController extends Controller
             $validated['amount'])->associate('Product', 'App\Models');
         return redirect()->route('allproducts');
     }
+=======
+>>>>>>> Stashed changes
     public function rubCurrency()
     {
         session(['products_currency' => 'rub']);

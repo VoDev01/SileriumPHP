@@ -11,6 +11,7 @@ CREATE TABLE `categories` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pageName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -48,11 +49,12 @@ CREATE TABLE `orders` (
   `orderDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `orderAdress` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
   `orderStatus` enum('ISSUING','PENDING','CLOSED','DELIVERY','RECEIVED') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `user_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`ulid`),
   KEY `orders_user_id_foreign` (`user_id`),
-  CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `orders_products`;
@@ -62,10 +64,11 @@ CREATE TABLE `orders_products` (
   `order_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `product_id` bigint(20) unsigned NOT NULL,
   `productAmount` int(11) NOT NULL,
+  `total_price` double(9,2) NOT NULL,
   KEY `orders_products_order_id_foreign` (`order_id`),
   KEY `orders_products_product_id_foreign` (`product_id`),
-  CONSTRAINT `orders_products_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`ulid`),
-  CONSTRAINT `orders_products_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+  CONSTRAINT `orders_products_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`ulid`) ON DELETE CASCADE,
+  CONSTRAINT `orders_products_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
@@ -106,7 +109,7 @@ CREATE TABLE `product_images` (
   `product_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_images_product_id_foreign` (`product_id`),
-  CONSTRAINT `product_images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+  CONSTRAINT `product_images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_specifications`;
@@ -131,7 +134,7 @@ CREATE TABLE `products` (
   `stockAmount` int(11) NOT NULL,
   `available` tinyint(1) NOT NULL,
   `subcategory_id` bigint(20) unsigned NOT NULL,
-  `timesPurchased` int(11) NOT NULL,
+  `timesPurchased` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ulid`),
   UNIQUE KEY `products_id` (`id`),
   KEY `products_subcategory_id_foreign` (`subcategory_id`),
@@ -146,8 +149,8 @@ CREATE TABLE `products_specifications` (
   `specification_id` bigint(20) unsigned NOT NULL,
   KEY `products_specifications_product_id_foreign` (`product_id`),
   KEY `products_specifications_specification_id_foreign` (`specification_id`),
-  CONSTRAINT `products_specifications_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  CONSTRAINT `products_specifications_specification_id_foreign` FOREIGN KEY (`specification_id`) REFERENCES `product_specifications` (`id`)
+  CONSTRAINT `products_specifications_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `products_specifications_specification_id_foreign` FOREIGN KEY (`specification_id`) REFERENCES `product_specifications` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `reviews`;
@@ -169,8 +172,8 @@ CREATE TABLE `reviews` (
   UNIQUE KEY `reviews_id` (`id`),
   KEY `reviews_product_id_foreign` (`product_id`),
   KEY `reviews_user_id_foreign` (`user_id`),
-  CONSTRAINT `reviews_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  CONSTRAINT `reviews_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `reviews_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reviews_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `reviews_images`;
@@ -182,7 +185,7 @@ CREATE TABLE `reviews_images` (
   `review_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `reviews_images_review_id_foreign` (`review_id`),
-  CONSTRAINT `reviews_images_review_id_foreign` FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`)
+  CONSTRAINT `reviews_images_review_id_foreign` FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `roles`;
@@ -192,6 +195,63 @@ CREATE TABLE `roles` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sellers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sellers` (
+  `ulid` char(26) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `organization_name` varchar(75) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `verified` tinyint(1) NOT NULL DEFAULT '0',
+  `rating` double(2,1) NOT NULL DEFAULT '1.0',
+  `logo` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified` tinyint(1) NOT NULL DEFAULT '0',
+  `type` enum('АО','ООО','ИП') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tax_system` enum('УСН','ОСНО','ЕСХН') COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`ulid`),
+  UNIQUE KEY `sellers_id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sellers_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sellers_orders` (
+  `sellers_id` bigint(20) unsigned NOT NULL,
+  `orders_id` char(26) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_price` double(12,2) NOT NULL,
+  KEY `sellers_orders_sellers_id_foreign` (`sellers_id`),
+  KEY `sellers_orders_orders_id_foreign` (`orders_id`),
+  CONSTRAINT `sellers_orders_orders_id_foreign` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`ulid`),
+  CONSTRAINT `sellers_orders_sellers_id_foreign` FOREIGN KEY (`sellers_id`) REFERENCES `sellers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sellers_products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sellers_products` (
+  `seller_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
+  `product_amount` int(11) NOT NULL,
+  KEY `sellers_products_seller_id_foreign` (`seller_id`),
+  KEY `sellers_products_product_id_foreign` (`product_id`),
+  CONSTRAINT `sellers_products_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  CONSTRAINT `sellers_products_seller_id_foreign` FOREIGN KEY (`seller_id`) REFERENCES `sellers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sellers_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sellers_users` (
+  `seller_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  KEY `sellers_users_seller_id_foreign` (`seller_id`),
+  KEY `sellers_users_user_id_foreign` (`user_id`),
+  CONSTRAINT `sellers_users_seller_id_foreign` FOREIGN KEY (`seller_id`) REFERENCES `sellers` (`id`),
+  CONSTRAINT `sellers_users_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `subcategories`;
@@ -241,8 +301,8 @@ CREATE TABLE `users_roles` (
   `user_id` bigint(20) unsigned NOT NULL,
   KEY `users_roles_role_id_foreign` (`role_id`),
   KEY `users_roles_user_id_foreign` (`user_id`),
-  CONSTRAINT `users_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
-  CONSTRAINT `users_roles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `users_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `users_roles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -277,3 +337,10 @@ INSERT INTO `migrations` VALUES (35,'2024_06_16_152404_users_roles',12);
 INSERT INTO `migrations` VALUES (36,'2024_06_28_192044_users_email_verified',13);
 INSERT INTO `migrations` VALUES (39,'2024_06_30_180731_user_emailverified_nullable',14);
 INSERT INTO `migrations` VALUES (42,'2024_07_07_170531_users_roles_fix_rel',15);
+INSERT INTO `migrations` VALUES (43,'2024_07_23_171125_create_sellers',16);
+INSERT INTO `migrations` VALUES (44,'2024_07_28_104445_change_seller',16);
+INSERT INTO `migrations` VALUES (45,'2024_07_28_121910_orders_live_time',16);
+INSERT INTO `migrations` VALUES (46,'2024_08_04_172002_on_delete_cascade',16);
+INSERT INTO `migrations` VALUES (47,'2024_08_04_180628_on_delete_cascade_reviews',16);
+INSERT INTO `migrations` VALUES (48,'2024_08_04_191118_times_purchased_default',16);
+INSERT INTO `migrations` VALUES (49,'2024_08_06_192602_category_pagename',17);

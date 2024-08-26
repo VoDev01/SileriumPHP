@@ -6,6 +6,9 @@ use Database\Factories\ProductSpecificationsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProductSpecifications
+ */
 class ProductSpecifications extends Model
 {
     use HasFactory;

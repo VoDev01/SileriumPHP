@@ -13,10 +13,10 @@ class APISubcategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(int $itemsPerPage = 15)
     {
-        $subcategories = Subcategory::paginate(15);
-        return response()->json(['subcategories' => $subcategories]);
+        $subcategories = Subcategory::orderBy('id')->paginate($itemsPerPage);
+        return response()->json($subcategories, 200);
     }
 
     /**
@@ -25,13 +25,13 @@ class APISubcategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function create(Request $request)
     {
-        $subcategories = Subcategory::create([
+        $subcategory = Subcategory::create([
             'name' => $request->name,
-            'image' => $request->image
+            'image' => $request->image,
+            'category_id' => $request->categoryId
         ]);
-        $subcategories->save();
         return response()->json(null, 200);
     }
 
@@ -41,10 +41,10 @@ class APISubcategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $subcategory = Subcategory::find($id);
-        return response()->json(['subcategory' => $subcategory]);
+        return response()->json($subcategory, 200);
     }
 
     /**
@@ -54,13 +54,12 @@ class APISubcategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        
-        $subcategory = Subcategory::find($id);
+        $subcategory = Subcategory::find($request->id);
         $subcategory->name = $request->name;
         $subcategory->image = $request->image;
-        $categories->save();
+        $subcategory->save();
         return response()->json(null, 200);
     }
 
@@ -70,9 +69,9 @@ class APISubcategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        Subcategory::destroy($id);
+        Subcategory::destroy($request->id);
         return response()->json(null, 200);
     }
 }

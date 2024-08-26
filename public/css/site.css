@@ -87,3 +87,13 @@ body {
 #logout:hover {
     color: black;
 }
+
+.scroll-container{
+    overflow: auto;
+    white-space: nowrap;
+    padding: 10px;
+}
+
+.scroll-container img{
+    padding: 10px;
+}
