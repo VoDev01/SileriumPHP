@@ -15,8 +15,8 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="name" class="form-label">Название организации</label>
-                <input type="text" class="form-control" name="name" id="name" />
+                <label for="organization_name" class="form-label">Название организации</label>
+                <input type="text" class="form-control" name="organization_name" id="organization_name" />
             </div>
             <div class="mb-3">
                 <label for="tax_system" class="form-label">Система налогообложения</label>
@@ -36,8 +36,8 @@
                 <input type="email" class="form-control" name="email" id="email" />
             </div>
             <div class="mb-3">
-                <label for="img" class="form-label">Логотип организации</label>
-                <input type="file" class="form-control" name="img" id="img" />
+                <label for="logo" class="form-label">Логотип организации</label>
+                <input type="file" class="form-control" name="logo" id="logo" />
             </div>
             <button type="submit" class="btn btn-primary">
                 Зарегистрировать

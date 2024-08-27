@@ -6,7 +6,7 @@
         var basePrice =
             $("#amount").change(function() {
                 var amount = $(this).val();
-                var basePrice = $("#base_price").val();
+                var basePrice = $("#basePrice").val();
                 var totalPrice = (basePrice * amount).toFixed(2);
                 console.log(totalPrice);
                 var strPrice = new Intl.NumberFormat("ru").format(totalPrice);
@@ -29,8 +29,8 @@
                 </div>
                 <div class="col-8"></div>
             </div>
-            <input hidden id="base_price" value="{{$order->product->priceRub}}" />
-            <input hidden name="order_id" value="{{$order->id}}" />
+            <input hidden id="basePrice" value="{{$order->product->priceRub}}" />
+            <input hidden name="orderId" value="{{$order->id}}" />
             <h3>Цена итого: <span id="price">{{$order->product->priceRub}}</span> &#8381</h3>
             <button type="submit" class="btn btn-success text-white">Изменить</button>
         </form>

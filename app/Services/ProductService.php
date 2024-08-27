@@ -27,7 +27,7 @@ class ProductService
         $product = Product::find($productId);
         return $product;
     }
-    private static function getFilterQuery(array $relationships = null, string $subcategory = "all", string $product = "", int $available = 1)
+    public static function getFilterQuery(array $relationships = null, string $subcategory = "all", string $product = "", int $available = 1)
     {
         if($relationships != null)
         {

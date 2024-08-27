@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserLoginRequest;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\UserRegisterRequest;
 use App\Services\ValidatePasswordHashService;
@@ -20,7 +19,7 @@ use App\Facades\ValidateEmailFacade as ValidateEmail;
 use App\Facades\ValidatePhoneFacade as ValidatePhone;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Password as FacadesPassword;
+use Illuminate\Support\Facades\Password as PasswordUtil;
 
 class UserAuthController extends Controller
 {
@@ -78,11 +77,11 @@ class UserAuthController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-        $status = FacadesPassword::sendResetLink(
+        $status = PasswordUtil::sendResetLink(
             $request->only('email')
         );
 
-        return $status === FacadesPassword::RESET_LINK_SENT
+        return $status === PasswordUtil::RESET_LINK_SENT
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
     }
@@ -98,7 +97,7 @@ class UserAuthController extends Controller
             'password' => ['required', 'confirmed', Password::min(10)->numbers()]
         ]);
 
-        $status = FacadesPassword::reset(
+        $status = PasswordUtil::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, string $password) {
                 $user->forceFill([
@@ -107,11 +106,11 @@ class UserAuthController extends Controller
 
                 $user->save();
 
-                event(new PasswordReset($user));
+                event(new PasswordUtil($user));
             }
         );
 
-        return $status === FacadesPassword::PASSWORD_RESET
+        return $status === PasswordUtil::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);
     }

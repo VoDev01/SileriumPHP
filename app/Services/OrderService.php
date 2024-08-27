@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class MakeOrderService 
+class OrderService 
 {
-    public static function make(string $order_adress, $total_price, OrderStatus $order_status, int $user_id, array $products)
+    public function make(string $order_adress, $total_price, OrderStatus $order_status, int $user_id, array $products)
     {
         $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact($order_adress, $total_price, $order_status, Auth::id()));
         $orderId = Order::insertGetId($insert);

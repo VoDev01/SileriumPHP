@@ -4,29 +4,32 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class ApiSearchForm extends Component
+class SearchForm extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public string $actionUrl;
+    public string $searchActionUrl;
     public string $header;
     public string $loadWith;
     public string $redirect;
     public array $inputs;
+    public array $checkboxInputs;
+    public array $hiddenInputs;
     public string $submit_id;
-    public bool $required;
-    public function __construct(string $actionUrl, string $header, string $loadWith, string $redirect, array $inputs, string $submit_id = '', bool $required = false)
+    public function __construct(string $searchActionUrl, string $header = 'Поиск', string $loadWith = '', string $redirect = '#', 
+    array $hiddenInputs = [], array $inputs = [], array $checkboxInputs = [], string $submit_id = '')
     {
-        $this->actionUrl = $actionUrl;
+        $this->searchActionUrl = $searchActionUrl;
         $this->header = $header;
         $this->loadWith = $loadWith;
         $this->redirect = $redirect;
+        $this->hiddenInputs = $hiddenInputs;
+        $this->checkboxInputs = $checkboxInputs;
         $this->inputs = $inputs;
         $this->submit_id = $submit_id;
-        $this->required = $required;
     }
 
     /**
@@ -36,6 +39,6 @@ class ApiSearchForm extends Component
      */
     public function render()
     {
-        return view('components.api-search-form');
+        return view('components.search-form');
     }
 }

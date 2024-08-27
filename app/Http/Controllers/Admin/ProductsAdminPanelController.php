@@ -11,17 +11,17 @@ use App\Http\Controllers\Controller;
 
 class ProductsAdminPanelController extends Controller
 {
-    public function products_index()
+    public function index()
     {
         $products = Product::paginate(15);
         return view('admin.products.index', ['products' => $products]);
     }
-    public function create_product()
+    public function create()
     {
         $categories = Category::with('subcategories')->get();
         return view('admin.products.create', ['categories' => $categories]);
     }
-    public function post_product(Request $request)
+    public function postProduct(Request $request)
     {
         $response = Http::post('/api/v1/products/create');
         if($response->ok())
@@ -29,13 +29,13 @@ class ProductsAdminPanelController extends Controller
             return redirect()->route('products_index');
         }
     }
-    public function update_product(int $id)
+    public function update(int $id)
     {
         $product = Product::find($id);
         $categories = Category::with('subcategories')->get();
         return view('admin.products.update', ['product' => $product, 'categories' => $categories]);
     }
-    public function post_updated_product(Request $request)
+    public function postUpdatedProduct(Request $request)
     {
         $response = Http::post('/api/v1/products/update/' + $request->id);
         if($response->ok())
@@ -43,12 +43,12 @@ class ProductsAdminPanelController extends Controller
             return redirect()->route('products_index');
         }
     }
-    public function delete_product(int $id)
+    public function delete(int $id)
     {
         $product = Product::find($id);
         return view("admin.products.delete", ['product' => $product]);
     }
-    public function post_deleted_product(Request $request)
+    public function postDeletedProduct(Request $request)
     {
         $response = Http::post('/api/v1/products/delete/' + $request->id);
         if($response->ok())
@@ -64,11 +64,11 @@ class ProductsAdminPanelController extends Controller
             return response()->json(['subcategories' => $subcategories]);
         }
     }
-    public function product(Request $request, int $id, string $name = null)
+    public function productJson(Request $request, int $id, string $name = null)
     {
         if($request->ajax())
         {
-            $response = Http::get('https://silerium.com/api/v1/products/by_nameid/' . $id . '/' . $name)['product'];
+            $response = Http::get('/api/v1/products/by_nameid/' . $id . '/' . $name)['product'];
             return response()->json(['product' => $response]);
         }
     }

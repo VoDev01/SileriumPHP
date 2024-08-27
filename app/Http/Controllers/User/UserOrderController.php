@@ -15,7 +15,7 @@ class UserOrderController extends Controller
     }
     public function postEditOrder(Request $request)
     {
-        $order = Order::find($request->order_id);
+        $order = Order::find($request->orderId);
         $order->save();
         return redirect()->route('cart');
     }

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\ConvertCurrencyService;
+use App\Services\ProductService;
 use Illuminate\Support\ServiceProvider;
 
-class ConvertCurrencyServiceProvider extends ServiceProvider
+class ProductProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +14,8 @@ class ConvertCurrencyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('ConvertCurrency', function(){
-            return new ConvertCurrencyService();
+        $this->app->bind('ProductService', function(){
+            return new ProductService();
         });
     }
 
@@ -26,5 +26,6 @@ class ConvertCurrencyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //
     }
 }
