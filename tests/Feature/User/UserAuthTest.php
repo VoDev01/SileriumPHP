@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\User;
 
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
+use App\Services\UserService;
+use Crypt;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserAuthTest extends TestCase
 {

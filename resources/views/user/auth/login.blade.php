@@ -3,8 +3,8 @@
         Логин | Silerium
     </x-slot>
 
-    <!--<script>
-        $('#login_button').on('change', function(event) {
+    <!--<script type="module">
+        $('#login_button').on('click', function(event) {
             event.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -14,7 +14,6 @@
                 error: function(data) {
                     var all_errors = data.errors;
                     $.each(all_errors, function(key, value) {
-                        $('#error-' + key).text("");
                         $('#error-' + key).text(value);
                     });
                 }

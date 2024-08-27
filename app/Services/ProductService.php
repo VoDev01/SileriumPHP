@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\DB;
 
 class ProductService 
 {
-    public static function make(string $name, string $description, $priceRub, int $stockAmount, bool $available, int $subcategory_id, array $images = null)
+    public static function make(array $validatedInput, array $images = null)
     {
-        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact('name', 'description', 'priceRub', 'stockAmount', 'available', 'subcategory_id'), ['timesPurchased' => 0]);
+        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], [
+            'name' => $validatedInput['name'], 
+            'description' => $validatedInput['description'], 
+            'priceRub' => $validatedInput['priceRub'], 
+            'stockAmount' => $validatedInput['stockAmount'], 
+            'available' => $validatedInput['available'], 
+            'subcategory_id' => $validatedInput['subcategory_id'], 
+            'timesPurchased' => 0]);
         $productId = Product::insertGetId($insert);
         if($images != null)
         {

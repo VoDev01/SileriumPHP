@@ -26,13 +26,7 @@ class APIProductsController extends Controller
     public function create(APIProductsRequest $request)
     {
         $validated = $request->validated();
-        $product = ProductService::make(
-            $validated['name'], 
-            $validated['description'], 
-            $validated['priceRub'], 
-            $validated['stockAmount'], 
-            $validated['available'], 
-            $validated['subcategory_id']);
+        $product = ProductService::make($validated);
         return response()->json(['Url' => 'https://silerium.com/catalog/product/' . $product->ulid], 200);
     }
     public function update(APIProductsRequest $request)

@@ -6,12 +6,10 @@ use Tests\TestCase;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductAPITest extends TestCase
+class APIProductTest extends TestCase
 {
     use RefreshDatabase;
     /**

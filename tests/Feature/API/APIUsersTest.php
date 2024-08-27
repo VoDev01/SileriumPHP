@@ -4,7 +4,6 @@ namespace Tests\Feature\API;
 
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

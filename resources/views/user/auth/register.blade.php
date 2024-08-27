@@ -21,7 +21,6 @@
                     var all_errors = response.errors;
 
                     $.each(all_errors, function(key, value) {
-                        $('#error-'+key).text("");
                         $('#error-'+key).text(value);
                     });
                 }

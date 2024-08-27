@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Services\MakeUserService;
+use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -19,6 +19,7 @@ use App\Services\ValidatePasswordHashService;
 use App\Facades\ValidateEmailFacade as ValidateEmail;
 use App\Facades\ValidatePhoneFacade as ValidatePhone;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Password as FacadesPassword;
 
 class UserAuthController extends Controller
@@ -36,8 +37,8 @@ class UserAuthController extends Controller
         else 
         {
             $validated = $request->validated();
-            $user = User::where('email', $validated['email'])->first();
-            if(ValidatePasswordHashService::validate($request, $validated['password'], $user))
+            $user = UserService::getDecrypted($validated['email']);
+            /*if(ValidatePasswordHashService::validate($request, $validated['password'], $user))
             {
                 if(Gate::allows('access-admin-panel', $user))
                 {
@@ -51,13 +52,22 @@ class UserAuthController extends Controller
             else
             {
                 return redirect()->back()->withErrors(['password' => 'Неверный пароль']);
+            }*/
+            
+            $response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
+            if($response['success'])
+            {
+                if(Gate::allows('access-admin-panel', $user))
+                {
+                    return redirect()->route('admin_index');
+                }
+                else
+                {
+                    return redirect()->route('profile');
+                }
             }
-            /*
-            /*$response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
-            if(!$response['success'])
-                return response()->json($response);
             else
-                return redirect()->route('profile');*/
+                return response()->json($response);
         }
     }
     public function forgotPassword()
@@ -138,8 +148,7 @@ class UserAuthController extends Controller
         } else {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
-        $user = MakeUserService::make($validated, $pfpPath);
-        $user->save();
+        UserService::makeEncrypted($validated, $pfpPath);
         return redirect()->route('login');
     }
 }
