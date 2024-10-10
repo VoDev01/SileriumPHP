@@ -10,6 +10,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://www.cbr-xml-daily.ru/money.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script type="module">
         var stars = new StarRating('.star-rating', {tooltip: false});
     </script>

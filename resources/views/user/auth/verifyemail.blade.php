@@ -4,6 +4,13 @@
     </x-slot>
     <div class="container m-auto">
         <h1>Подтведите свой email</h1>
-        <p class="text-secondary">На ваш email было отправлено письмо с ссылкой на страницу подтвеждения. Перейдите по ссылке.</p>
+        <p class="text-secondary">На ваш email было отправлено письмо с ссылкой на страницу подтвеждения. Перейдите по
+            ссылке.</p>
+        <form action="/user/email/resendverification" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-primary">
+                Отправить повторно
+            </button>
+        </form>
     </div>
 </x-layout>

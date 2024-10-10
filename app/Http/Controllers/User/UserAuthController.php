@@ -15,10 +15,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\UserRegisterRequest;
 use App\Services\ValidatePasswordHashService;
-use App\Facades\ValidateEmailFacade as ValidateEmail;
-use App\Facades\ValidatePhoneFacade as ValidatePhone;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Password as PasswordUtil;
 
 class UserAuthController extends Controller
@@ -36,23 +34,7 @@ class UserAuthController extends Controller
         else 
         {
             $validated = $request->validated();
-            $user = UserService::getDecrypted($validated['email']);
-            /*if(ValidatePasswordHashService::validate($request, $validated['password'], $user))
-            {
-                if(Gate::allows('access-admin-panel', $user))
-                {
-                    return redirect()->route('admin_index');
-                }
-                else
-                {
-                    return redirect()->route('profile');
-                }
-            }
-            else
-            {
-                return redirect()->back()->withErrors(['password' => 'Неверный пароль']);
-            }*/
-            
+            $user = User::where('email', $validated['email'])->first();
             $response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
             if($response['success'])
             {
@@ -66,8 +48,12 @@ class UserAuthController extends Controller
                 }
             }
             else
-                return response()->json($response);
+                return response()->json($response, 422);
         }
+    }
+    public function matchPassword()
+    {
+        
     }
     public function forgotPassword()
     {
@@ -134,20 +120,14 @@ class UserAuthController extends Controller
     }
     public function postRegister(UserRegisterRequest $request)
     {
-        $validated = $request->validate();
-        $apiValidationMessage = "";
-        if (!ValidateEmail::validate($validated['email'], $apiValidationMessage)) {
-            return back()->withErrors(['email' => $apiValidationMessage]);
-        } 
-        if (!ValidatePhone::validate($validated['phone'], $apiValidationMessage)) {
-            return back()->withErrors(['phone' => $apiValidationMessage]);
-        }
+        $validated = $request->validated();
         if ($request->pfp != null) {
             $pfpPath = Storage::putFile('pfp', $validated['pfp']);
         } else {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
-        UserService::makeEncrypted($validated, $pfpPath);
+        $user = UserService::make($validated, $pfpPath);
+        event(new Registered($user));
         return redirect()->route('login');
     }
 }

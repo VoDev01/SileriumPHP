@@ -29,12 +29,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        VerifyEmail::toMailUsing(function(object $notifiable, string $url){
+        VerifyEmail::toMailUsing(function($notifiable, $url){
             return (new MailMessage)
                 ->subject('Подтверждение email')
-                ->line('Нажмите на ссылку для подтвеждения email')
+                ->line('Нажмите на ссылку для подтвеждения email.')
                 ->action('Подтвердить', $url);
         });
+
         Gate::define('access-admin-panel', function(User $user){
             foreach($user->roles as $role)
             {

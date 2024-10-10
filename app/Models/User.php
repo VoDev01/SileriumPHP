@@ -3,10 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\Seller;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +19,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * @mixin IdeHelperUser
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, HasUlids, Notifiable;
     
@@ -71,10 +76,65 @@ class User extends Authenticatable
     }
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'users_roles', 'role_id', 'user_id');
+        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
     }
     public function sellers()
     {
-        return $this->belongsToMany(Seller::class, 'sellers_users', 'seller_id', 'user_id');
+        return $this->belongsToMany(Seller::class, 'sellers_users', 'user_id', 'seller_id');
+    }
+
+    protected function name() : Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value)
+        );
+    }
+    protected function surname() : Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value)
+        );
+    }
+    protected function password() : Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => Hash::make($value)
+        );
+    }
+    protected function birthDate() : Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => Carbon::parse($value)->format('Y-m-d H:i:s')
+        ); 
+    }
+    protected function country() : Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value)
+        );
+    }
+    protected function city() : Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value)
+        );
+    }
+    protected function homeAdress() : Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value)
+        );
+    }
+    protected function phone() : Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value)
+        );
     }
 }

@@ -5,7 +5,6 @@ namespace Tests\Feature\User;
 use Tests\TestCase;
 use App\Models\User;
 use App\Services\UserService;
-use Crypt;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserAuthTest extends TestCase
@@ -18,11 +17,15 @@ class UserAuthTest extends TestCase
      */
     public function testLogin()
     {
-        $user = User::factory()->create();
+        $user = UserService::make(User::factory()->make()->toArray(), 'default');
 
         $response = $this->post('/user/postlogin', ['email' => 'harak32@gmail.com', 'password' => '1122334455']);
 
         $response->assertInvalid(['email']);
+
+        $response = $this->post('/user/postlogin', ['email' => $user->email, 'password' => '112233445566']);
+
+        $response->assertInvalid(['password']);
 
         $response = $this->post('/user/postlogin', ['email' => $user->email, 'password' => '1122334455']);
 
@@ -49,6 +52,6 @@ class UserAuthTest extends TestCase
 
         $response->assertValid();
 
-        $this->assertDatabaseHas('users', ['email' => $user->email]);
+        $this->assertDatabaseHas('users', ['id' => $user->id]);
     }
 }

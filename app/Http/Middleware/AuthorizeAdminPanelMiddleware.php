@@ -20,7 +20,7 @@ class AuthorizeAdminPanelMiddleware
     {
         if(Auth::check())
         {
-            $user = User::find(Auth::id());
+            $user = User::with('roles')->where('id', Auth::id())->first();
             if($user->roles->first()->role == "admin")
             {
                 return $next($request);

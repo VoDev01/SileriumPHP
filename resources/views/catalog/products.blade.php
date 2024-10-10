@@ -4,11 +4,7 @@
         Товары | Silerium
     </x-slot>
 
-<<<<<<< HEAD
     {{-- <script type="module">
-=======
-    <script type="module">
->>>>>>> admin_panel
         $(".select1").change(function() {
             if ($(this).data('options') == undefined) {
                 /*Taking an array of all options-2 and kind of embedding it on the select1*/
@@ -22,19 +18,11 @@
 
     <div class="mx-3">
         @php
-<<<<<<< HEAD
             $inputs = [['displayName' => 'Название товара', 'inputName' => 'name', 'field' => 'name', 'required' => false]];
             $checkboxInputs = [['displayName' => 'В продаже', 'inputId' => 'available', 'inputName' => 'available', 'required' => false]];
             $hiddenInputs = [
                 ['inputName' => 'sortOrder', 'inputId' => 'sortOrder', 'inputValue' => $sortOrder],
                 ['inputName' => 'available', 'inputId' => null, 'inputValue' => 0],
-=======
-            $inputs = [['displayName' => 'Название товара', 'inputName' => 'name', 'required' => true]];
-            $checkboxInputs = [['displayName' => 'В продаже', 'inputName' => 'available', 'required' => false]];
-            $hiddenInputs = [
-                ['inputName' => 'sortOrder', 'inputId' => 'sortOrder', 'inputValue' => $sortOrder],
-                ['inputName' => 'available', 'inputId' => 'available', 'inputValue' => $available],
->>>>>>> admin_panel
                 ['inputName' => 'subcategory', 'inputId' => 'subcategory', 'inputValue' => $subcategory],
             ];
             $filterActionParams = '/' . $available . '/' . $subcategory;
@@ -43,17 +31,11 @@
             <x-filter-form filterActionLink="/catalog/products/" :$filterActionParams
                 filterRubCurrencyLink="/catalog/rubcurrency" filterDolCurrencyLink="/catalog/dolcurrency" :$sortOrder
                 popularity="true" price="true" currency="true">
-<<<<<<< HEAD
 
                 <x-search-form searchActionUrl="/catalog/filter" header="Поиск товаров"
                     loadWith="images, productSpecifications" :$hiddenInputs :$inputs :$checkboxInputs
                     submit_id="filterProducts" />
 
-=======
-                <x-search-form searchActionUrl="/catalog/filter" header="Поиск товаров"
-                    loadWith="images, productSpecifications" :$hiddenInputs :$inputs :$checkboxInputs
-                    submit_id="filterProducts" />
->>>>>>> admin_panel
             </x-filter-form>
             <div class="row flex-column flex-lg-row">
                 <div class="col-12 col-lg-9">

@@ -23,9 +23,9 @@ Route::controller(UserAuthController::class)->group(function(){
     Route::post('forgotpassword', 'postForgotPassword')->middleware('guest')->name('password.email');
     Route::get('resetpassword', 'resetPassword')->middleware('guest')->name('password.reset');
     Route::post('resetpassword', 'postResetPassword')->middleware('guest')->name('password.update');
-    Route::get('email/verify', 'verifyEmail');
-    Route::get('email/verify/{id}/{hash}', 'emailVerificationHandler')->middleware(['auth', 'signed'])->name('varification.verify');
-    Route::post('email/resend-verification', 'resendEmailVerification')->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    Route::get('email/verify', 'verifyEmail')->middleware('auth')->name('verification.notice');
+    Route::get('email/verify/{id}/{hash}', 'emailVerificationHandler')->middleware(['auth', 'signed'])->name('verification.verify');
+    Route::post('email/resendverification', 'resendEmailVerification')->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 });
 Route::controller(UserReviewController::class)->group(function(){
     Route::get('reviews', 'userReviews')->middleware(['auth', 'verified'])->name('userReviews');
