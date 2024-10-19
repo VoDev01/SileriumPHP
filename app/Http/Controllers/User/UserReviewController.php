@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\ReviewService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\UserReviewRequest;
+use App\Http\Requests\User\UserReviewRequest;
 
 class UserReviewController extends Controller
 {

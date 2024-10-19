@@ -24,14 +24,14 @@
             <div class="col-10">
                 <h3>{{$user->name}} {{$user->surname}}</h3>
                 @php
-                    $emailVerified = $user->email_verified_at == null ? "не подтвержден" : "";
+                    $emailVerified = $user->email_verified_at == null ? "Потвердить" : "";
                 @endphp
                 <p>Email: {{$user->email}} <a class="text-danger text-decoration-none" href="/user/email/verify">{{$emailVerified}}</a></p>
                 @if ($user->birthDate != null)
                     <p>День рождения: {{$user->birthDate->format('Y-m-d')}}</p>
                 @endif
                 @php
-                    $phoneVerified = ($user->phoneVerified == 0 && $user->phone != null) ? "не подтвержден" : "";
+                    $phoneVerified = ($user->phoneVerified == 0 && $user->phone != null) ? "Подтвердить" : "";
                 @endphp
                 @if($user->phone != null)
                     <p>Номер телефона: {{$user->phone}} <a class="text-danger text-decoration-none" href="/user/phone/verify">{{$phoneVerified}}</a></p>
@@ -53,7 +53,7 @@
         </div>
         <div class="row">
             <div class="col-3">
-                <a class="btn btn-outline-secondary text-decoration-none" href="/user/editprofile">Редактировать профиль</a>
+                <a class="btn btn-outline-secondary text-decoration-none" href="/user/edit_profile">Редактировать профиль</a>
             </div>
             <form class="form-inline col-2" action="/user/logout" method="POST">
                 @csrf

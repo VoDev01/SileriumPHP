@@ -1,14 +1,14 @@
 <x-seller-layout>
     <x-slot:title>
-        Silerium Partner | Регистрация
+        Регистрация | Silerium Partner
     </x-slot>
     <div class="container" style="width:500px;">
         <h1>Заполните данные</h1>
 
-        <form method="POST" action="/seller/post_register">
+        <form method="POST" enctype="multipart/form-data" action="/seller/register">
             <div class="mb-3">
-                <label for="type" class="form-label">Тип организации</label>
-                <select class="form-select form-select-lg" name="type" id="type">
+                <label for="organization_type" class="form-label">Тип организации</label>
+                <select class="form-select form-select-lg" name="organization_type" id="organization_type">
                     <option value="1">ООО</option>
                     <option value="2">ИП</option>
                     <option value="3">АО</option>
@@ -32,12 +32,16 @@
                     aria-describedby="nickname_desc" />
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Email организации</label>
-                <input type="email" class="form-control" name="email" id="email" />
+                <label for="organization_email" class="form-label">Email организации</label>
+                <input type="email" class="form-control" name="organization_email" id="organization_email" />
             </div>
             <div class="mb-3">
                 <label for="logo" class="form-label">Логотип организации</label>
                 <input type="file" class="form-control" name="logo" id="logo" />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email продавца</label>
+                <input type="email" class="form-control" name="email" id="email" />
             </div>
             <button type="submit" class="btn btn-primary">
                 Зарегистрировать

@@ -11,4 +11,8 @@ class SellerController extends Controller
     {
         return view('seller.index');
     }
+    public function account()
+    {
+        return view('seller.account');
+    }
 }

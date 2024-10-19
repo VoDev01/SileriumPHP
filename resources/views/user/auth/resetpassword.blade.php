@@ -4,7 +4,7 @@
     </x-slot>
     <div class="container mx-auto">
         <h1>Введите новый пароль</h1>
-        <form action="/user/resetpassword" method="post" class="row flex-column">
+        <form action="/user/reset_password" method="post" class="row flex-column">
             <div class="mb-3 col">
                 <label for="password" class="form-label">Пароль</label>
                 <input type="text" class="form-control" name="password" id="password">

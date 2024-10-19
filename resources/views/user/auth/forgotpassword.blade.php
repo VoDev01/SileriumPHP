@@ -4,7 +4,7 @@
     </x-slot>
     <div class="container mx-auto">
         <h1>Введите email адрес</h1>
-        <form action="/user/forgotpassword" method="post" class="row flex-column">
+        <form action="/user/forgot_password" method="post" class="row flex-column">
             <div class="mb-3 col" style="width: 250px;">
                 <label for="email" class="form-label">Email</label>
                 <input type="text" class="form-control" name="email" id="email">

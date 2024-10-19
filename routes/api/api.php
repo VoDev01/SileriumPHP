@@ -25,7 +25,7 @@ Route::controller(APIProductsController::class)->prefix('product')->group(functi
     Route::post('create', 'create');
     Route::put('update', 'update');
     Route::delete('delete', 'delete');
-    Route::get('name_id/{name}/{id?}', 'productsByNameId');
+    Route::get('name_seller/{sellerNickname}/{productName}/{loadWith?}', 'productsByNameSeller');
 });
 Route::controller(APISubcategoriesController::class)->prefix('subcategories')->group(function(){
     Route::get('index/{itemsPerPage?}', 'index');
@@ -35,5 +35,5 @@ Route::controller(APISubcategoriesController::class)->prefix('subcategories')->g
     Route::delete('delete', 'delete');
 });
 Route::controller(APIUsersController::class)->prefix('user')->group(function(){
-    Route::get('find/{email}/{load_with?}/{name?}/{surname?}/{id?}/{phone?}', 'find');
+    Route::get('find/{email}/{loadWith?}/{name?}/{surname?}/{id?}/{phone?}', 'find');
 });

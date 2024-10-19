@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Services\DeleteClosedOrdersService;
 
 class UserOrderController extends Controller
@@ -21,13 +22,14 @@ class UserOrderController extends Controller
     }
     public function closeOrder(Request $request)
     {
-        Order::where('ulid', $request->orderId)->first()->delete();
+        $order = Order::find($request->ulid);
+        $order->delete();
         return redirect()->route('cart');
     }
     public function ordersHistory()
     {
-        $orders = Order::with(['products', 'products.images'])->withTrashed()->get();
-        DeleteClosedOrdersService::delete();
+        $orders = Order::withTrashed()->where('user_id', Auth::id())->with(['products', 'products.images'])->get();
+        DeleteClosedOrdersService::delete($orders);
         return view('user.orders.ordershistory', ['orders' => $orders]);
     }
 }

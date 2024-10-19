@@ -80,7 +80,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function sellers()
     {
-        return $this->belongsToMany(Seller::class, 'sellers_users', 'user_id', 'seller_id');
+        return $this->hasOne(Seller::class);
     }
 
     protected function name() : Attribute
@@ -100,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function password() : Attribute
     {
         return Attribute::make(
-            set: fn($value) => Hash::make($value)
+            set: fn($value) => Hash::make($value, ['rounds' => 10])
         );
     }
     protected function birthDate() : Attribute

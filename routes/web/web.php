@@ -24,8 +24,8 @@ Route::get('/categories/{category}/subcategories', [CategoriesController::class,
 
 Route::controller(CatalogController::class)->prefix('catalog')->group(function(){
     Route::get('products/{sortOrder?}/{available?}/{subcategory?}/{product?}', 'products')->name('allproducts');
-    Route::post('rubcurrency', 'rubCurrency');
-    Route::post('dolcurrency','dolCurrency');
+    Route::post('rub_currency', 'rubCurrency');
+    Route::post('dol_currency','dolCurrency');
     Route::post('filter','filterProducts');
     Route::get('product/{productId}', 'product')->middleware('auth');
 });

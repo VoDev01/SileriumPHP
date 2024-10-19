@@ -1,19 +1,20 @@
 <?php
 namespace App\Services;
 
-use SMSRU;
 use stdClass;
 use Illuminate\Support\Facades\Log;
 
 class VerifyPhoneService
 {
-    public static function verify(string $phone = '79385157102')
+    public static int $verification_code;
+    public static function send(string $phone = '79385157102')
     {
         $smsru = new SMSRU(env('SMSRU_API_ID'));
+        $verification_code = rand(1111, 9999);
 
         $data = new stdClass();
         $data->to = $phone;
-        $data->text = "Ваш код подтверждения: " . rand(1111, 9999);
+        $data->text = "Ваш код подтверждения: " . $verification_code;
 
         $response = $smsru->send_one($data);
 

@@ -45,11 +45,11 @@
                 @endempty
                 <div class="row col">
                     <div class="col-1">
-                        <a class="btn btn-outline-warning" href="/user/editreview/{{$review->id}}">
+                        <a class="btn btn-outline-warning" href="/user/edit_review/{{$review->id}}">
                             <i class="bi bi-arrow-repeat"></i>
                         </a>
                     </div>
-                    <form action="/user/deletereview" class="form-inline col-1" method="post">
+                    <form action="/user/delete_review" class="form-inline col-1" method="post">
                         @csrf
                         <input hidden name="review_id" value="{{$review->id}}">
                         <button type="submit" class="btn btn-outline-danger">

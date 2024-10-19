@@ -26,9 +26,14 @@ class Order extends Model
         'orderStatus'
     ];
     
+    protected $casts = [
+        'deleted_at' => 'datetime', 
+        'updated_at' => 'datetime'
+    ];
+
     public $timestamps = false;
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -36,17 +41,16 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class, 'orders_products', 'order_id', 'product_id');
     }
-    public function sellers()
+    public function seller()
     {
-        return $this->belongsToMany(Seller::class, 'sellers_users', 'seller_id', 'order_id');
+        return $this->belongsTo(Seller::class);
     }
-
     public static function boot()
     {
         parent::boot();
-        self::deleted(function ($model){
-            $model->orderStatus = 'CLOSED';
-            $model->save();
+        static::softDeleted(function($order) {
+            $order->orderStatus = 'CLOSED';
+            $order->save();
         });
     }
 }

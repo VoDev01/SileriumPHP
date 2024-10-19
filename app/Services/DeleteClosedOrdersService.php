@@ -3,13 +3,15 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use App\Models\Order;
-use Illuminate\Support\Facades\Auth;
 
 class DeleteClosedOrdersService
 {
-    public static function delete()
+    public static function delete($orders)
     {
-        Order::onlyTrashed()->where('user_id', Auth::id())->where('deleted_at', '<=', Carbon::now())->forceDelete();
+        foreach($orders as $order)
+        {
+            if(Carbon::now()->diffInDays($order->deleted_at) >= 7 && $order->orderStatus == "CLOSED")
+                $order->forceDelete();
+        }
     }
 }

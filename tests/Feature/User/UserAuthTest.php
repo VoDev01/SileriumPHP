@@ -19,15 +19,15 @@ class UserAuthTest extends TestCase
     {
         $user = UserService::make(User::factory()->make()->toArray(), 'default');
 
-        $response = $this->post('/user/postlogin', ['email' => 'harak32@gmail.com', 'password' => '1122334455']);
+        $response = $this->post('/user/login', ['email' => 'harak32@gmail.com', 'password' => '1122334455']);
 
         $response->assertInvalid(['email']);
 
-        $response = $this->post('/user/postlogin', ['email' => $user->email, 'password' => '112233445566']);
+        $response = $this->post('/user/login', ['email' => $user->email, 'password' => '112233445566']);
 
         $response->assertInvalid(['password']);
 
-        $response = $this->post('/user/postlogin', ['email' => $user->email, 'password' => '1122334455']);
+        $response = $this->post('/user/login', ['email' => $user->email, 'password' => '1122334455']);
 
         $response->assertValid();
     }
@@ -36,7 +36,7 @@ class UserAuthTest extends TestCase
     {
         $user = User::factory()->make();
 
-        $response = $this->post('/user/postregister', [
+        $response = $this->post('/user/register', [
             'name' => $user->name,
             'surname' => $user->surname,
             'email' => $user->email,
@@ -52,6 +52,6 @@ class UserAuthTest extends TestCase
 
         $response->assertValid();
 
-        $this->assertDatabaseHas('users', ['id' => $user->id]);
+        $this->assertDatabaseHas('users', ['email' => $user->email]);
     }
 }

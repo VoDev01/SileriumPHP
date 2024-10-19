@@ -4,21 +4,25 @@
     </x-slot>
     <h1 class="text-center">Изменить товар</h1>
     <div class="container">
-        <form class="mb-3">
-            <div class="mb-3">
-                <label for="name" class="form-label">Название товара</label>
-                <input type="text" class="form-control" name="name" id="name" />
-            </div>
-            <div class="mb-3">
-                <label for="id" class="form-label">Id товара</label>
-                <input type="text" class="form-control" name="id" id="id" required />
-            </div>
-            <p class="text-danger" id="product_not_found" hidden>Товар не найден</p>
-            <button type="submit" class="btn btn-primary" id="submit_product_name">
-                Найти
-            </button>
-        </form>
-        <form action="/admin/products/post_updated_product" method="POST" hidden id="update_form">
+        @php
+            $inputs = [
+                [
+                    'inputName' => 'seller_nickname',
+                    'displayName' => 'Название продавца',
+                    'field' => 'seller_nickname',
+                    'required' => true,
+                ],
+                [
+                    'inputName' => 'product_name',
+                    'displayName' => 'Название товара',
+                    'field' => 'product_name',
+                    'required' => true,
+                ],
+            ];
+        @endphp
+        <x-search-form actionUrl="/admin/products/product_search" loadWith="subcategory" redirect="update"
+            header="Поиск товаров" submit_id="find_products" :$inputs />
+        <form action="/admin/products/updated_product" method="POST" hidden id="update_form">
             @csrf
             <input hidden name="id" value="{{ $product->id }}" />
             <div class="mb-3">
@@ -34,8 +38,8 @@
                 <input type="text" class="form-control" name="priceRub" id="priceRub" />
             </div>
             <div class="mb-3">
-                <label for="stockAmount" class="form-label">Количество товара на складе</label>
-                <input type="text" class="form-control" name="stockAmount" id="stockAmount" />
+                <label for="productAmount" class="form-label">Количество товара к продаже</label>
+                <input type="text" class="form-control" name="productAmount" id="productAmount" />
             </div>
             <div class="mb-3">
                 <label class="form-check-label" for="available"> Доступен к продаже </label>

@@ -10,6 +10,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://www.cbr-xml-daily.ru/money.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>{{ $title }}</title>
 </head>
 
@@ -41,13 +42,13 @@
                                 <i class="bi bi-chat-dots"></i>
                             </a>
                         @endif
-                        <a class="nav-item nav-link text-black text-decoration-none" href="/seller/profile">
+                        <a class="nav-item nav-link text-black text-decoration-none" href="/seller/login">
                             Войти в личный кабинет
                             <i class="bi bi-box-arrow-in-right"></i>
                         </a>
                         @if(!Auth::user())
                             <a class="nav-item nav-link text-black text-decoration-none" href="/seller/register">
-                                Зарегестрироваться
+                                Зарегистрироваться
                                 <i class="bi bi-cash"></i>
                             </a>
                         @endif
@@ -56,7 +57,7 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid g-0">
+    <div class="container-fluid g-4">
         <main role="main" class="pb-3">
             {{ $slot }}
         </main>

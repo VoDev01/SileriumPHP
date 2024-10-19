@@ -29,10 +29,10 @@ class ProductFactory extends Factory
             'name' => fake()->sentence(3),
             'description' => fake()->sentence(75),
             'priceRub' => random_int(5000, 100000),
-            'stockAmount' => random_int(0, 100000),
             'available' => 1,
             'subcategory_id' => Subcategory::max('id'),
-            'timesPurchased' => 0
+            'timesPurchased' => 0,
+            'productAmount' => random_int(0, 1000000)
         ];
     }
 }

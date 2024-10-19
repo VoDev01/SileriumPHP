@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\APIProductsRequest;
+use App\Models\Seller;
+use Illuminate\Database\Eloquent\Collection;
 
 class APIProductsController extends Controller
 {
@@ -36,7 +38,6 @@ class APIProductsController extends Controller
             'name' => $validated['name'],
             'description' => $validated['description'],
             'priceRub' => $validated['priceRub'],
-            'stockAmount' => $validated['stockAmount'],
             'available' => $validated['available'],
             'subcategory_id' =>  $validated['subcategory_id']
         ]);
@@ -53,9 +54,29 @@ class APIProductsController extends Controller
             return response()->json(null, 400);
 
     }
-    public function productsByNameId(string $name, int $id = null)
+    public function productsByNameSeller(string $sellerNickname, string $productName, string $loadWith = null)
     {
-        $products = Product::where('name', 'like', '%'.$name.'%')->orWhere('id', $id)->orderBy('id')->get();
+        if($loadWith != null)
+        {
+            $loadWithArray = explode(', ', $loadWith);
+            for($i = 0; $i < count($loadWithArray); $i++)
+                $loadWithArray[$i] = 'products.' + $loadWithArray[$i];
+            $sellers = Seller::with(array_merge(['products'], $loadWithArray))->where('nickname', 'like', '%'.$sellerNickname.'%')->get();
+        }
+        else
+            $sellers = Seller::with('products')->where('nickname', 'like', '%'.$sellerNickname.'%')->get();
+        $products = new Collection();
+        foreach($sellers as $seller)
+        {
+            foreach($seller->products as $product)
+            {
+                $result = strpos($product->name, $productName) !== false;
+                if($result != false)
+                {
+                    $products->add($product);
+                }
+            }
+        }
         if($products != null)
             return response()->json($products, 200);
         else

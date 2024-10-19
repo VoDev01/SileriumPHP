@@ -3,19 +3,19 @@
         Корзина | Silerium
     </x-slot>
     @section('scripts')
-        <script type="text/javascript">
+        <script type="module">
             function deliveryWarn() {
                 toastr.options.preventDuplicates = true;
                 toastr.warning('Заказ с данным статусом изменить или отозвать невозможно.');
                 $('#edit_order').prop("href", "#");
                 $('#delete_order').prop("disabled", true);
             }
-            function increaseAmount()
-            {
+
+            function increaseAmount() {
                 $('#amount_change').val("up");
             }
-            function decreaseAmount()
-            {
+
+            function decreaseAmount() {
                 $('#amount_change').val("down");
             }
         </script>
@@ -28,11 +28,12 @@
                     @php
                         $productImage = $product->images == null ? '' : $product->images->first()->imagePath;
                     @endphp
-                    <img class="col" alt="картинка товара" width="100" height="100" src="{{ asset($productImage) }}">
+                    <img class="col" alt="картинка товара" width="100" height="100"
+                        src="{{ asset($productImage) }}">
                     <div class="row col flex-column">
                         <p class="col">{{ $product->name }}</p>
                         <p class="col text-secondary">{{ $product->quantity }} шт.</p>
-                        <form action="/user/cart/removefromcart" method="POST">
+                        <form action="/user/cart/remove_from_cart" method="POST">
                             @csrf
                             <input hidden name="productId" value="{{ $product->id }}">
                             <button type="submit" class="border-0 bg-white text-danger col">
@@ -58,14 +59,14 @@
                             @endif --}}
                     </div>
                     <div class="row col">
-                        <form action="/user/cart/changeamount" class="form-inline" method="POST">
+                        <form action="/user/cart/change_amount" class="form-inline" method="POST">
                             @csrf
                             <div class="btn-group">
-                                <input hidden name="product_id" value="{{$product->id}}" />
-                                <input hidden id="amountChange" name="amountChange"/>
+                                <input hidden name="product_id" value="{{ $product->id }}" />
+                                <input hidden id="amountChange" name="amountChange" />
                                 <button type="submit" class="btn" onclick="decreaseAmount()">-</button>
-                                <input class="form-control" style="width: 50px;" type="number" name="amount" id="amount" 
-                                value="{{$product->quantity}}" onchange="this.form.submit()">
+                                <input class="form-control" style="width: 50px;" type="number" name="amount"
+                                    id="amount" value="{{ $product->quantity }}" onchange="this.form.submit()">
                                 <button type="submit" class="btn" onclick="increaseAmount()">+</button>
                             </div>
                         </form>

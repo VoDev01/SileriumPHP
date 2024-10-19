@@ -9,14 +9,17 @@ class ProductService
 {
     public static function make(array $validatedInput, array $images = null)
     {
-        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], [
+        $insert = [
+            'ulid' => Str::ulid()->toBase32(),
             'name' => $validatedInput['name'], 
             'description' => $validatedInput['description'], 
             'priceRub' => $validatedInput['priceRub'], 
-            'stockAmount' => $validatedInput['stockAmount'], 
+            'productAmount' => $validatedInput['productAmount'], 
             'available' => $validatedInput['available'], 
             'subcategory_id' => $validatedInput['subcategory_id'], 
-            'timesPurchased' => 0]);
+            'timesPurchased' => 0,
+            'seller_id' => $validatedInput['seller_id']
+        ];
         $productId = Product::insertGetId($insert);
         if($images != null)
         {

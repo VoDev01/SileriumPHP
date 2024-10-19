@@ -27,8 +27,7 @@ class OrderFactory extends Factory
             'orderAdress' => fake()->address(),
             'orderStatus' => 'PENDING',
             'deleted_at' => null,
-            'updated_at' => null,
-            'user_id' => User::max('id')
+            'updated_at' => null
         ];
     }
 }

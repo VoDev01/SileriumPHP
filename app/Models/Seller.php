@@ -29,18 +29,22 @@ class Seller extends Model
         'email_verified'
     ];
 
+    protected $guarded = [
+        'id'
+    ];
+
     public $timestamps = false;
 
     public function orders()
     {
-        return $this->belongsToMany(Order::class, 'sellers_orders', 'order_id', 'seller_id');
+        return $this->HasMany(Order::class);
     }
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'sellers_products', 'product_id', 'seller_id');
+        return $this->hasMany(Product::class);
     }
     public function users()
     {
-        return $this->belongsToMany(User::class, 'sellers_users', 'user_id', 'seller_id');
+        return $this->belongsTo(User::class);
     }
 }

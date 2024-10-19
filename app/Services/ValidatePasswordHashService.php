@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class ValidatePasswordHashService 
 {
-    public static function validate(Request $request, string $inputPassword, User $user)
+    public static function validate(Request $request, string $inputPassword, $user)
     {
         if (Hash::check($inputPassword, $user->password)) {
             $request->session()->regenerate();

@@ -2,7 +2,11 @@
 
 namespace App\View\Components;
 
+use ComponentsInputs\SearchForm\SearchFormCheckboxInputs;
+use ComponentsInputs\SearchForm\SearchFormHiddenInputs;
 use Illuminate\View\Component;
+use ComponentsInputs\SearchForm\SearchFormInputs;
+use ComponentsInputs\SearchForm\SearchFormQueryInputs;
 
 class SearchForm extends Component
 {
@@ -11,24 +15,26 @@ class SearchForm extends Component
      *
      * @return void
      */
-    public string $searchActionUrl;
-    public string $header;
-    public string $loadWith;
-    public string $redirect;
     public array $inputs;
-    public array $checkboxInputs;
+    public SearchFormQueryInputs $queryInputs;
     public array $hiddenInputs;
+    public array $checkboxInputs;
+    public string $header;
     public string $submit_id;
-    public function __construct(string $searchActionUrl, string $header = 'Поиск', string $loadWith = '', string $redirect = '#', 
-    array $hiddenInputs = [], array $inputs = [], array $checkboxInputs = [], string $submit_id = '')
+    public function __construct(
+        array $inputs,
+        SearchFormQueryInputs $queryInputs,
+        array $hiddenInputs = null,
+        array $checkboxInputs = null, 
+        string $header = 'Поиск',
+        string $submit_id = ''
+    )
     {
-        $this->searchActionUrl = $searchActionUrl;
-        $this->header = $header;
-        $this->loadWith = $loadWith;
-        $this->redirect = $redirect;
+        $this->$queryInputs = $queryInputs;
         $this->hiddenInputs = $hiddenInputs;
         $this->checkboxInputs = $checkboxInputs;
         $this->inputs = $inputs;
+        $this->$header = $header;
         $this->submit_id = $submit_id;
     }
 

@@ -76,8 +76,8 @@
                             </a>
                         @endauth
                         <a class="nav-item nav-link text-black text-decoration-none" href="/user/profile">
-                            Личный кабинет
-                            <i class="bi bi-box-arrow-in-right"></i>
+                            Профиль
+                            <i class="bi bi-box-arrow-in-right"></i>  
                         </a>
                     </div>
                 </div>

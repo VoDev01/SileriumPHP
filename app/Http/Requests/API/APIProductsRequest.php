@@ -27,9 +27,10 @@ class APIProductsRequest extends FormRequest
             'name' => ['min:5', 'max:100', 'required'],
             'description' => ['min:50', 'max:1000'],
             'priceRub' => ['numeric', 'required'],
-            'stockAmount' => ['max_digits:11', 'required'],
+            'productAmount' => ['max_digits:11', 'required'],
             'available' => ['boolean', 'required'],
-            'subcategory_id'=> ['required']
+            'subcategory_id'=> ['required'],
+            'seller_id' => ['required']
         ];
     }
 }

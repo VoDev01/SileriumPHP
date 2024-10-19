@@ -6,7 +6,7 @@
         <h1>Подтведите свой email</h1>
         <p class="text-secondary">На ваш email было отправлено письмо с ссылкой на страницу подтвеждения. Перейдите по
             ссылке.</p>
-        <form action="/user/email/resendverification" method="POST">
+        <form action="/user/email/resend_verification" method="POST">
             @csrf
             <button type="submit" class="btn btn-primary">
                 Отправить повторно

@@ -25,6 +25,6 @@
                 <hr />
             @endforeach
         @endif
-        <a class="btn btn-outline-success" href="/user/shopcart">К заказам</a>
+        <a class="btn btn-outline-success" href="/user/cart">К заказам</a>
     </div>
 </x-layout>

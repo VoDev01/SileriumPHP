@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService 
 {
-    public static function make(array $validated_input, string $pfp)
+    public static function make(array $input, string $pfp)
     {
         $userId = User::insertGetId([
             'ulid' => Str::ulid()->toBase32(),
-            'name' => $validated_input['name'],
-            'surname' => $validated_input['surname'],
-            'email' => $validated_input['email'],
-            'password' => Hash::make($validated_input['password']),
-            'birthDate' => Carbon::parse($validated_input['birthDate'])->format('Y-m-d H:i:s'),
-            'country' => $validated_input['country'],
-            'city' => $validated_input['city'],
-            'homeAdress' => $validated_input['homeAdress'],
-            'phone' => $validated_input['phone'],
+            'name' => $input['name'],
+            'surname' => $input['surname'],
+            'email' => $input['email'],
+            'password' => $input['password'],
+            'birthDate' => Carbon::parse($input['birthDate'])->format('Y-m-d H:i:s'),
+            'country' => $input['country'],
+            'city' => $input['city'],
+            'homeAdress' => $input['homeAdress'],
+            'phone' => $input['phone'],
             'profilePicture' => $pfp,
             'phoneVerified' => false,
             'email_verified_at' => null,

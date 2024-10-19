@@ -30,7 +30,7 @@
 
     <h2 class="text-center">Регистрация</h2>
     <div class="container" style="width: 500px;">
-        <form action="/user/postregister" id="register_form" method="POST" enctype="multipart/form-data">
+        <form action="/user/register" id="register_form" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label class="form-label" for="name">Имя</label>

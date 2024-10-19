@@ -62,7 +62,7 @@
                         </div>
                         <div class="row col">
                             <div class="col">
-                                <a class="btn btn-outline-success" href="/user/cart/addtocart/{{ $product->id }}">В
+                                <a class="btn btn-outline-success" href="/user/cart/add_to_cart/{{ $product->id }}">В
                                     корзину</a>
                             </div>
                             <div class="col">

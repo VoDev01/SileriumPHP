@@ -18,7 +18,7 @@
         <h1>{{ $order->product->name }}</h1>
         <p>Номер заказа - {{ $order->id }}</p>
         <img alt="картинка товара" src="{{ asset($order->product->images->first()) }}" />
-        <form action="/user/posteditorder" method="POST">
+        <form action="/user/edit_order" method="POST">
             <div class="row">
                 <div class="col-2">
                     <label for="amount" class="form-label">Количество шт.</label>

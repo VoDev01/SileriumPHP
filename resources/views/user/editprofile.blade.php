@@ -30,7 +30,7 @@
         });
     </script>
     <div class="m-auto" style="width: 500px;">
-        <form class="row flex-column" id="edit_proifle_form" action="/user/editprofile" method="POST" enctype="multipart/form-data">
+        <form class="row flex-column" id="edit_proifle_form" action="/user/edit_profile" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label class="form-label" for="name">Имя</label>

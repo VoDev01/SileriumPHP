@@ -3,8 +3,10 @@
 namespace Tests\Feature\API;
 
 use Tests\TestCase;
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Seller;
 use App\Models\Subcategory;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,7 +23,7 @@ class APIProductTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        Product::factory()->count(15)->create();
+        Seller::factory()->has(Product::factory(15))->create();
 
         $response = $this->getJson('/api/v1/product/index/15');
 
@@ -44,15 +46,15 @@ class APIProductTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $product = Product::factory()->create();
+        $seller = Seller::factory()->has(Product::factory(15))->create();
 
         $response = $this->getJson('/api/v1/product/show/' . Product::max('id'));
 
         $response
             ->assertOk()   
             ->assertJson(fn (AssertableJson $json) =>
-                $json->where('0.id', $product->id)
-                    ->where('0.name', $product->name)
+                $json->where('0.id', $seller->products->last()->id)
+                    ->where('0.name', $seller->products->last()->name)
                     ->etc()
         );
     }
@@ -61,15 +63,18 @@ class APIProductTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $product = Product::factory()->create();
+        $seller = Seller::factory()->has(Product::factory())->create();
+
+        $product = $seller->products->first();
 
         $response = $this->postJson('/api/v1/product/create/', [
             'name' => $product->name,
             'description' => $product->description,
             'priceRub' => $product->priceRub,
-            'stockAmount' => $product->stockAmount,
             'available' => $product->available,
-            'subcategory_id' => $product->subcategory_id
+            'productAmount' => $product->productAmount,
+            'subcategory_id' => $product->subcategory_id,
+            'seller_id' => $seller->id
         ]);
 
         $response->assertOk();
@@ -78,9 +83,10 @@ class APIProductTest extends TestCase
             'name' => $product->name,
             'description' => $product->description,
             'priceRub' => $product->priceRub,
-            'stockAmount' => $product->stockAmount,
             'available' => $product->available,
-            'subcategory_id' => $product->subcategory_id
+            'productAmount' => $product->productAmount,
+            'subcategory_id' => $product->subcategory_id,
+            'seller_id' => $seller->id
         ]);
     }
 
@@ -88,28 +94,33 @@ class APIProductTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $product = Product::factory()->create();
+        $seller = Seller::factory()->has(Product::factory())->create();
+
+        $product = $seller->products->first();
 
         $response = $this->putJson('/api/v1/product/update', [
-            'id' => 1,
+            'id' => $product->id,
             'name' => $product->name,
             'description' => $product->description,
             'priceRub' => $product->priceRub,
-            'stockAmount' => $product->stockAmount,
             'available' => $product->available,
-            'subcategory_id' => $product->subcategory_id
+            'productAmount' => $product->productAmount,
+            'subcategory_id' => $product->subcategory_id,
+            'seller_id' => $seller->id
         ]);
 
         $response->assertOk();
     }
 
-    public function testProductsByNameId()
+    public function testProductsByNameSeller()
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $product = Product::factory()->create();
+        $seller = Seller::factory()->has(Product::factory())->create();
 
-        $response = $this->getJson('/api/v1/product/name_id/' . $product->name . '/' . $product->id);
+        $product = $seller->products->first();
+
+        $response = $this->getJson('/api/v1/product/name_seller/' . $seller->nickname . '/' . $product->name);
 
         $response
             ->assertOk()
@@ -124,10 +135,21 @@ class APIProductTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $product = Product::factory()->create();
+        $seller = Seller::factory()->has(Product::factory())->create();
+
+        $product = $seller->products->first();
 
         $response = $this->deleteJson('/api/v1/product/delete', ['id' => $product->id]);
 
         $response->assertOk();
+    }
+
+    public function testProductsReviewSearch()
+    {
+        Category::factory()->create();
+        Subcategory::factory()->create();
+        $seller = Seller::factory()->has(Product::factory())->create();
+
+        $product = $seller->products->first();
     }
 }

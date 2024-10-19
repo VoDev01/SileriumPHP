@@ -27,8 +27,10 @@ class Product extends Model
         'name',
         'description',
         'priceRub',
-        'stockAmount',
         'available',
+        'productAmount',
+        'subcategory_id',
+        'seller_id'
     ];
     public function images(): HasMany
     {
@@ -44,7 +46,7 @@ class Product extends Model
     }
     public function productSpecifications()
     {
-        return $this->belongsToMany(ProductSpecifications::class, 'products_specifications', 'specification_id', "product_id");
+        return $this->belongsToMany(ProductSpecifications::class, 'products_specifications', "product_id", 'specification_id');
     }
     public function reviews()
     {
@@ -52,7 +54,7 @@ class Product extends Model
     }
     public function sellers()
     {
-        return $this->belongsToMany(Seller::class, 'sellers_users', 'seller_id', 'product_id');
+        return $this->belongsTo(Seller::class);
     }
     protected static function newFactory()
     {

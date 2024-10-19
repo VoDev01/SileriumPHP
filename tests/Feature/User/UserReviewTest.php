@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Support\Str;
 use App\Models\ReviewsImages;
+use App\Models\Seller;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,16 +29,17 @@ class UserReviewTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->create();
-        $productId = Product::factory()->create()->id;
+        $productId = Seller::factory()->has(Product::factory())->create()->products()->first()->id;
         $review = Review::factory()->make();
 
         Storage::fake('reviews');
 
         $reviewImages = array();
         for($i = 0; $i < 3; $i++)
+        {
             $reviewImages[$i] = UploadedFile::fake()->image('review_' . Str::ulid()->toBase32() . '.jpg', 2048, 1024)->size(10 * 1024);
-
-        $response = $this->actingAs($user)->post('/user/postreview', [
+        }
+        $response = $this->actingAs($user)->post('/user/review', [
             'title' => $review->title,
             'pros' => $review->pros,
             'cons' => $review->cons,
@@ -49,8 +51,9 @@ class UserReviewTest extends TestCase
         ]);
 
         for($i = 0; $i < 3; $i++)
+        {
             Storage::disk('reviews')->fileExists($reviewImages[$i]->hashName());
-
+        }
         $response->assertValid();
 
         $this->assertDatabaseHas('reviews', ['id' => $review->id]);
@@ -61,10 +64,10 @@ class UserReviewTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->create();
-        $productId = Product::factory()->create()->id;
+        $productId = Seller::factory()->has(Product::factory())->create()->products()->first()->id;
         $review = Review::factory()->create();
 
-        $response = $this->actingAs($user)->put('/user/posteditreview', [
+        $response = $this->actingAs($user)->put('/user/edit_review', [
             'review_id' => $review->id,
             'title' => 'New title',
             'pros' => 'New pros',
@@ -92,10 +95,10 @@ class UserReviewTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->create();
-        $productId = Product::factory()->create()->id;
+        Seller::factory()->has(Product::factory())->create();
         $review = Review::factory()->create();
 
-        $this->actingAs($user)->delete('/user/deletereview', [
+        $this->actingAs($user)->delete('/user/delete_review', [
             'review_id' => $review->id,
         ]);
 

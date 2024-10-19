@@ -9,7 +9,7 @@
         @else
             <img class="col" src="{{ asset($product->images->first()->imagePath) }}" alt="Картинка товара">
         @endempty
-        <form class="col" action="/user/postreview" method="post" enctype="multipart/form-data">
+        <form class="col" action="/user/review" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="rating" class="form-label">Оценка</label>

@@ -6,12 +6,8 @@
     <div class="container">
         <form class="mb-3">
             <div class="mb-3">
-                <label for="name" class="form-label">Название товара</label>
-                <input type="text" class="form-control" name="name" id="name" />
-            </div>
-            <div class="mb-3">
-                <label for="id" class="form-label">Id товара</label>
-                <input type="text" class="form-control" name="id" id="id" required />
+                <label for="product_id" class="form-label">Id товара</label>
+                <input type="text" class="form-control" name="product_id" id="product_id" required/>
             </div>
             <p class="text-danger" hidden id="product_not_found">Товар не найден</p>
             <button type="submit" class="btn btn-primary" id="submit_product_name">
@@ -36,7 +32,7 @@
                 </tr>
             </tbody>
         </table>
-        <form action="/admin/products/post_deleted_product" id="post_product_delete" hidden>
+        <form action="/admin/products/deleted_product" id="product_delete" hidden>
             @csrf
             <input hidden name="id" value="{{$product->id}}" />
             <button type="submit" class="btn btn-danger">
@@ -49,12 +45,12 @@
         $(document).ready(function() {
             $("#submit_product_name").on("click", function(e) {
                 e.preventDefault();
-                let name = $("#name").val();
-                let id = $("#id").val();
-                if (id) {
+                let product_name = $("#product_name").val();
+                let seller_name = $("#seller_name").val();
+                if (seller_name && product_name) {
                     $.ajax({
                         method: "GET",
-                        url: "/admin/product/" + id + "/" + name,
+                        url: "/admin/product/" + seller_name + "/" + product_name,
                         dataType: "json",
                         success: function(data) {
                             $("#product_info").attr("hidden", false);
@@ -65,7 +61,7 @@
                             $("#product_info_row").append('<td>' + data.product.name + '</td>');
                             $("#product_info_row").append('<td>' + data.product.description + '</td>');
                             $("#product_info_row").append('<td>' + data.product.priceRub + '</td>');
-                            $("#product_info_row").append('<td>' + data.product.stockAmount + '</td>');
+                            $("#product_info_row").append('<td>' + data.product.productAmount + '</td>');
                             $("#product_info_row").append('<td>' + data.product.available + '</td>');
                             $("#product_info_row").append('<td>' + data.subcategoryName +
                                 '</td>');

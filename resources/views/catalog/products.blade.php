@@ -29,7 +29,7 @@
         @endphp
         <div class="container-fluid mt-2">
             <x-filter-form filterActionLink="/catalog/products/" :$filterActionParams
-                filterRubCurrencyLink="/catalog/rubcurrency" filterDolCurrencyLink="/catalog/dolcurrency" :$sortOrder
+                filterRubCurrencyLink="/catalog/rub_currency" filterDolCurrencyLink="/catalog/dol_currency" :$sortOrder
                 popularity="true" price="true" currency="true">
 
                 <x-search-form searchActionUrl="/catalog/filter" header="Поиск товаров"

@@ -1,53 +1,55 @@
 <div class="d-flex mb-3">
-    <form method="POST" action="{{ $searchActionUrl }}" style="width: 300px;">
+    <form method="POST" action="{{ $queryInputs->searchActionUrl }}" style="width: 300px;">
         <h5>{{ $header }}</h5>
         @csrf
-        <input hidden name="loadWith" id="loadWith" value="{{ $loadWith }}" />
-        <input hidden name="redirect" id="redirect" value="{{ $redirect }}" />
-        @for ($i = 0; $i < count($hiddenInputs); $i++)
-            @if ($hiddenInputs[$i]['inputId'] == null)
-                <input hidden name="{{ $hiddenInputs[$i]['inputName'] }}" value={{ $hiddenInputs[$i]['inputValue'] }} />
-            @else
-                <input hidden name="{{ $hiddenInputs[$i]['inputName'] }}" id="{{ $hiddenInputs[$i]['inputId'] }}"
-                    value={{ $hiddenInputs[$i]['inputValue'] }} />
-            @endif
-        @endfor
-        @for ($i = 0; $i < count($inputs); $i++)
-            @if ($inputs[$i]['required'])
+        <input hidden name="loadWith" id="loadWith" value="{{ $queryInputs->loadWith }}" />
+        <input hidden name="redirect" id="redirect" value="{{ $queryInputs->redirect }}" />
+        @if ($hiddenInputs != null)
+            @foreach ($hiddenInputs as $hiddenInput)
+                @if ($hiddenInput->inputId == null)
+                    <input hidden name="{{ $hiddenInput->inputName }}" value={{ $hiddenInput->inputValue }} />
+                @else
+                    <input hidden name="{{ $hiddenInput->inputName }}" id="{{ $hiddenInput->inputId }}"
+                        value={{ $hiddenInput->inputValue }} />
+                @endif
+            @endforeach
+        @endif
+        @foreach($inputs as $input)
+            @if ($input->required)
                 <div class="mb-3">
-                    <label for="{{ $inputs[$i]['inputName'] }}"
-                        class="form-label">{{ $inputs[$i]['displayName'] }}</label>
-                    <input type="text" class="form-control" name="{{ $inputs[$i]['inputName'] }}"
-                        id="{{ $inputs[$i]['inputName'] }}" required />
+                    <label for="{{ $input->inputName }}"
+                        class="form-label">{{ $input->displayName }}</label>
+                    <input type="text" class="form-control" name="{{ $input->inputName }}"
+                        id="{{ $input->inputName }}" required />
                 </div>
             @else
                 <div class="mb-3">
-                    <label for="{{ $inputs[$i]['inputName'] }}"
-                        class="form-label">{{ $inputs[$i]['displayName'] }}</label>
-                    <input type="text" class="form-control" name="{{ $inputs[$i]['inputName'] }}"
-                        id="{{ $inputs[$i]['inputName'] }}" />
+                    <label for="{{ $input->inputName }}"
+                        class="form-label">{{ $input->displayName }}</label>
+                    <input type="text" class="form-control" name="{{ $input->inputName }}"
+                        id="{{ $input->inputName }}" />
                 </div>
             @endif
-            <x-error :field="$inputs[$i]['field']" />
-        @endfor
-        @for ($i = 0; $i < count($checkboxInputs); $i++)
-            @if ($checkboxInputs[$i]['required'])
+            <x-error :field="$input->field" />
+        @endforeach
+        @foreach($checkboxInputs as $checkboxInput)
+            @if ($checkboxInput->required)
                 <div class="mb-3">
-                    <label for="{{ $checkboxInputs[$i]['inputName'] }}"
-                        class="form-check-label">{{ $checkboxInputs[$i]['displayName'] }}</label>
-                    <input type="checkbox" class="form-check-input" name="{{ $checkboxInputs[$i]['inputName'] }}"
-                        id="{{ $checkboxInputs[$i]['inputId'] }}" value="1" required />
+                    <label for="{{ $checkboxInput->inputName }}"
+                        class="form-check-label">{{ $checkboxInput->displayName }}</label>
+                    <input type="checkbox" class="form-check-input" name="{{ $checkboxInput->inputName }}"
+                        id="{{ $checkboxInput->inputId }}" value="1" required />
                 </div>
-                <x-error :field="$checkboxInputs[$i]['field']" />
+                <x-error :field="$checkboxInput->field" />
             @else
                 <div class="mb-3">
-                    <label for="{{ $checkboxInputs[$i]['inputName'] }}"
-                        class="form-check-label">{{ $checkboxInputs[$i]['displayName'] }}</label>
-                    <input type="checkbox" class="form-check-input" name="{{ $checkboxInputs[$i]['inputName'] }}"
-                        id="{{ $checkboxInputs[$i]['inputId'] }}" value="1" />
+                    <label for="{{ $checkboxInput->inputName }}"
+                        class="form-check-label">{{ $checkboxInput->displayName }}</label>
+                    <input type="checkbox" class="form-check-input" name="{{ $checkboxInput->inputName }}"
+                        id="{{ $checkboxInput->inputId }}" value="1" />
                 </div>
             @endif
-        @endfor
+        @endforeach
         {{ $slot }}
         <button type="submit" class="btn btn-primary" id="{{ $submit_id }}">
             Найти

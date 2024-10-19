@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\User;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 use App\Models\User;
+use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserCartTest extends TestCase
 {
@@ -18,9 +19,9 @@ class UserCartTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->create();
-        $product = Product::factory()->create();
+        $product = Seller::factory()->has(Product::factory())->create()->products()->first();
 
-        $this->actingAs($user)->post('/user/cart/postcart', ['amount' => 5, 'productId' => $product->id]);
+        $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
 
         $this->assertFalse(Cart::session($user->id)->isEmpty());
     }
@@ -29,13 +30,13 @@ class UserCartTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->create();
-        $product = Product::factory()->create();
+        $product = Seller::factory()->has(Product::factory())->create()->products()->first();
 
-        $this->actingAs($user)->post('/user/cart/postcart', ['amount' => 5, 'productId' => $product->id]);
+        $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
 
         $this->assertFalse(Cart::session($user->id)->isEmpty());
 
-        $this->actingAs($user)->post('/user/cart/changeamount', ['amount' => 5, 'amountChange' => 'up', 'productId' => $product->id]);
+        $this->actingAs($user)->post('/user/cart/change_amount', ['amount' => 5, 'amountChange' => 'up', 'productId' => $product->id]);
 
         $this->assertGreaterThan(5, Cart::session($user->id)->get($product->id)['quantity']);
     }
@@ -44,13 +45,13 @@ class UserCartTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->create();
-        $product = Product::factory()->create();
+        $product = Seller::factory()->has(Product::factory())->create()->products()->first();
 
-        $this->actingAs($user)->post('/user/cart/postcart', ['amount' => 5, 'productId' => $product->id]);
+        $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
 
         $this->assertFalse(Cart::session($user->id)->isEmpty());
 
-        $this->actingAs($user)->delete('/user/cart/removefromcart', ['productId' => $product->id]);
+        $this->actingAs($user)->delete('/user/cart/remove_from_cart', ['productId' => $product->id]);
 
         $this->assertTrue(Cart::session($user->id)->isEmpty());
     }

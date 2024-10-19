@@ -11,12 +11,15 @@
             }
             $.ajax({
                 type: 'POST',
-                url: '/user/postlogin',
+                url: '/user/login',
                 dataType: 'json',
                 headers : {
                     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-                }
+                },
                 data: $("#login_form").serialize(),
+                success: function(data) {
+                    window.location.href = data.redirect;
+                },
                 error: function(data) {
                     var all_errors = data.responseJSON.errors;
                     $.each(all_errors, function(key, value) {
@@ -35,7 +38,7 @@
 
     <h2 class="text-center">Вход</h2>
     <div class="container" style="width: 500px;">
-        <form id="login_form" action="/user/postlogin" method="POST">
+        <form id="login_form" action="/user/login" method="POST">
             @csrf
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>

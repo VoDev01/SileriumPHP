@@ -10,11 +10,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\User\UserLoginRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
-use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\User\UserRegisterRequest;
 use App\Services\ValidatePasswordHashService;
+use App\Services\VerifyPhoneService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Password as PasswordUtil;
@@ -29,7 +30,14 @@ class UserAuthController extends Controller
     {
         if (Auth::viaRemember()) {
             $request->session()->regenerate();
-            return redirect()->intended('/user/profile');
+            if(Gate::allows('access-admin-panel', Auth::user()))
+            {
+                return redirect()->route('admin_index');
+            }
+            else
+            {
+                return redirect()->intended('/user/profile');
+            }
         } 
         else 
         {
@@ -40,20 +48,16 @@ class UserAuthController extends Controller
             {
                 if(Gate::allows('access-admin-panel', $user))
                 {
-                    return redirect()->route('admin_index');
+                    return response()->json(['redirect' => '/admin']);
                 }
                 else
                 {
-                    return redirect()->route('profile');
+                    return response()->json(['redirect' => '/user/profile']);
                 }
             }
             else
                 return response()->json($response, 422);
         }
-    }
-    public function matchPassword()
-    {
-        
     }
     public function forgotPassword()
     {
@@ -80,14 +84,14 @@ class UserAuthController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Password::min(10)->numbers()]
+            'password' => ['required', 'confirmed', Password::min(10)->numbers(), 'max: 50']
         ]);
 
         $status = PasswordUtil::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, string $password) {
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($password, ['rounds' => 10])
                 ])->setRememberToken(Str::random(60));
 
                 $user->save();
@@ -113,6 +117,29 @@ class UserAuthController extends Controller
     {
         $request->user()->sendEmailVerificationNotification();
         return back();
+    }
+    public function verifyPhone()
+    {
+        VerifyPhoneService::send();
+        session('link_sent', false);
+        return view('user.auth.verifyphone');
+    }
+    public function resendPhoneVerification()
+    {
+        VerifyPhoneService::send();
+        return back()->with('link_sent', true);
+    }
+    public function validatePhoneVerification(int $code)
+    {
+        if(VerifyPhoneService::$verification_code == $code)
+        {
+            Auth::user()->phoneVerified = true;
+            return redirect()->route('profile');
+        }
+        else
+        {
+            return back()->withErrors("Код неверный. Повторите попытку.", 'verification_code');
+        }
     }
     public function register()
     {

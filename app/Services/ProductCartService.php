@@ -20,9 +20,9 @@ class ProductCartService
     public function addProductToCart(User $user, Request $request, int $amount)
     {
         $product = Product::find($request->productId);
-        $product->amount -= $amount;
+        $product->productAmount -= $amount;
         $product->timesPurchased += $amount;
-        if ($product->amount <= 0)
+        if ($product->productAmount <= 0)
             $product->available = false;
         Cart::session($user->id)->add(array(
             'id' => $product->id,
