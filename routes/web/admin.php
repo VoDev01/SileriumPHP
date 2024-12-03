@@ -7,27 +7,28 @@ use App\Http\Controllers\Admin\ProductsAdminPanelController;
 
 Route::middleware('authorize.admin')->group(function () {
 
-    Route::get('/', [AdminPanelController::class, 'index'])->name('admin_index');
+    Route::get('/', [AdminPanelController::class, 'index'])->name('admin.index');
     Route::get('profile', [AdminPanelController::class, 'profile']);
 
     Route::controller(ProductsAdminPanelController::class)->prefix('products')->group(function () {
-        Route::get('index', 'products_index')->name('index');
-        Route::get('create', 'create');
-        Route::post('create', 'postProduct');
-        Route::get('update/{product}', 'update');
-        Route::put('update_product', 'postUpdatedProduct');
-        Route::get('delete/{product}', 'delete');
-        Route::delete('delete_product', 'postDeletedProduct');
+        Route::get('index', 'index')->name('admin.products.index');
+        Route::get('update', 'update')->name('admin.products.update');
+        Route::post('update', 'postUpdatedProduct');
+        Route::get('delete', 'delete')->name('admin.products.delete');
+        Route::post('deletet', 'postDeletedProduct');
         Route::get('category/{id}/subcategories', 'categories');
-        Route::get('{seller_id}/{product_name}', 'productJson');
+        Route::post('search', 'searchProducts');
+        Route::get('reviews', 'reviews')->name('admin.products.reviews');
+        Route::post('receive_product_reviews', 'receiveProductReviews');
     });
     Route::controller(UsersAdminPanelController::class)->prefix('users')->group(function () {
-        Route::get('index', 'index')->name('users_index');
-        Route::get('roles', 'roles')->name('user_roles');
-        Route::get('orders', 'orders')->name('user_orders');
-        Route::get('reviews', 'reviews')->name('user_reviews');
-        Route::get('find/{load_with}/{email}/{redirect?}/{name?}/{surname?}/{id?}/{phone?}', 'findUsers')->name('find_user');
-        Route::post('user_search', 'postUserSearch');
+        Route::get('index', 'index')->name('admin.users.index');
+        Route::get('roles', 'roles')->name('admin.users.roles');
+        Route::get('orders', 'orders')->name('admin.users.orders');
+        Route::post('orders', 'searchUserOrders');
+        Route::get('reviews', 'reviews')->name('admin.users.reviews');
+        Route::post('reviews', 'searchUserReviews');
+        Route::post('search', 'searchUsers')->name('admin.users.search');
     });
 
 });

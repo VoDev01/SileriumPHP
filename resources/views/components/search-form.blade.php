@@ -4,6 +4,7 @@
         @csrf
         <input hidden name="loadWith" id="loadWith" value="{{ $queryInputs->loadWith }}" />
         <input hidden name="redirect" id="redirect" value="{{ $queryInputs->redirect }}" />
+        <input hidden name="searchKey" id="searchKey" value="{{ $queryInputs->searchKey }}" />
         @if ($hiddenInputs != null)
             @foreach ($hiddenInputs as $hiddenInput)
                 @if ($hiddenInput->inputId == null)
@@ -14,44 +15,44 @@
                 @endif
             @endforeach
         @endif
-        @foreach($inputs as $input)
+        @foreach ($inputs as $input)
             @if ($input->required)
                 <div class="mb-3">
-                    <label for="{{ $input->inputName }}"
-                        class="form-label">{{ $input->displayName }}</label>
+                    <label for="{{ $input->inputName }}" class="form-label">{{ $input->displayName }}</label>
                     <input type="text" class="form-control" name="{{ $input->inputName }}"
                         id="{{ $input->inputName }}" required />
                 </div>
             @else
                 <div class="mb-3">
-                    <label for="{{ $input->inputName }}"
-                        class="form-label">{{ $input->displayName }}</label>
+                    <label for="{{ $input->inputName }}" class="form-label">{{ $input->displayName }}</label>
                     <input type="text" class="form-control" name="{{ $input->inputName }}"
                         id="{{ $input->inputName }}" />
                 </div>
             @endif
-            <x-error :field="$input->field" />
+            <x-error field="{{ $input->errorField }}" />
         @endforeach
-        @foreach($checkboxInputs as $checkboxInput)
-            @if ($checkboxInput->required)
-                <div class="mb-3">
-                    <label for="{{ $checkboxInput->inputName }}"
-                        class="form-check-label">{{ $checkboxInput->displayName }}</label>
-                    <input type="checkbox" class="form-check-input" name="{{ $checkboxInput->inputName }}"
-                        id="{{ $checkboxInput->inputId }}" value="1" required />
-                </div>
-                <x-error :field="$checkboxInput->field" />
-            @else
-                <div class="mb-3">
-                    <label for="{{ $checkboxInput->inputName }}"
-                        class="form-check-label">{{ $checkboxInput->displayName }}</label>
-                    <input type="checkbox" class="form-check-input" name="{{ $checkboxInput->inputName }}"
-                        id="{{ $checkboxInput->inputId }}" value="1" />
-                </div>
-            @endif
-        @endforeach
+        @if ($checkboxInputs != null)
+            @foreach ($checkboxInputs as $checkboxInput)
+                @if ($checkboxInput->required)
+                    <div class="mb-3">
+                        <label for="{{ $checkboxInput->inputName }}"
+                            class="form-check-label">{{ $checkboxInput->displayName }}</label>
+                        <input type="checkbox" class="form-check-input" name="{{ $checkboxInput->inputName }}"
+                            id="{{ $checkboxInput->inputId }}" value="1" required />
+                    </div>
+                    <x-error :field="$checkboxInput->errorField" />
+                @else
+                    <div class="mb-3">
+                        <label for="{{ $checkboxInput->inputName }}"
+                            class="form-check-label">{{ $checkboxInput->displayName }}</label>
+                        <input type="checkbox" class="form-check-input" name="{{ $checkboxInput->inputName }}"
+                            id="{{ $checkboxInput->inputId }}" value="1" />
+                    </div>
+                @endif
+            @endforeach
+        @endif
         {{ $slot }}
-        <button type="submit" class="btn btn-primary" id="{{ $submit_id }}">
+        <button type="submit" class="btn btn-primary" id="{{ $submitId }}">
             Найти
         </button>
     </form>

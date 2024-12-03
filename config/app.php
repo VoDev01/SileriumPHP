@@ -224,11 +224,7 @@ return [
         'ValidatePhone' => App\Facades\ValidatePhoneFacade::class,
         'ValidateEmail' => App\Facades\ValidateEmailFacade::class,
         'CheckUserRole' => App\Facades\CheckUserRoleFacade::class,
-        'ProductCart' => App\Facades\ProductCartServiceFacade::class,
-        'SearchFormQueryInputs' => ComponentsInputs\SearchForm\SearchFormQueryInputs::class,
-        'SearchFormInputs' => ComponentsInputs\SearchForm\SearchFormInputs::class,
-        'SearchFormCheckboxInputs' => ComponentsInputs\SearchForm\SearchFormCheckboxInputs::class,
-        'SearchFormHiddenInputs' => ComponentsInputs\SearchForm\SearchFormHiddenInputs::class
+        'ProductCart' => App\Facades\ProductCartServiceFacade::class
     ])->toArray(),
 
 ];

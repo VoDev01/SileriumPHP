@@ -3,70 +3,111 @@
         Админ панель - Отзывы товара | Silerium
     </x-slot>
     <div class="container">
-        @php
-            $inputs = [
-                new SearchFormInputs('sellerNickname', 'Название продавца', 'seller_nickname', true),
-                new SearchFormInputs('productName', 'Название товара', 'product_name', true),
-            ];
-            $queryInputs = new SearchFormQueryInputs('/admin/products/product_search', 'reviews', 'product_reviews');
-        @endphp
-        <x-search-form header="Поиск отзывов на товар" submit_id="find_product_review" :$queryInputs :$inputs />
         <h1>Отзывы товара</h1>
-        <table class="table table-bordered mb-3" id="review_info" hidden>
-            <thead>
-                <td>Название отзыва</td>
-                <td>Плюсы</td>
-                <td>Минусы</td>
-                <td>Комментарий</td>
-                <td>Оценка</td>
-                <td>Создан</td>
-                <td>Изменен</td>
-                <td>Отзыв на товар</td>
-            </thead>
-            <tbody>
-                <tr id="review_info_row">
-                </tr>
-            </tbody>
-        </table>
-        <x-pagination :model="$userPaginatedReviews" />
-    </div>
-    <script type="module">
-        $(document).ready(function() {
-            $("#find_product_review").on("click", function(e) {
-                e.preventDefault();
-                let product_name = $("#product_name").val();
-                let seller_name = $("#seller_name").val();
-                if (seller_name && product_name) {
-                    $.ajax({
-                        method: "GET",
-                        url: "/admin/product/search_reviews/" + seller_name + "/" + product_name,
-                        dataType: "json",
-                        success: function(data) {
-                            $("#review_info").attr("hidden", false);
-                            $("#review_info_row").empty();
-                            $("#review_info_row").append('<td>' + data.review.id + '</td>');
-                            $("#review_info_row").append('<td>' + data.review.name + '</td>');
-                            $("#review_info_row").append('<td>' + data.review.pros +
-                                '</td>');
-                            $("#review_info_row").append('<td>' + data.review.cons +
-                                '</td>');
-                            $("#review_info_row").append('<td>' + data.review.comment +
-                                '</td>');
-                            $("#review_info_row").append('<td>' + data.review.rating +
-                                '</td>');
-                            $("#review_info_row").append('<td>' + data.review.created +
-                                '</td>');
-                            $("#review_info_row").append('<td>' + data.review.updated +
-                                '</td>');
-                            $("#review_info_row").append('<td>' + data.review.productName +
-                                '</td>');
-                        }
-                    });
-                } else {
-                    $("#review_info").attr("hidden", true);
-                    $("#review_info_row").empty();
-                }
+        <x-search-form header="Поиск id товаров" submitId="find-products-id" :$queryInputs :$inputs />
+        @php
+            $searchKey = ['searchKey' => session('searchKey')];
+        @endphp
+        @if ($products != null)
+            <p>
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#foundProducts"
+                    aria-expanded="false" aria-controls="foundProducts">
+                    <i class="bi bi-arrow-down" id="foundProductsArrow"></i> Найденные товары
+                </button>
+            </p>
+            <div class="collapse mb-3" id="foundProducts">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Название</td>
+                            <td>Отзывов</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($products as $product)
+                            <tr>
+                                @php
+                                    $product = (object) $product;
+                                @endphp
+                                <td>{{ $product->ulid }}</td>
+                                <td>{{ $product->name }}</td>
+                                <td>{{ count($product->reviews) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <x-pagination :model="$products" :params="$searchKey" />
+
+                <form action="/admin/products/receive_product_reviews" method="POST" style="width: 300px;">
+                    <h5>Показать отзывы товара</h5>
+                    @csrf
+                    <input name="searchKey" value="{{ session('searchKey') }}" hidden />
+                    <div class="mb-3">
+                        <label for="id" class="form-label">Id товара</label>
+                        <input type="text" class="form-control" name="id" id="id" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Отправить
+                    </button>
+                </form>
+            </div>
+        @endif
+        <p>
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#foundReviews"
+                aria-expanded="false" aria-controls="foundReviews">
+                <i class="bi bi-arrow-down" id="foundReviewsArrow"></i> Отзывы товара
+            </button>
+        </p>
+        <div class="collapse" id="foundReviews">
+            @if ($reviews != null && $message == null)
+                <ol>
+                    @foreach ($reviews as $review)
+                        @php
+                            $review = (object)$review;
+                            $review->user = (object)$review->user;
+                            $review->product = (object)$review->product;
+                        @endphp
+                        <li class="border-bottom border-dark">
+                            <h5>Отзыв пользователя {{ $review->user->name }} {{ $review->user->surname }}</h5>
+                            <p>Название отзыва: {{ $review->title }}</p>
+                            <p>Плюсы: {{ $review->pros }}</p>
+                            <p>Минусы: {{ $review->cons }}</p>
+                            <p>Комментарий: {{ $review->comment }}</p>
+                            <p>Оценка: {{ $review->rating }}</p>
+                            <p>Создан: {{ $review->created_at }}</p>
+                            <p>Изменен: {{ $review->updated_at }}</p>
+                            <p>Отзыв на товар: {{ $review->product->name }}</p>
+                        </li>
+                    @endforeach
+                </ol>
+                <x-pagination :model="$reviews" :params="['searchKey' => session('searchKey')]" />
+            @else
+                <span class="mt-3">{{$message}}</span>
+            @endif
+        </div>
+
+        <script type="module">
+            $(document).ready(function() {
+                var foundProducts = document.getElementById('foundProducts');
+                foundProducts.addEventListener('show.bs.collapse', function() {
+                    $('#foundProductsArrow').removeClass("bi-arrow-down");
+                    $('#foundProductsArrow').addClass("bi-arrow-up");
+                });
+                foundProducts.addEventListener('hide.bs.collapse', function() {
+                    $('#foundProductsArrow').removeClass("bi-arrow-up");
+                    $('#foundProductsArrow').addClass("bi-arrow-down");
+                });
+                var productReviews = document.getElementById('foundReviews');
+                productReviews.addEventListener('show.bs.collapse', function() {
+                    $('#foundReviewsArrow').removeClass("bi-arrow-down");
+                    $('#foundReviewsArrow').addClass("bi-arrow-up");
+                });
+                productReviews.addEventListener('hide.bs.collapse', function() {
+                    $('#foundReviewsArrow').removeClass("bi-arrow-up");
+                    $('#foundReviewsArrow').addClass("bi-arrow-down");
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
 </x-admin-layout>

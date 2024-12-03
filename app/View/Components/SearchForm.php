@@ -2,11 +2,7 @@
 
 namespace App\View\Components;
 
-use ComponentsInputs\SearchForm\SearchFormCheckboxInputs;
-use ComponentsInputs\SearchForm\SearchFormHiddenInputs;
 use Illuminate\View\Component;
-use ComponentsInputs\SearchForm\SearchFormInputs;
-use ComponentsInputs\SearchForm\SearchFormQueryInputs;
 
 class SearchForm extends Component
 {
@@ -15,27 +11,27 @@ class SearchForm extends Component
      *
      * @return void
      */
-    public array $inputs;
-    public SearchFormQueryInputs $queryInputs;
-    public array $hiddenInputs;
-    public array $checkboxInputs;
+    public $inputs;
+    public $queryInputs;
+    public $hiddenInputs;
+    public $checkboxInputs;
     public string $header;
-    public string $submit_id;
+    public string $submitId;
     public function __construct(
-        array $inputs,
-        SearchFormQueryInputs $queryInputs,
-        array $hiddenInputs = null,
-        array $checkboxInputs = null, 
+        $inputs,
+        $queryInputs,
+        $hiddenInputs = null,
+        $checkboxInputs = null, 
         string $header = 'Поиск',
-        string $submit_id = ''
+        string $submitId = ''
     )
     {
-        $this->$queryInputs = $queryInputs;
+        $this->queryInputs = $queryInputs;
         $this->hiddenInputs = $hiddenInputs;
         $this->checkboxInputs = $checkboxInputs;
         $this->inputs = $inputs;
-        $this->$header = $header;
-        $this->submit_id = $submit_id;
+        $this->header = $header;
+        $this->submitId = $submitId;
     }
 
     /**

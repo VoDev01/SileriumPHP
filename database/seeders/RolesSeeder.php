@@ -29,9 +29,5 @@ class RolesSeeder extends Seeder
                 'role' => 'seller'
             ]
         ]);
-        DB::table('users_roles')->insert([
-            'user_id' => 1,
-            'role_id' => 1
-        ]);
     }
 }

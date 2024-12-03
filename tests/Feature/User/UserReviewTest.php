@@ -56,7 +56,7 @@ class UserReviewTest extends TestCase
         }
         $response->assertValid();
 
-        $this->assertDatabaseHas('reviews', ['id' => $review->id]);
+        $this->assertDatabaseHas('reviews', ['id' => Review::max('id')]);
     }
 
     public function testEditReview()

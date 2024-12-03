@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use ComponentsInputs\SearchForm\SearchFormInputs;
+use ComponentsInputs\SearchForm\SearchFormQueryInputs;
 
 class SellerController extends Controller
 {
@@ -13,6 +15,9 @@ class SellerController extends Controller
     }
     public function account()
     {
-        return view('seller.account');
+        if(session('seller_id') != null)
+            return view('seller.account');
+        else
+            return redirect()->route('seller.login');
     }
 }

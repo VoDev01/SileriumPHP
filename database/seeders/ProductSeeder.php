@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Seller;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,6 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        Product::factory()->count(30)->create();
+        Product::factory()->count(30)->create(['seller_id' => Seller::max('id')]);
     }
 }

@@ -3,32 +3,30 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\Users\APIUserSearchRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 
 class APIUsersController extends Controller
 {
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function find(string $email, string $load_with = "", string $name = null, string $surname = null, string $id = null, string $phone = null)
+    public function search(APIUserSearchRequest $request)
     {
-        if($load_with == "")
+        $validated = $request->validated();
+        if(!array_key_exists('loadWith', $validated))
         {
-            $users = User::where("email", $email)->get();
-            return response()->json($users, 200);
+            $users = User::where("email", 'like', '%'.$validated['email'].'%')->get();
+            return response()->json(['users' => $users->toArray()], 200);
         }
-        else if ($load_with == "orders")
-            $usersQuery = User::with("orders");
-        else if($load_with == "roles")
-            $usersQuery = User::with("roles");
-        else if($load_with == "reviews")
-            $usersQuery = User::with("reviews.product");
-        $users = $usersQuery->where("email", $email)->get();
-        return response()->json($users, 200);
+        else
+        {
+            $loadWithArr = explode(', ', $validated['loadWith']);
+            $usersQuery = User::with($loadWithArr);
+        }
+        $users = $usersQuery->where("email", 'like', '%'.$validated['email'].'%')->get();
+        if($users != null)
+            return response()->json(['users' => $users->toArray()], 200);
+        else
+            return response()->json(['message' => 'Не было найдено пользователей с данными запросами.'], 404);
     }
 }

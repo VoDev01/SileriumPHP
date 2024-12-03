@@ -4,31 +4,13 @@
     </x-slot>
     <div class="container">
         <h1>Управление ролями</h1>
+        <x-search-form header="Поиск пользователей" submit_id="search-users" :$inputs :$queryInputs />
         <p>
-            <a class="btn btn-primary" data-bs-toggle="collapse" href="#users" aria-expanded="false" aria-controls="users">
-                Пользователи
+            <a class="btn" data-bs-toggle="collapse" href="#foundUsers" aria-expanded="false" aria-controls="foundUsers">
+               <i class="bi bi-arrow-down" id="foundUsersArrow"></i> Пользователи
             </a>
         </p>
-        <div class="collapse" id="users">
-            <form class="mb-3" style="width: 250px;">
-                <h4>Найти пользователя</h4>
-                <input hidden name="load_with" id="load_with" value="roles" />
-                <div class="mb-3">
-                    <label for="id" class="form-label">Id</label>
-                    <input type="number" class="form-control" name="id" id="id" defa />
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" />
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Телефон</label>
-                    <input type="phone" class="form-control" name="phone" id="phone" />
-                </div>
-                <button type="submit" class="btn btn-primary" id="find_user">
-                    Найти
-                </button>
-            </form>
+        <div class="collapse" id="foundUsers">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -40,22 +22,22 @@
                 <tbody>
                     @foreach ($users as $user)
                         <tr id="user">
-                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->ulid }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ implode(', ', array_column($user->roles->all(), 'role')) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            <x-pagination :model="$users" />
+            <x-pagination :model="$users" :params="['searchKey' => session('searchKey')]"/>
         </div>
         <p>
-            <a class="btn btn-primary" data-bs-toggle="collapse" href="#roles" aria-expanded="false"
+            <a class="btn" data-bs-toggle="collapse" href="#roles" aria-expanded="false"
                 aria-controls="roles">
-                Роли
+                <i class="bi bi-arrow-down" id="rolesArrow"></i> Роли
             </a>
         </p>
-        <div class="collapse" id="roles">
+        <div class="collapse" id="roles" style="width: 300px;">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -72,49 +54,29 @@
                     @endforeach
                 </tbody>
             </table>
+            <x-pagination :model="$roles" />
         </div>
-    </div>
-    <script type="module">
-        $(document).ready(function() {
-            $("#find_user").on("click", function(e) {
-                console.log("clicked");
-                e.preventDefault();
-                let id = $("#id").val();
-                let email = $("#email").val();
-                let phone = $("#phone").val();
-
-                let url = "/admin/users/find/" + email;
-
-                if (id.length != 0) {
-                    url += "/" + id;
-                }
-                if (phone.length != 0) {
-                    url += "/" + phone;
-                }
-
-                if (email) {
-                    console.log("not null");
-                    $.ajax({
-                        method: "GET",
-                        dataType: "json",
-                        url: url,
-                        success: function(data) {
-                            console.log("success");
-                            $("#user").empty();
-                            $("#user").append("<td>" + data.users.id + "</td>");
-                            $("#user").append("<td>" + data.users.email + "</td>");
-                            $("#user").append("<td>" + data.users.roles.join(", ") +
-                                "</td>");
-                        },
-                        error: function(data, status, error) {
-                            console.log(data.responseText);
-                        }
-                    });
-                } else {
-                    console.log("null");
-                    $("#user").empty();
-                }
+        <script type="module">
+            $(document).ready(function(){
+                var foundUsers = document.getElementById('foundUsers');
+                foundUsers.addEventListener('show.bs.collapse', function(){
+                    $('#foundUsersArrow').addClass('bi-arrow-up');
+                    $('#foundUsersArrow').removeClass('bi-arrow-down');
+                });
+                foundUsers.addEventListener('hide.bs.collapse', function(){
+                    $('#foundUsersArrow').addClass('bi-arrow-down');
+                    $('#foundUsersArrow').removeClass('bi-arrow-up');
+                });
+                var roles = document.getElementById('roles');
+                roles.addEventListener('show.bs.collapse', function(){
+                    $('#rolesArrow').addClass('bi-arrow-up');
+                    $('#rolesArrow').removeClass('bi-arrow-down');
+                });
+                roles.addEventListener('hide.bs.collapse', function(){
+                    $('#rolesArrow').addClass('bi-arrow-down');
+                    $('#rolesArrow').removeClass('bi-arrow-up');
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
 </x-admin-layout>

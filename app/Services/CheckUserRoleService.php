@@ -11,7 +11,7 @@ class CheckUserRoleService
     {
         if(Auth::user())
         {
-            $user = User::with('roles')->where('id', Auth::id())->get();
+            $user = User::with('roles')->where('id', Auth::id())->first();
             foreach($user->roles as $userRole)
             {
                 if($userRole->role == $role)

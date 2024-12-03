@@ -3,45 +3,88 @@
         Админ панель - Заказы пользователя | Silerium
     </x-slot>
     <div class="container">
-        <div class="d-flex">
-            @php
-                $inputs = array(
-                    array('inputName' => 'name', 'displayName' => 'Имя'),
-                    array('inputName' => 'surname', 'displayName' => 'Фамилия'),
-                    array('inputName' => 'email', 'displayName' => 'Email', 'required' => true)
-                )
-            @endphp
-            <x-api-search-form actionUrl="/admin/users/post_user_search" loadWith="reviews" redirect="user_reviews" header="Поиск пользователей" submit_id="find_user" :$inputs/>
-        </div>
-        @if ($userInfoReceived)
-            <div class="container" id="user_reviews">
-
-                <div class="row mb-3 pb-3 border-bottom border-dark">
-                    <div class="col-3">
-                        <h5>{{ $user['name'] }} {{ $user['surname'] }}</h5>
-                        <img src="{{ $user['profilePicture'] }}" alt="Аватарка пользователя"
-                            style="width: 128px; heigth: 128px;" />
-                    </div>
-
-                    <div class="col-9">
-                        <p>{{ $user['email'] }}</p>
-                        <p>{{ $user['country'] }}</p>
-                        <p>{{ $user['city'] }}</p>
-                        <p>{{ $user['homeAdress'] }}</p>
-                    </div>
-                </div>
-
-                <h5>Заказы пользователя {{ $user['name'] }} {{ $user['surname'] }}</h5>
-                @foreach ($user['orders'] as $order)
-                    <p>Заказ {{ $order['id'] }}</p>
-                    <p>Сумма {{ $order['totalPrice'] }}</p>
-                    <p>Дата осуществления заказа {{ $order['orderDate'] }}</p>
-                    <p>Адрес доставки {{ $order['orderAdress'] }}</p>
-                    <p>Состояние заказа {{ $order['orderStatus'] }}</p>
-                    <p>Дата завершения заказа {{ $order['deleted_at'] }}</p>
-                @endforeach
-                <x-pagination :model="$userPaginatedOrders" />
+        <h1>Заказы пользователей</h1>
+        <x-search-form header="Поиск пользователей" submit_id="find_user" :$inputs :$queryInputs />
+        @if ($users != null)
+            <p>
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#foundUsers"
+                    aria-expanded="false" aria-controls="foundUsers">
+                    <i class="bi bi-arrow-down" id="foundUsersArrow"></i> Пользователи
+                </button>
+            </p>
+            <div class="collapse" id="foundUsers">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Имя</td>
+                            <td>Фамилия</td>
+                            <td>Email</td>
+                            <td>Телефон</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($users as $user)
+                            @php
+                                $user = (object) $user;
+                            @endphp
+                            <tr>
+                                <td>{{ $user->ulid }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->surname }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->phone }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <x-pagination :model="$users" :params="['searchKey' => session('searchKey')]" />
             </div>
+            <form action="/admin/products/orders" method="POST" style="width: 300px;">
+                <h5>Показать заказы пользователя</h5>
+                @csrf
+                <input name="searchKey" value="{{ session('searchKey') }}" hidden />
+                <div class="mb-3">
+                    <label for="id" class="form-label">Id пользователя</label>
+                    <input type="text" class="form-control" name="id" id="id" />
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    Отправить
+                </button>
+            </form>
+            @if ($orders != null && $message == null)
+                <h5>Заказы пользователя {{ $user->name }} {{ $user->surname }}</h5>
+                @foreach ($orders as $order)
+                    @php
+                        $order = (object) $order;
+                    @endphp
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Заказ</td>
+                                <td>Сумма</td>
+                                <td>Дата осуществления заказа</td>
+                                <td>Адрес доставки</td>
+                                <td>Состояние</td>
+                                <td>Дата завершения заказа</td>
+                                <td>Название товаров</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td>{{ $order->id }}</td>
+                            <td>{{ $order->totalPrice }}</td>
+                            <td>{{ $order->orderDate }}</td>
+                            <td>{{ $order->orderAdress }}</td>
+                            <td>{{ $order->orderStatus }}</td>
+                            <td>{{ $order->deleted_at }}</td>
+                            <td>{{ $order->productsNames }}</td>
+                        </tbody>
+                    </table>
+                @endforeach
+                <x-pagination :model="$orders" :params="['searchKey' => session('searchKey')]" />
+            @else
+                <span class="mt-3">{{ $message }}</span>
+            @endif
         @endif
     </div>
 </x-admin-layout>

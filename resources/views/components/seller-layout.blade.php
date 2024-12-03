@@ -37,13 +37,13 @@
                                 Товары
                                 <i class="bi bi-box-seam"></i>
                             </a>
-                            <a class="nav-item nav-link text-black text-decoration-none" href="/seller/reviews">
+                            <a class="nav-item nav-link text-black text-decoration-none" href="/seller/products/reviews">
                                 Отзывы
                                 <i class="bi bi-chat-dots"></i>
                             </a>
                         @endif
-                        <a class="nav-item nav-link text-black text-decoration-none" href="/seller/login">
-                            Войти в личный кабинет
+                        <a class="nav-item nav-link text-black text-decoration-none" href="/seller/account">
+                            Личный кабинет
                             <i class="bi bi-box-arrow-in-right"></i>
                         </a>
                         @if(!Auth::user())

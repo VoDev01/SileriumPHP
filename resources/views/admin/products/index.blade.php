@@ -2,14 +2,8 @@
     <x-slot name="title">
         Админ панель - Товары | Silerium
     </x-slot>
-    @php
-        $inputs = [
-            new SearchFormInputs('sellerNickname', 'Название продавца', 'seller_nickname', true),
-            new SearchFormInputs('productName', 'Название товара', 'product_name', true),
-        ];
-        $queryInputs = new SearchFormQueryInputs('/admin/products/product_search', 'reviews', 'product_reviews');
-    @endphp
-    <x-search-form header="Поиск товаров" submit_id="find_product_review" :$queryInputs :$inputs />
+    <div class="container">
+        <x-search-form header="Поиск товаров" submit_id="find_products" :$queryInputs :$inputs />
         <h1 class="text-center">Товары</h1>
         <div class="container-fluid">
             <table class="table table-bordered">
@@ -27,6 +21,9 @@
                 </thead>
                 <tbody>
                     @foreach ($products as $product)
+                        @php
+                            $product = (object)$product;
+                        @endphp
                         <tr>
                             <td>{{ $product->id }}</td>
                             <td>{{ $product->name }}</td>
@@ -40,6 +37,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <x-pagination :model="$products" />
+            <x-pagination :model="$products" :params="['searchKey' => session('searchKey')]"/>
         </div>
+    </div>
 </x-admin-layout>

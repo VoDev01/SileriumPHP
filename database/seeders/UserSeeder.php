@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
@@ -18,5 +19,6 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()->count(5)->create();
+        Seller::factory()->count(1)->create(['user_id' => User::max('id')]);
     }
 }

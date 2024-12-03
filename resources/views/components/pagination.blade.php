@@ -1,1 +1,1 @@
-{{$model->onEachSide(5)->links('pagination.custom')}}
+{{$model->onEachSide(5)->withQueryString()->links('pagination.custom')}}

@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class AuthorizeAdminPanelMiddleware
 {
@@ -18,17 +18,14 @@ class AuthorizeAdminPanelMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check())
+        $response = Gate::inspect('access-admin-panel');
+        if ($response->allowed())
         {
-            $user = User::with('roles')->where('id', Auth::id())->first();
-            if($user->roles->first()->role == "admin")
-            {
-                return $next($request);
-            }
-            else
-            {
-                return abort(403, 'Forbidden');
-            }
+            return $next($request);
+        }
+        else
+        {
+            abort(404);
         }
     }
 }

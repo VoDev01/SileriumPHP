@@ -83,6 +83,26 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Seller::class);
     }
 
+    public function hasRoles(array|string $roles)
+    {
+        if(gettype($roles) == "string")
+        {
+            foreach($this->roles()->get() as $role)
+                if($role->role == $roles)
+                    return true;
+            return false;
+        }
+        else if(gettype($roles) == "array")
+        {
+            foreach($this->roles()->get() as $role)
+            {
+                if(in_array($role->role, $roles))
+                    return true;
+            }
+            return false;
+        }
+    }
+
     protected function name() : Attribute
     {
         return Attribute::make(

@@ -5,7 +5,7 @@
     <div class="container" style="width:500px;">
         <h1>Заполните данные</h1>
 
-        <form method="POST" enctype="multipart/form-data" action="/seller/register">
+        <form method="POST" enctype="multipart/form-data" action="/seller/register/">
             <div class="mb-3">
                 <label for="organization_type" class="form-label">Тип организации</label>
                 <select class="form-select form-select-lg" name="organization_type" id="organization_type">

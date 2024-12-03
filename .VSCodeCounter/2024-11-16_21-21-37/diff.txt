@@ -1,0 +1,100 @@
+Date : 2024-11-16 21:21:37
+Directory : c:\Users\admin\source\repos\Silerium_laravel
+Total : 38 files,  356 codes, 30 comments, 37 blanks, all 423 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| PHP      |         38 |        356 |         30 |         37 |        423 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                      | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                         |         38 |        356 |         30 |         37 |        423 |
+| app                                                                                                                       |         23 |        211 |         30 |         32 |        273 |
+| app\Http                                                                                                                  |         16 |        122 |         29 |         19 |        170 |
+| app\Http\Controllers                                                                                                      |          8 |         56 |         -1 |          4 |         59 |
+| app\Http\Controllers\API                                                                                                  |          2 |         11 |          0 |          2 |         13 |
+| app\Http\Controllers\API\V1                                                                                               |          2 |         11 |          0 |          2 |         13 |
+| app\Http\Controllers\Admin                                                                                                |          2 |        -42 |          0 |          0 |        -42 |
+| app\Http\Controllers\Seller                                                                                               |          4 |         87 |         -1 |          2 |         88 |
+| app\Http\Middleware                                                                                                       |          1 |          5 |          0 |          0 |          5 |
+| app\Http\Requests                                                                                                         |          7 |         61 |         30 |         15 |        106 |
+| app\Http\Requests\API                                                                                                     |          7 |         61 |         30 |         15 |        106 |
+| app\Http\Requests\API (Files)                                                                                             |          3 |        -18 |        -10 |         -5 |        -33 |
+| app\Http\Requests\API\Products                                                                                            |          4 |         79 |         40 |         20 |        139 |
+| app\Services                                                                                                              |          3 |         52 |          0 |          8 |         60 |
+| app\View                                                                                                                  |          4 |         37 |          1 |          5 |         43 |
+| app\View\Components                                                                                                       |          4 |         37 |          1 |          5 |         43 |
+| app\View\Components (Files)                                                                                               |          1 |         -4 |          0 |          0 |         -4 |
+| app\View\Components\ComponentsInputs                                                                                      |          2 |          2 |          0 |          1 |          3 |
+| app\View\Components\ComponentsInputs\SearchForm                                                                           |          2 |          2 |          0 |          1 |          3 |
+| app\View\Components\ComponentsMethods                                                                                     |          1 |         39 |          1 |          4 |         44 |
+| app\View\Components\ComponentsMethods\SearchForm                                                                          |          1 |         39 |          1 |          4 |         44 |
+| config                                                                                                                    |          1 |         -4 |          0 |          0 |         -4 |
+| database                                                                                                                  |          2 |          3 |          0 |          0 |          3 |
+| database\seeders                                                                                                          |          2 |          3 |          0 |          0 |          3 |
+| resources                                                                                                                 |          9 |         93 |          0 |          1 |         94 |
+| resources\views                                                                                                           |          9 |         93 |          0 |          1 |         94 |
+| resources\views\admin                                                                                                     |          2 |         -1 |          0 |          0 |         -1 |
+| resources\views\admin\products                                                                                            |          2 |         -1 |          0 |          0 |         -1 |
+| resources\views\components                                                                                                |          1 |          1 |          0 |          0 |          1 |
+| resources\views\seller                                                                                                    |          6 |         93 |          0 |          1 |         94 |
+| resources\views\seller (Files)                                                                                            |          1 |          4 |          0 |          0 |          4 |
+| resources\views\seller\orders                                                                                             |          1 |         27 |          0 |         -1 |         26 |
+| resources\views\seller\products                                                                                           |          4 |         62 |          0 |          2 |         64 |
+| routes                                                                                                                    |          1 |         17 |          0 |          0 |         17 |
+| routes\web                                                                                                                |          1 |         17 |          0 |          0 |         17 |
+| tests                                                                                                                     |          2 |         36 |          0 |          4 |         40 |
+| tests\Feature                                                                                                             |          2 |         36 |          0 |          4 |         40 |
+| tests\Feature\API                                                                                                         |          1 |         34 |          0 |          4 |         38 |
+| tests\Feature\Seller                                                                                                      |          1 |          2 |          0 |          0 |          2 |
++---------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                  | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\API\V1\APIProductsController.php                        | PHP      |         12 |          0 |          2 |         14 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\API\V1\APIUsersController.php                           | PHP      |         -1 |          0 |          0 |         -1 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Admin\ProductsAdminPanelController.php                  | PHP      |        -13 |          0 |          0 |        -13 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Admin\UsersAdminPanelController.php                     | PHP      |        -29 |          0 |          0 |        -29 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Seller\SellerAuthController.php                         | PHP      |         10 |          0 |          0 |         10 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Seller\SellerController.php                             | PHP      |          5 |          0 |          0 |          5 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Seller\SellerOrdersController.php                       | PHP      |          6 |         -1 |          0 |          5 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Controllers\Seller\SellerProductsController.php                     | PHP      |         66 |          0 |          2 |         68 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Middleware\Authenticate.php                                         | PHP      |          5 |          0 |          0 |          5 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\API\APIProductsRequest.php                                 | PHP      |        -22 |        -10 |         -5 |        -37 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\API\APIProductsSearchRequest.php                           | PHP      |        -17 |        -10 |         -5 |        -32 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\API\APIUserSearchRequest.php                               | PHP      |         21 |         10 |          5 |         36 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\API\Products\APIProductsCreateRequest.php                  | PHP      |         22 |         10 |          5 |         37 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\API\Products\APIProductsDeleteRequest.php                  | PHP      |         16 |         10 |          5 |         31 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\API\Products\APIProductsSearchRequest.php                  | PHP      |         20 |         10 |          5 |         35 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Http\Requests\API\Products\APIProductsUpdateRequest.php                  | PHP      |         21 |         10 |          5 |         36 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\ManualPaginatorService.php                                      | PHP      |          0 |          0 |          1 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\SearchFormKeyAuthService.php                                    | PHP      |         30 |          0 |          4 |         34 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\Services\UpdateSessionValueJson.php                                      | PHP      |         22 |          0 |          3 |         25 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\ComponentsInputs\SearchForm\SearchFormCheckboxInputs.php | PHP      |          0 |          0 |          1 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInputs.php    | PHP      |          2 |          0 |          0 |          2 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\ComponentsMethods\SearchForm\SearchFormSearchMethod.php  | PHP      |         39 |          1 |          4 |         44 |
+| c:\Users\admin\source\repos\Silerium_laravel\app\View\Components\SearchForm.php                                           | PHP      |         -4 |          0 |          0 |         -4 |
+| c:\Users\admin\source\repos\Silerium_laravel\config\app.php                                                               | PHP      |         -4 |          0 |          0 |         -4 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\seeders\ProductSeeder.php                                           | PHP      |          1 |          0 |          0 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\database\seeders\UserSeeder.php                                              | PHP      |          2 |          0 |          0 |          2 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\products\index.blade.php                               | PHP      |         -7 |          0 |          0 |         -7 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\admin\products\reviews.blade.php                             | PHP      |          6 |          0 |          0 |          6 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\components\search-form.blade.php                             | PHP      |          1 |          0 |          0 |          1 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\account.blade.php                                     | PHP      |          4 |          0 |          0 |          4 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\orders\orders.blade.php                               | PHP      |         27 |          0 |         -1 |         26 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\products\delete.blade.php                             | PHP      |          1 |          0 |          1 |          2 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\products\index.blade.php                              | PHP      |        -31 |          0 |         -1 |        -32 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\products\products-list.blade.php                      | PHP      |         43 |          0 |          1 |         44 |
+| c:\Users\admin\source\repos\Silerium_laravel\resources\views\seller\products\update.blade.php                             | PHP      |         49 |          0 |          1 |         50 |
+| c:\Users\admin\source\repos\Silerium_laravel\routes\web\seller.php                                                        | PHP      |         17 |          0 |          0 |         17 |
+| c:\Users\admin\source\repos\Silerium_laravel\tests\Feature\API\APIProductTest.php                                         | PHP      |         34 |          0 |          4 |         38 |
+| c:\Users\admin\source\repos\Silerium_laravel\tests\Feature\Seller\SellerAuthTest.php                                      | PHP      |          2 |          0 |          0 |          2 |
+| Total                                                                                                                     |          |        356 |         30 |         37 |        423 |
++---------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

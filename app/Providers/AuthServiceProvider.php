@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
 use App\Models\User;
-
+use Illuminate\Http\Request;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -17,7 +19,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\Order' => 'App\Policies\OrderPolicy',
+        'App\Models\Product' => 'App\Policies\ProductPolicy',
+        'App\Models\Review' => 'App\Policies\ReviewPolicy'
     ];
 
     /**
@@ -29,22 +33,53 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        VerifyEmail::toMailUsing(function($notifiable, $url){
+        VerifyEmail::toMailUsing(function ($notifiable, $url)
+        {
             return (new MailMessage)
                 ->subject('Подтверждение email')
                 ->line('Нажмите на ссылку для подтвеждения email.')
                 ->action('Подтвердить', $url);
         });
 
-        Gate::define('access-admin-panel', function(User $user){
-            foreach($user->roles as $role)
-            {
-                if($role->role == 'admin' || $role->role == 'moderator')
-                    return true;
-                else
-                    continue;
-            }
-            return false;
+        Gate::define('access-admin-panel', function (User $user)
+        {
+            if($user->hasRoles(['admin', 'moderator']))
+                return Response::allow();
+            else
+                return Response::denyAsNotFound();
+
+        });
+
+        Gate::define('access-api', function (User $user)
+        {
+            if($user->hasRoles(['user', 'seller', 'admin', 'moderator']))
+                return Response::allow();
+            else
+                return Response::denyAsNotFound();
+        });
+
+        Gate::define('access-admin-api', function (User $user)
+        {
+            if($user->hasRoles('admin'))
+                return Response::allow();
+            else
+                return Response::denyAsNotFound();
+        });
+
+        Gate::define('access-seller-api', function (User $user)
+        {
+            if($user->hasRoles('seller'))
+                return Response::allow();
+            else
+                return Response::denyAsNotFound();
+        });
+
+        Gate::define('access-seller-admin-api', function (User $user)
+        {
+            if($user->hasRoles(['admin', 'seller', 'moderator']))
+                return Response::allow();
+            else
+                return Response::denyAsNotFound();
         });
     }
 }

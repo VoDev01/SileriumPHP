@@ -6,7 +6,10 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\APIProductsRequest;
+use App\Http\Requests\API\Products\APIProductsCreateRequest;
+use App\Http\Requests\API\Products\APIProductsDeleteRequest;
+use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Http\Requests\API\Products\APIProductsUpdateRequest;
 use App\Models\Seller;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,71 +18,95 @@ class APIProductsController extends Controller
     public function index(int $itemsPerPage = 15)
     {
         $products = Product::orderBy('id')->paginate($itemsPerPage);
-        return response()->json($products, 200);
+        return response()->json($products->toArray(), 200);
     }
     public function show(int $id)
     {
         $product = Product::where('id', $id)->orderBy('id')->get();
-        if($product != null)
-            return response()->json($product, 200);
+        if ($product != null)
+            return response()->json(['product' => $product], 200);
         else
             return response()->json(['message' => 'No product was found with this id'], 400);
     }
-    public function create(APIProductsRequest $request)
+    public function create(APIProductsCreateRequest $request)
     {
         $validated = $request->validated();
         $product = ProductService::make($validated);
         return response()->json(['Url' => 'https://silerium.com/catalog/product/' . $product->ulid], 200);
     }
-    public function update(APIProductsRequest $request)
+    public function update(APIProductsUpdateRequest $request)
     {
         $validated = $request->validated();
-        Product::where('id', $request->id)->orderBy('id')->update([
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'priceRub' => $validated['priceRub'],
-            'available' => $validated['available'],
-            'subcategory_id' =>  $validated['subcategory_id']
-        ]);
-        return response()->json(['Url' => 'https://silerium.com/catalog/product/' . $validated['name']], 200);
+        $product = Product::where('ulid', $validated['id'])->get()->first();
+        $product->name = $validated['name'] ?? $product->name;
+        $product->description = $validated['description'] ?? $product->description;
+        $product->priceRub = $validated['priceRub'] ?? $product->priceRub;
+        $product->available = $validated['available'] ?? $product->available;
+        $product->productAmount = $validated['productAmount'] ?? $product->productAmount;
+        $product->save();
+        return response()->json(['updated_product' => $product], 200);
     }
-    public function delete(Request $request)
+    public function delete(APIProductsDeleteRequest $request)
     {
-        if(!Product::where('id', $request->id)->exists())
+        $validated = $request->validated();
+        if (!Product::where('ulid', $validated['id'])->exists())
             return response()->json(['message' => 'Trying to delete non-existent entity'], 403);
-        Product::destroy($request->id);
-        if(!Product::where('id', $request->id)->exists())
+        Product::where('ulid', $validated['id'])->delete();
+        if (!Product::where('ulid', $validated['id'])->exists())
             return response()->json(null, 200);
         else
             return response()->json(null, 400);
-
     }
-    public function productsByNameSeller(string $sellerNickname, string $productName, string $loadWith = null)
+    public function productsByNameSeller(APIProductsSearchRequest $request)
     {
-        if($loadWith != null)
+        $validated = $request->validated();
+        $loadWithArray = null;
+        if (array_key_exists('loadWith', $validated))
         {
-            $loadWithArray = explode(', ', $loadWith);
-            for($i = 0; $i < count($loadWithArray); $i++)
-                $loadWithArray[$i] = 'products.' + $loadWithArray[$i];
-            $sellers = Seller::with(array_merge(['products'], $loadWithArray))->where('nickname', 'like', '%'.$sellerNickname.'%')->get();
+            if (isset($validated['loadWith']))
+            {
+                $loadWithArray = explode(', ', $validated['loadWith']);
+                for ($i = 0; $i < count($loadWithArray); $i++)
+                    $loadWithArray[$i] = 'products.' . $loadWithArray[$i];
+            }
+        }
+        $sellers = null;
+        if ($loadWithArray != null)
+        {
+            $sellers = Seller::with(array_merge(['products'], $loadWithArray));
+        }
+        if (isset($sellers))
+        {
+            if (session('seller_id') != null)
+                $sellers = $sellers->where('id', session('seller_id'));
+            else
+                $sellers = $sellers->where('nickname', 'like', '%' . $validated['sellerName'] . '%');
         }
         else
-            $sellers = Seller::with('products')->where('nickname', 'like', '%'.$sellerNickname.'%')->get();
-        $products = new Collection();
-        foreach($sellers as $seller)
         {
-            foreach($seller->products as $product)
+            if (session('seller_id') != null)
+                $sellers = Seller::where('id', session('seller_id'));
+            else
+                $sellers = Seller::where('nickname', 'like', '%' . $validated['sellerName'] . '%');
+        }
+
+        $sellers = $sellers->get();
+
+        $products = new Collection();
+        foreach ($sellers as $seller)
+        {
+            foreach ($seller->products as $product)
             {
-                $result = strpos($product->name, $productName) !== false;
-                if($result != false)
+                $result = strpos($product->name, $validated['productName']) !== false;
+                if ($result != false)
                 {
                     $products->add($product);
                 }
             }
         }
-        if($products != null)
-            return response()->json($products, 200);
+        if ($products != null)
+            return response()->json(['products' => $products->toArray()], 200);
         else
-            return response()->json(['message' => 'No products were found with this name or id'], 400);
+            return response()->json(['message' => 'Не было найдено товаров с таким именем'], 404);
     }
 }
