@@ -36,6 +36,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedUser::class
         ],
 
         'api' => [
@@ -63,10 +64,12 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'authorize.api.loggedin' => \App\Http\Middleware\AuthorizeApiLoggedInMiddleware::class,
+        'authorize.api.key' => \App\Http\Middleware\AuthorizeApiKeyMiddleware::class,
         'authorize.admin' => \App\Http\Middleware\AuthorizeAdminPanelMiddleware::class,
-        'authorize.api' => \App\Http\Middleware\AuthorizeApiMiddleware::class,
         'authorize.admin.api' => \App\Http\Middleware\AuthorizeAdminApiMiddleware::class,
         'authorize.seller.api' => \App\Http\Middleware\AuthorizeSellerApiMiddleware::class,
-        'authorize.seller.admin.api' => \App\Http\Middleware\AuthorizeSellerAdminApiMiddleware::class
+        'authorize.seller.admin.api' => \App\Http\Middleware\AuthorizeSellerAdminApiMiddleware::class,
+        'banned' => \App\Http\Middleware\CheckBannedUser::class
     ];
 }

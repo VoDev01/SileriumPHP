@@ -10,6 +10,7 @@ use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
+use App\Models\UserApiKey;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -27,9 +28,14 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
         $product = Seller::factory()->has(Product::factory(20))->create()->first();
 
-        $response = $this->actingAs($user)->getJson('/api/v1/products/index/15');
+        $response = $this->withBasicAuth($user->email, $user->password)->getJson('/api/v1/products/index/15');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->getJson('/api/v1/products/index/15');
 
         $response
             ->assertOk()   
@@ -48,9 +54,14 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
         $seller = Seller::factory()->has(Product::factory(15))->create();
 
-        $response = $this->actingAs($user)->getJson('/api/v1/products/show/' . Product::max('id'));
+        $response = $this->withBasicAuth($user->email, $user->password)->getJson('/api/v1/products/show/' . Product::max('id'));
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->getJson('/api/v1/products/show/' . Product::max('id'));
 
         $response
             ->assertOk()   
@@ -70,11 +81,16 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'seller']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
 
-        $response = $this->actingAs($user)->postJson('/api/v1/products/create/', [
+        $response = $this->withBasicAuth($user->email, $user->password)->postJson('/api/v1/products/create/');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/products/create/', [
             'name' => $product->name,
             'description' => $product->description,
             'priceRub' => $product->priceRub,
@@ -103,11 +119,16 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
 
-        $response = $this->actingAs($user)->putJson('/api/v1/products/update', [
+        $response = $this->withBasicAuth($user->email, $user->password)->putJson('/api/v1/products/update/');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->putJson('/api/v1/products/update', [
             'id' => $product->ulid,
             'name' => $product->name,
             'description' => $product->description,
@@ -127,11 +148,16 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
 
-        $response = $this->actingAs($user)->deleteJson('/api/v1/products/delete', ['id' => $product->ulid]);
+        $response = $this->withBasicAuth($user->email, $user->password)->deleteJson('/api/v1/products/delete');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->deleteJson('/api/v1/products/delete', ['id' => $product->ulid]);
 
         $response->assertOk();
     }
@@ -142,11 +168,16 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
 
-        $response = $this->actingAs($user)->postJson('/api/v1/products/by_name_seller/', [
+        $response = $this->withBasicAuth($user->email, $user->password)->postJson('/api/v1/products/by_name_seller/');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/products/by_name_seller/', [
             'sellerName' => $seller->nickname,
             'productName' => $product->name
         ]);

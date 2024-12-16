@@ -3,16 +3,17 @@
 namespace Tests\Feature\API;
 
 use Tests\TestCase;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Review;
-use App\Models\Role;
+use App\Models\UserApiKey;
 use App\Models\Subcategory;
-use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class APIReviewTest extends TestCase
 {
@@ -27,8 +28,13 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->actingAs($user)->getJson('/api/v1/reviews/index');
+        $response = $this->withBasicAuth($user->email, $user->password)->getJson('/api/v1/reviews/index');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->getJson('/api/v1/reviews/index');
 
         $response->assertOk()
             ->assertJson(fn (AssertableJson $json) => 
@@ -48,9 +54,14 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
         $review = Review::factory()->for($user)->for($product)->create();
 
-        $response = $this->actingAs($user)->putJson('/api/v1/reviews/update', [
+        $response = $this->withBasicAuth($user->email, $user->password)->putJson('/api/v1/reviews/update');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->putJson('/api/v1/reviews/update', [
             'id' => $review->ulid,
             'title' => $review->title,
             'pros' => null,
@@ -75,8 +86,13 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
         $review = Review::factory()->for($user)->for($product)->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->actingAs($user)->deleteJson('/api/v1/reviews/delete', ['id' => $review->ulid]);
+        $response = $this->withBasicAuth($user->email, $user->password)->deleteJson('/api/v1/reviews/delete');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->deleteJson('/api/v1/reviews/delete', ['id' => $review->ulid]);
 
         $response->assertOk();
 
@@ -93,8 +109,13 @@ class APIReviewTest extends TestCase
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $review = Review::factory()->for($user)->for($product)->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->actingAs($user)->postJson('/api/v1/reviews/search_user_reviews', [
+        $response = $this->withBasicAuth($user->email, $user->password)->postJson('/api/v1/reviews/search_user_reviews');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/reviews/search_user_reviews', [
             'userEmail' => $user->email,
             'userId' => $user->ulid
         ]);
@@ -121,8 +142,13 @@ class APIReviewTest extends TestCase
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $review = Review::factory()->for($user)->for($product)->create();
+        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->actingAs($user)->postJson('/api/v1/reviews/search_product_reviews', [
+        $response = $this->withBasicAuth($user->email, $user->password)->postJson('/api/v1/reviews/search_product_reviews');
+
+        $response->assertForbidden();
+
+        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/reviews/search_product_reviews', [
             'sellerName' => $seller->nickname,
             'productName' => $product->name
         ]);

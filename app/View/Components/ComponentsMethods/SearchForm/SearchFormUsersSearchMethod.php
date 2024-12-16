@@ -3,14 +3,17 @@
 namespace App\View\Components\ComponentsMethods\SearchForm;
 
 use App;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class SearchFormUsersSearchMethod
 {
     public static function searchUsers(Request $request, array $validated)
     {
-        $response = Http::post('silerium.com/api/v1/user/search', [
+        $user = User::with('apiKey')->where('ulid', Auth::user()->ulid)->get()->first();
+        $response = Http::asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key' => $user->apiKey->api_key])->post('silerium.com/api/v1/user/search', [
             'email' => $validated["email"],
             'loadWith' => $validated["loadWith"],
             'name' => $validated["name"],
@@ -23,7 +26,7 @@ class SearchFormUsersSearchMethod
             if($response->ok())
                 return ['users' => $response->json('users')];
             else
-                return ['message' => $response->json('message')];
+                return ['message' => $response->json('message') ?? 'Пользователи не были найдены.'];
         }
         else
         {
@@ -31,11 +34,11 @@ class SearchFormUsersSearchMethod
             {
                 if (key_exists('redirect', $validated))
                 {
-                    return redirect()->route($validated['redirect'])->with(['message' => $response->json('message')]);
+                    return redirect()->route($validated['redirect'])->with(['message' => $response->json('message') ?? 'Пользователи не были найдены.']);
                 }
                 else
                 {
-                    return response()->json(['message' => $response->json('message')]);
+                    return response()->json(['message' => $response->json('message') ?? 'Пользователи не были найдены.']);
                 }
             }
             else

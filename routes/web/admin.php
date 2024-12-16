@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\Admin\AdminPanelController;
 use App\Http\Controllers\Admin\UsersAdminPanelController;
 use App\Http\Controllers\Admin\ProductsAdminPanelController;
 
-Route::middleware('authorize.admin')->group(function () {
+Route::middleware(['authorize.admin', 'banned'])->group(function () {
 
-    Route::get('/', [AdminPanelController::class, 'index'])->name('admin.index');
+    Route::get('index', [AdminPanelController::class, 'index'])->name('admin.index');
     Route::get('profile', [AdminPanelController::class, 'profile']);
 
     Route::controller(ProductsAdminPanelController::class)->prefix('products')->group(function () {
@@ -28,7 +29,11 @@ Route::middleware('authorize.admin')->group(function () {
         Route::post('orders', 'searchUserOrders');
         Route::get('reviews', 'reviews')->name('admin.users.reviews');
         Route::post('reviews', 'searchUserReviews');
+        Route::get('ban', 'ban')->name("admin.users.ban");
+        Route::post('ban', 'postBan');
         Route::post('search', 'searchUsers')->name('admin.users.search');
     });
 
 });
+
+Route::fallback(FallbackController::class);

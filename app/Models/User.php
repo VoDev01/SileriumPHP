@@ -82,7 +82,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Seller::class);
     }
-
+    public function apiKey()
+    {
+        return $this->hasOne(UserApiKey::class, 'user_id', 'ulid');
+    }
+    public function banned()
+    {
+        return $this->hasOne(BannedUser::class);
+    }
     public function hasRoles(array|string $roles)
     {
         if(gettype($roles) == "string")
@@ -155,6 +162,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return Attribute::make(
             get: fn($value) => Crypt::decryptString($value),
             set: fn($value) => Crypt::encryptString($value)
-        );
+        );   
+    }
+
+    public function toArray()
+    {
+        $users = parent::toArray();
+        $users['homeAdress'] = $this->homeAdress;
+        return $users;
     }
 }

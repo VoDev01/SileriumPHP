@@ -25,7 +25,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link text-black text-decoration-none" href="/admin/home">
+                        <a class="nav-item nav-link text-black text-decoration-none" href="/admin/index">
                             Админ панель
                             <i class="bi bi-code"></i>
                         </a>

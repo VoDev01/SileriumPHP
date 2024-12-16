@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\BannedUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\Response;
@@ -39,6 +40,13 @@ class AuthServiceProvider extends ServiceProvider
                 ->subject('Подтверждение email')
                 ->line('Нажмите на ссылку для подтвеждения email.')
                 ->action('Подтвердить', $url);
+        });
+
+        Gate::define('banned', function (User $user){
+            if(null !== BannedUser::where('user_id', $user->ulid)->get()->first())
+                return Response::deny();
+            else
+                return Response::allow();
         });
 
         Gate::define('access-admin-panel', function (User $user)

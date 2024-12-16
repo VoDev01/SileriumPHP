@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Services\ManualPaginatorService;
 use App\Services\UpdateSessionValueJson;
@@ -47,7 +49,8 @@ class ProductsAdminPanelController extends Controller
     public function postUpdatedProduct(Request $request)
     {
         $this->authorize('update', Product::class);
-        $response = Http::asJson()->put('silerium.com/api/v1/products/update', [
+        $user = User::with('apiKey')->where('id', Auth::id())->get()->first();
+        $response = Http::asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key', $user->apiKey])->put('silerium.com/api/v1/products/update', [
             'id' => $request->id,
             'name' => $request->name,
             'description' => $request->description,
@@ -75,7 +78,8 @@ class ProductsAdminPanelController extends Controller
     public function postDeletedProduct(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $response = Http::delete('silerium.com/api/v1/products/delete', ['id' => $request->id]);
+        $user = User::with('apiKey')->where('id', Auth::id())->get()->first();
+        $response = Http::asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key', $user->apiKey])->delete('silerium.com/api/v1/products/delete', ['id' => $request->id]);
         if ($response->ok())
         {
             UpdateSessionValueJson::delete($request, 'products', $response->json(['updated_product']), 'ulid');

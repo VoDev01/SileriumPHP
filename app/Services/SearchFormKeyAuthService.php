@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class SearchFormKeyAuthService
 {
-    public static function AuthenticateKey(Request $request, string $queryModelSessionKeyName, string $searchKeySessionKeyName, int $perPage = 5)
+    public static function AuthenticateKey(Request $request, string $queryModelSessionKeyName, ?string $searchKeySessionKeyName = null, int $perPage = 5)
     {
         if ($request->session()->get($queryModelSessionKeyName) != null)
         {
@@ -27,7 +27,15 @@ class SearchFormKeyAuthService
             }
         }
         else
-            $paginated = null;
+        {
+            if($request->session()->get($queryModelSessionKeyName) != null)
+            {
+                $json = json_decode($request->session()->get($queryModelSessionKeyName), true)[$queryModelSessionKeyName];
+                $paginated = ManualPaginatorService::paginate($json, $perPage, $request->page);
+            }
+            else
+                $paginated = null;
+        }
         return $paginated;
     }
 }

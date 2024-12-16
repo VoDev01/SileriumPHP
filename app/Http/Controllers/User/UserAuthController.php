@@ -32,7 +32,7 @@ class UserAuthController extends Controller
             $request->session()->regenerate();
             if(Gate::allows('access-admin-panel', Auth::user()))
             {
-                return redirect()->route('admin_index');
+                return redirect()->route('admin.index');
             }
             else
             {
@@ -48,7 +48,7 @@ class UserAuthController extends Controller
             {
                 if(Gate::allows('access-admin-panel', $user))
                 {
-                    return response()->json(['redirect' => '/admin']);
+                    return response()->json(['redirect' => '/admin/index']);
                 }
                 else
                 {

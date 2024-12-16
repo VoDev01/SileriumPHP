@@ -18,6 +18,11 @@ class APIUsersController extends Controller
             $users = User::where("email", 'like', '%'.$validated['email'].'%')->get();
             return response()->json(['users' => $users->toArray()], 200);
         }
+        else if(array_key_exists('loadWith', $validated) && !isset($validated['loadWith']))
+        {   
+            $users = User::where("email", 'like', '%'.$validated['email'].'%')->get();
+            return response()->json(['users' => $users->toArray()], 200);
+        }
         else
         {
             $loadWithArr = explode(', ', $validated['loadWith']);

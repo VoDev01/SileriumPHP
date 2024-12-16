@@ -36,7 +36,7 @@ class UserFactory extends Factory
             'birthDate' => fake()->dateTime(),
             'country' => fake()->country(),
             'city' => fake()->city(),
-            'homeAdress' => fake()->address(),
+            'homeAdress' => fake()->streetAddress(),
             'phone' => fake()->phoneNumber(),
             'profilePicture' => 'images/pfp/default_user.png',
             'remember_token' => Str::random(10),

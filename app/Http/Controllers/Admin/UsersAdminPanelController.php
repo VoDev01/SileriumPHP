@@ -9,16 +9,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\ManualPaginatorService;
 use App\Services\SearchFormKeyAuthService;
+use App\Http\Requests\Users\UserBanRequest;
 use App\Http\Requests\API\Users\APIUserSearchRequest;
+use App\Models\BannedUser;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormUsersSearchMethod;
 
 class UsersAdminPanelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(15);
+        $users = SearchFormKeyAuthService::AuthenticateKey($request, 'users', null, 15) ?? User::paginate(15);
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
             new SearchFormInput('name', 'Имя', 'name', false),
@@ -129,6 +131,34 @@ class UsersAdminPanelController extends Controller
         }
         else
             return redirect()->route('admin.users.reviews')->with('message', 'Данного пользователя не существует.');
+    }
+    public function ban(Request $request)
+    {
+        $users = SearchFormKeyAuthService::AuthenticateKey($request, 'users', 'searchKey', 15);
+        $message = $request->session()->get('message');
+        $inputs = [
+            new SearchFormInput('email', 'Email', 'email', false),
+            new SearchFormInput('name', 'Имя', 'name', false),
+            new SearchFormInput('surname', 'Фамилия', 'surname', false),
+            new SearchFormInput('phone', 'Телефон', 'phone', false)
+        ];
+        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.ban', null, Str::ulid());
+        return view('admin.users.ban', ['users' => $users, 'inputs' => $inputs, 'queryInputs' => $queryInputs, 'message' => $message]);
+    }
+    public function postBan(UserBanRequest $request)
+    {
+        $validated = $request->validated();
+
+        $user_id = User::where('ulid', $validated['user_id']);
+        $admin_id = User::where('ulid', $validated['admin_id']);
+        BannedUser::create([
+            'user_id' => $user_id,
+            'admin_id' => $admin_id,
+            'reason' => $validated['reason'],
+            'banTime' => $validated['banTime'],
+            'timeType' => $validated['timeType']
+        ]);
+        return redirect()->route('admin.users.ban');
     }
     public function searchUsers(APIUserSearchRequest $request)
     {

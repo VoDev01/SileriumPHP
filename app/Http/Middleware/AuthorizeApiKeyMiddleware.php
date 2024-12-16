@@ -2,13 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Models\User;
+use App\Models\UserApiKey;
+use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Crypt;
 
-class AuthorizeSellerApiMiddleware
+class AuthorizeApiKeyMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,17 +20,17 @@ class AuthorizeSellerApiMiddleware
     public function handle(Request $request, Closure $next)
     {
         $user = User::where('email', $request->header('php-auth-user'))->get()->first();
-        $auth = $request->header('php-auth-pw');
-        if(!$auth === $user->password)
-            abort(404, 'Wrong password.');
-        $response = Gate::forUser($user)->inspect('access-seller-api');
-        if ($response->allowed())
+        $userApiKey = UserApiKey::where('user_id', $user->ulid)->get()->first();
+        if(null !== $request->header('API-Key'))
         {
-            return $next($request);
+            if($request->header('API-Key') == $userApiKey->api_key)
+                return $next($request);
+            else
+                abort(403, 'API Key is invalid.');
         }
         else
         {
-            abort(404);
+            abort(403, 'API Key is missing.');
         }
     }
 }

@@ -30,6 +30,9 @@
                     </thead>
                     <tbody>
                         @foreach ($users as $user)
+                        @php
+                           $user = (object)$user;
+                        @endphp
                             <tr>
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
@@ -62,6 +65,6 @@
                 $('#foundUsersArrow').removeClass("bi-arrow-up");
                 $('#foundUsersArrow').addClass("bi-arrow-down");
             });
-        }
+        });
     </script>
 </x-admin-layout>

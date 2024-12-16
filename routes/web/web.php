@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BannedController;
+use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\Product\CatalogController;
 use App\Http\Controllers\Product\CategoriesController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\FallbackController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,5 +30,7 @@ Route::controller(CatalogController::class)->prefix('catalog')->group(function()
     Route::post('filter','filterProducts');
     Route::get('product/{productId}', 'product')->middleware('auth');
 });
+
+Route::get('/banned', [BannedController::class, 'banned'])->name('banned')->middleware('banned');
 
 Route::fallback(FallbackController::class);
