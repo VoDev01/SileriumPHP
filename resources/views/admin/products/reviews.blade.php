@@ -5,9 +5,6 @@
     <div class="container">
         <h1>Отзывы товара</h1>
         <x-search-form header="Поиск id товаров" submitId="find-products-id" :$queryInputs :$inputs />
-        @php
-            $searchKey = ['searchKey' => session('searchKey')];
-        @endphp
         @if ($products != null)
             <p>
                 <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#foundProducts"
@@ -42,7 +39,6 @@
                 <form action="/admin/products/receive_product_reviews" method="POST" style="width: 300px;">
                     <h5>Показать отзывы товара</h5>
                     @csrf
-                    <input name="searchKey" value="{{ session('searchKey') }}" hidden />
                     <div class="mb-3">
                         <label for="id" class="form-label">Id товара</label>
                         <input type="text" class="form-control" name="id" id="id" />
@@ -81,7 +77,7 @@
                         </li>
                     @endforeach
                 </ol>
-                <x-pagination :model="$reviews" :params="['searchKey' => session('searchKey')]" />
+                <x-pagination :model="$reviews" />
             @else
                 <span class="mt-3">{{$message}}</span>
             @endif

@@ -5,9 +5,6 @@
     <div class="container">
         <h1>Отзывы товара</h1>
         <x-search-form header="Поиск id товаров" submitId="find-products-id" :$queryInputs :$inputs />
-        @php
-            $searchKey = ['searchKey' => session('searchKey')];
-        @endphp
         @if ($products != null)
             <p>
                 <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#foundProducts"
@@ -35,7 +32,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <x-pagination :model="$products" :params="$searchKey" />
+                <x-pagination :model="$products"/>
 
                 <form action="/seller/products/receive_product_reviews" method="POST" style="width: 300px;">
                     <h5>Показать отзывы товара</h5>

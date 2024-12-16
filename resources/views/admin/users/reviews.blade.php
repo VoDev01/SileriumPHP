@@ -39,7 +39,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <x-pagination :model="$users" :params="['searchKey' => session('searchKey')]" />
+                <x-pagination :model="$users"/>
             </div>
             <form action="/admin/users/reviews" method="POST" style="width: 300px;">
                 <h5>Показать отзывы пользователя</h5>
@@ -73,7 +73,7 @@
                         </li>
                     @endforeach
                 </ol>
-                <x-pagination :model="$reviews" :params="['searchKey' => session('searchKey')]" />
+                <x-pagination :model="$reviews"/>
             @else
                 <span class="mt-3">{{$message}}</span>
             @endif

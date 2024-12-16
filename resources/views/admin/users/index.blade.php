@@ -48,7 +48,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <x-pagination :model="$users" :params="['searchKey' => session('searchKey')]" />
+                <x-pagination :model="$users"/>
             </div>
         @else
             <span>{{$message}}</span>

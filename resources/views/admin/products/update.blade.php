@@ -32,10 +32,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                @php
-                    $searchKey = ['searchKey' => session('searchKey')];
-                @endphp
-                <x-pagination :model="$products" :params="$searchKey" />
+                <x-pagination :model="$products" />
             </div>
             <p>
                 <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#productEdit"

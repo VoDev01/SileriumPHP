@@ -37,7 +37,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <x-pagination :model="$products" :params="['searchKey' => session('searchKey')]"/>
+            <x-pagination :model="$products" />
         </div>
     </div>
 </x-admin-layout>

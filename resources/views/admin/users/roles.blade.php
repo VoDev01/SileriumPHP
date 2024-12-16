@@ -29,7 +29,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <x-pagination :model="$users" :params="['searchKey' => session('searchKey')]"/>
+            <x-pagination :model="$users"/>
         </div>
         <p>
             <a class="btn" data-bs-toggle="collapse" href="#roles" aria-expanded="false"

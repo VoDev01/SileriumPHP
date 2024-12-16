@@ -37,7 +37,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <x-pagination :model="$users" :params="['searchKey' => session('searchKey')]" />
+                <x-pagination :model="$users" />
             </div>
             <p>
                 <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#banUser"
