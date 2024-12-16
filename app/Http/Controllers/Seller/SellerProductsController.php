@@ -12,7 +12,7 @@ use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\Http\Requests\API\Products\APIProductsUpdateRequest;
 use Illuminate\Support\Facades\Http;
 use App\Services\ManualPaginatorService;
-use App\Services\SearchFormKeyAuthService;
+use App\Services\SearchFormPaginateResponseService;
 use App\Services\UpdateSessionValueJson;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
@@ -28,13 +28,13 @@ class SellerProductsController extends Controller
     public function list(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey');
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
         if ($products == null)
             $products = Product::paginate(15);
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
         ];
-        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.list', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.list', null);
         return view('seller.products.products-list', ['products' => $products, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function create()
@@ -55,11 +55,11 @@ class SellerProductsController extends Controller
     public function update(Request $request)
     {
         $this->authorize('update', Product::class);
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey');
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'product_name', true),
         ];
-        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.update', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.update', null);
         $categories = Category::with('subcategories')->get();
         return view('seller.products.update', ['products' => $products, 'categories' => $categories, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
@@ -83,11 +83,11 @@ class SellerProductsController extends Controller
     public function delete(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey');
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
         ];
-        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.delete', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.delete', null);
         return view('seller.products.delete', ['products' => $products, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function postDeletedProduct(Request $request)
@@ -111,12 +111,12 @@ class SellerProductsController extends Controller
 
     public function reviews(Request $request)
     {
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey');
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
         $reviews = $request->session()->get('reviews');
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true)
         ];
-        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.reviews', 'reviews', Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.reviews', 'reviews');
         return view('seller.products.reviews', ['products' => $products, 'reviews' => $reviews, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
 

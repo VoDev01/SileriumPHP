@@ -27,7 +27,6 @@ class APIProductsSearchRequest extends FormRequest
             'productName' => ['max:100', 'string'],
             'sellerName' => ['max:50', 'nullable', 'string'],
             'reviewsCount' => ['boolean', 'nullable'],
-            'searchKey' => ['ulid', 'nullable'],
             'redirect' => ['max:100', 'string', 'nullable'],
             'loadWith' => ['max:100', 'string', 'nullable']
         ];

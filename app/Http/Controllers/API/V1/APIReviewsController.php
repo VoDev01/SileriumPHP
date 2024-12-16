@@ -11,7 +11,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Services\SearchFormKeyAuthService;
+use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\API\Reviews\APIDeleteReviewRequest;
 use App\Http\Requests\API\Reviews\APIUpdateReviewRequest;
 use App\Http\Requests\API\Reviews\APIUserReviewsSearchRequest;
@@ -22,9 +22,7 @@ class APIReviewsController extends Controller
     
     public function index(Request $request)
     {
-        $reviews = SearchFormKeyAuthService::AuthenticateKey($request, 'reviews', 'searchKey');
-        if($reviews == null)
-            $reviews = Review::paginate(15);
+        $reviews = SearchFormPaginateResponseService::paginate($request, 'products', 15) ?? Review::paginate(15);
         return response()->json(['reviews' => $reviews]);
     }
 

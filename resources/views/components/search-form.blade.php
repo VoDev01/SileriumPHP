@@ -4,7 +4,6 @@
         @csrf
         <input hidden name="loadWith" id="loadWith" value="{{ $queryInputs->loadWith }}" />
         <input hidden name="redirect" id="redirect" value="{{ $queryInputs->redirect }}" />
-        <input hidden name="searchKey" id="searchKey" value="{{ $queryInputs->searchKey }}" />
         @if ($hiddenInputs != null)
             @foreach ($hiddenInputs as $hiddenInput)
                 @if ($hiddenInput->inputId == null)

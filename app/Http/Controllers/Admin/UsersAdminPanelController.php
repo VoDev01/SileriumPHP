@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\ManualPaginatorService;
-use App\Services\SearchFormKeyAuthService;
+use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\Users\UserBanRequest;
 use App\Http\Requests\API\Users\APIUserSearchRequest;
 use App\Models\BannedUser;
@@ -20,14 +20,14 @@ class UsersAdminPanelController extends Controller
 {
     public function index(Request $request)
     {
-        $users = SearchFormKeyAuthService::AuthenticateKey($request, 'users', null, 15) ?? User::paginate(15);
+        $users = SearchFormPaginateResponseService::paginate($request, 'users') ?? User::paginate(15);
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
             new SearchFormInput('name', 'Имя', 'name', false),
             new SearchFormInput('surname', 'Фамилия', 'surname', false),
             new SearchFormInput('phone', 'Телефон', 'phone', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.index', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.index', null);
         return view('admin.users.index', ['users' => $users, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function roles()
@@ -40,12 +40,12 @@ class UsersAdminPanelController extends Controller
             new SearchFormInput('surname', 'Фамилия', 'surname', false),
             new SearchFormInput('phone', 'Телефон', 'phone', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.roles', 'roles', Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.roles', 'roles');
         return view('admin.users.roles', ['users' => $users, 'roles' => $roles, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function orders(Request $request)
     {
-        $users = SearchFormKeyAuthService::AuthenticateKey($request, 'users', 'searchKey');
+        $users = SearchFormPaginateResponseService::paginate($request, 'users');
 
         $orders = null;
         $user = null;
@@ -74,7 +74,7 @@ class UsersAdminPanelController extends Controller
             new SearchFormInput('surname', 'Фамилия', 'surname', false),
             new SearchFormInput('phone', 'Телефон', 'phone', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.orders', 'orders', Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.orders', 'orders');
         return view('admin.users.orders', ['users' => $users, 'user' => $user, 'message' => $message, 'orders' => $orders, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function searchUserOrders(Request $request)
@@ -95,7 +95,7 @@ class UsersAdminPanelController extends Controller
     }
     public function reviews(Request $request)
     {
-        $users = SearchFormKeyAuthService::AuthenticateKey($request, 'users', 'searchKey');
+        $users = SearchFormPaginateResponseService::paginate($request, 'users');
         $reviews = null;
         $user = null;
         $message = null;
@@ -113,7 +113,7 @@ class UsersAdminPanelController extends Controller
             new SearchFormInput('surname', 'Фамилия', 'surname', false),
             new SearchFormInput('phone', 'Телефон', 'phone', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.reviews', 'reviews', Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.reviews', 'reviews');
         return view('admin.users.reviews', ['users' => $users, 'user' => $user, 'reviews' => $reviews, 'message' => $message, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function searchUserReviews(Request $request)
@@ -134,7 +134,7 @@ class UsersAdminPanelController extends Controller
     }
     public function ban(Request $request)
     {
-        $users = SearchFormKeyAuthService::AuthenticateKey($request, 'users', 'searchKey', 15);
+        $users = SearchFormPaginateResponseService::paginate($request, 'users', 15);
         $message = $request->session()->get('message');
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
@@ -142,7 +142,7 @@ class UsersAdminPanelController extends Controller
             new SearchFormInput('surname', 'Фамилия', 'surname', false),
             new SearchFormInput('phone', 'Телефон', 'phone', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.ban', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.ban', null);
         return view('admin.users.ban', ['users' => $users, 'inputs' => $inputs, 'queryInputs' => $queryInputs, 'message' => $message]);
     }
     public function postBan(UserBanRequest $request)

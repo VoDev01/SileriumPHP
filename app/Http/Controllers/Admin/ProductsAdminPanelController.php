@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Services\ManualPaginatorService;
 use App\Services\UpdateSessionValueJson;
-use App\Services\SearchFormKeyAuthService;
+use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
@@ -24,25 +24,23 @@ class ProductsAdminPanelController extends Controller
     public function index(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey');
-        if($products == null)
-            $products = Product::paginate(15);
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15) ?? Product::paginate(15);
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.index', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.index', null);
         return view('admin.products.index', ['products' => $products, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function update(Request $request)
     {
         $this->authorize('update', Product::class);
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey');
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.update', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.update', null);
         $categories = Category::with('subcategories')->get();
         return view('admin.products.update', ['products' => $products, 'categories' => $categories, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
@@ -67,12 +65,12 @@ class ProductsAdminPanelController extends Controller
     public function delete(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey');
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.delete', null, Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.delete', null);
         return view('admin.products.delete', ['products' => $products, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function postDeletedProduct(Request $request)
@@ -97,14 +95,14 @@ class ProductsAdminPanelController extends Controller
 
     public function reviews(Request $request)
     {
-        $products = SearchFormKeyAuthService::AuthenticateKey($request, 'products', 'searchKey', 10);
+        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
         $reviews = $request->session()->get('reviews');
         $message = $request->session()->get('message');
         $inputs = [
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', true),
             new SearchFormInput('productName', 'Название товара', 'productName', false)
         ];
-        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.reviews', 'reviews', Str::ulid());
+        $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.reviews', 'reviews');
         return view('admin.products.reviews', ['products' => $products, 'reviews' => $reviews, 'message' => $message, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
 
@@ -115,7 +113,7 @@ class ProductsAdminPanelController extends Controller
         if (isset($request->id))
             if ($product->ulid == $request->id)
                 $reviews = $product->reviews;
-        return redirect()->route('admin.products.reviews', ['searchKey' => $request->session()->get('searchKey')])->with('reviews', ManualPaginatorService::paginate($reviews->toArray()));
+        return redirect()->route('admin.products.reviews')->with('reviews', ManualPaginatorService::paginate($reviews->toArray()));
     }
 
     public function searchProducts(APIProductsSearchRequest $request)

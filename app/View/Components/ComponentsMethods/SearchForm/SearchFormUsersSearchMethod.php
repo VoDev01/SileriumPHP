@@ -23,7 +23,7 @@ class SearchFormUsersSearchMethod
         ]);
         if ($request->ajax() || App::environment('testing'))
         {
-            if($response->ok())
+            if ($response->ok())
                 return ['users' => $response->json('users')];
             else
                 return ['message' => $response->json('message') ?? 'Пользователи не были найдены.'];
@@ -44,22 +44,9 @@ class SearchFormUsersSearchMethod
             else
             {
                 if (key_exists('redirect', $validated))
-                {
-                    if (key_exists('searchKey', $validated))
-                    {
-                        session(['users' => $response->json('users'), 'searchKey' => $validated['searchKey']]);
-                        return redirect()->route($validated['redirect'], ['searchKey' => $validated['searchKey']]);
-                    }
-                    else
-                    {
-                        session(['users' => $response->json('users')]);
-                        return redirect()->route($validated['redirect']);
-                    }
-                }
+                    return redirect()->route($validated['redirect'])->with('users', $response->json('users'));
                 else
-                {
                     return response()->json($response->json('users'));
-                }
             }
         }
     }
