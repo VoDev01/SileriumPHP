@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\ManualPaginatorService;
 use App\Services\SearchFormPaginateResponseService;
-use App\Http\Requests\Users\UserBanRequest;
+use App\Http\Requests\User\UserBanRequest;
 use App\Http\Requests\API\Users\APIUserSearchRequest;
 use App\Models\BannedUser;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
@@ -149,11 +149,12 @@ class UsersAdminPanelController extends Controller
     {
         $validated = $request->validated();
 
-        $user_id = User::where('ulid', $validated['user_id']);
-        $admin_id = User::where('ulid', $validated['admin_id']);
+        $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
+        $admin_id = User::where('ulid', $validated['admin_id'])->get()->first()->ulid;
         BannedUser::create([
             'user_id' => $user_id,
             'admin_id' => $admin_id,
+            'userIp' => "1000",
             'reason' => $validated['reason'],
             'banTime' => $validated['banTime'],
             'timeType' => $validated['timeType']
