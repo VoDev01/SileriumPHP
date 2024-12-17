@@ -9,11 +9,26 @@ use App\Services\ProductService;
 use App\Http\Controllers\Controller;
 use App\Services\OrderItemsService;
 use App\Facades\ProductCartServiceFacade as ProductCart;
+use App\View\Components\ComponentsInputs\SearchForm\SearchFormCheckboxInput;
+use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
+use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 
 class CatalogController extends Controller
 {
     public function products(int $sortOrder = 1, int $available = 1, string $subcategory = "all", string $product = "")
     {
+        $inputs = [
+            new SearchFormInput('name', 'Название товара', 'name', false)
+        ];
+        $checkboxInputs = [
+            new SearchFormCheckboxInput('available', 'В продаже', 'available', false)
+        ];
+        $hiddenInputs = [
+            new SearchFormHiddenInput('sortOrder', 'sortOrder',  $sortOrder),
+            new SearchFormHiddenInput('available', 'availableHidden', 0),
+            new SearchFormHiddenInput('subcategory', 'subcategory', $subcategory),
+        ];
+
         $relationships = null;
         if(session('loadWith') != null)
             $relationships = explode(', ', session('loadWith'));
@@ -23,10 +38,18 @@ class CatalogController extends Controller
         {
             ProductCart::convertCurrency($products);
         }
-        return view('catalog.products', ['products' => $products,
-        'sortOrder' => $sortOrder, 'subcategories' => Subcategory::all(), 
-        'subcategory' => $subcategory, 'product' => $product,
-        'categories' => Category::all(), 'available' => $available]);
+        return view('catalog.products', [
+            'products' => $products,
+            'sortOrder' => $sortOrder, 
+            'subcategories' => Subcategory::all(), 
+            'subcategory' => $subcategory, 
+            'product' => $product,
+            'categories' => Category::all(), 
+            'available' => $available,
+            'inputs' => $inputs,
+            'checkboxInputs' => $checkboxInputs,
+            'hiddenInputs' => $hiddenInputs
+        ]);
     }
     public function filterProducts(Request $request)
     {

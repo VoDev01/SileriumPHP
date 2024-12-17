@@ -16,8 +16,9 @@ class BannedUser extends Model
         'userIp',
         'admin_id',
         'reason',
-        'banTime',
-        'timeType'
+        'duration',
+        'timeType',
+        'bannedAt'
     ];
 
     public $timestamps = false;

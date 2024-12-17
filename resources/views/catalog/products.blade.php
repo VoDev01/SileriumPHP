@@ -18,13 +18,6 @@
 
     <div class="mx-3">
         @php
-            $inputs = [['displayName' => 'Название товара', 'inputName' => 'name', 'field' => 'name', 'required' => false]];
-            $checkboxInputs = [['displayName' => 'В продаже', 'inputId' => 'available', 'inputName' => 'available', 'required' => false]];
-            $hiddenInputs = [
-                ['inputName' => 'sortOrder', 'inputId' => 'sortOrder', 'inputValue' => $sortOrder],
-                ['inputName' => 'available', 'inputId' => null, 'inputValue' => 0],
-                ['inputName' => 'subcategory', 'inputId' => 'subcategory', 'inputValue' => $subcategory],
-            ];
             $filterActionParams = '/' . $available . '/' . $subcategory;
         @endphp
         <div class="container-fluid mt-2">
@@ -32,9 +25,7 @@
                 filterRubCurrencyLink="/catalog/rub_currency" filterDolCurrencyLink="/catalog/dol_currency" :$sortOrder
                 popularity="true" price="true" currency="true">
 
-                <x-search-form searchActionUrl="/catalog/filter" header="Поиск товаров"
-                    loadWith="images, productSpecifications" :$hiddenInputs :$inputs :$checkboxInputs
-                    submit_id="filterProducts" />
+                <x-search-form header="Поиск товаров" submit_id="filterProducts" loadWith="images, productSpecifications" :$hiddenInputs :$inputs :$checkboxInputs/>
 
             </x-filter-form>
             <div class="row flex-column flex-lg-row">

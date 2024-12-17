@@ -15,6 +15,7 @@ use App\Models\BannedUser;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormUsersSearchMethod;
+use Illuminate\Support\Carbon;
 
 class UsersAdminPanelController extends Controller
 {
@@ -154,10 +155,11 @@ class UsersAdminPanelController extends Controller
         BannedUser::create([
             'user_id' => $user_id,
             'admin_id' => $admin_id,
-            'userIp' => "1000",
+            'userIp' => $request->ip(),
             'reason' => $validated['reason'],
-            'banTime' => $validated['banTime'],
-            'timeType' => $validated['timeType']
+            'duration' => $validated['duration'],
+            'timeType' => $validated['timeType'],
+            'bannedAt' => Carbon::now()
         ]);
         return redirect()->route('admin.users.ban');
     }

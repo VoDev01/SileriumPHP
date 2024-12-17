@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 
 class BanUserTest extends TestCase
 {
@@ -23,7 +24,7 @@ class BanUserTest extends TestCase
                 'user_id' => $user->ulid,
                 'admin_id' => $admin->ulid,
                 'reason' => 'Spam',
-                'banTime' => 100,
+                'duration' => 100,
                 'timeType' => 'hours'
             ]
         );
@@ -33,5 +34,17 @@ class BanUserTest extends TestCase
         $response->assertValid();
 
         $this->assertDatabaseHas('banned_users', ['user_id' => $user->ulid]);
+
+        $this->actingAs($user)->get('/user/profile');
+
+        $response->assertForbidden();
+        
+        Carbon::setTestNow(Carbon::now()->addHours(100));
+
+        $this->actingAs($user)->get('/user/profile');
+
+        $response->assertOk();
+
+        Carbon::setTestNow();
     }
 }
