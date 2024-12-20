@@ -35,13 +35,13 @@ class BanUserTest extends TestCase
 
         $this->assertDatabaseHas('banned_users', ['user_id' => $user->ulid]);
 
-        $this->actingAs($user)->get('/user/profile');
+        $response = $this->actingAs($user)->get('/user/profile');
 
-        $response->assertForbidden();
+        $response->assertRedirect("/banned");
         
         Carbon::setTestNow(Carbon::now()->addHours(100));
 
-        $this->actingAs($user)->get('/user/profile');
+        $response = $this->actingAs($user)->get('/user/profile');
 
         $response->assertOk();
 

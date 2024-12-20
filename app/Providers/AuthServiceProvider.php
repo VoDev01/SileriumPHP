@@ -46,19 +46,19 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('banned', function (User $user)
         {
             $banned = BannedUser::where('user_id', $user->ulid)->get()->first();
-            if (null !== $banned)
+            if ($banned !== null)
             {
                 $diff = true;
                 if ($banned->timeType == "seconds")
-                    $diff = Carbon::now()->diffInSeconds($banned->banTime) == 0;
+                    $diff = $banned->bannedAt->diffInSeconds(Carbon::now()) >= $banned->duration;
                 else if ($banned->timeType == "hours")
-                    $diff = Carbon::now()->diffInHours($banned->banTime) == 0;
+                    $diff = $banned->bannedAt->diffInHours(Carbon::now()) >= $banned->duration;
                 else if ($banned->timeType == "days")
-                    $diff = Carbon::now()->diffInDays($banned->banTime) == 0;
+                    $diff = $banned->bannedAt->diffInDays(Carbon::now()) >= $banned->duration;
                 else if ($banned->timeType == "years")
-                    $diff = Carbon::now()->diffInYears($banned->banTime) == 0;
+                    $diff = $banned->bannedAt->diffInYears(Carbon::now()) >= $banned->duration;
 
-                return $diff ? Response::deny() : Response::allow();
+                return $diff ? Response::allow() : Response::deny();
             }
             else
                 return Response::allow();

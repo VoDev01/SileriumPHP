@@ -21,6 +21,10 @@ class BannedUser extends Model
         'bannedAt'
     ];
 
+    protected $casts = [
+        'bannedAt' => 'datetime'
+    ];
+
     public $timestamps = false;
 
     public function user()
