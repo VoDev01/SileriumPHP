@@ -9,7 +9,7 @@ use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserReviewController;
 
 
-Route::middleware('banned')->group(function ()
+Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
 {
     Route::controller(UserController::class)->group(function ()
     {
@@ -18,7 +18,7 @@ Route::middleware('banned')->group(function ()
         Route::post('edit_profile', 'postEditProfile');
         Route::post('logout', 'logout');
     });
-    Route::controller(UserAuthController::class)->group(function ()
+    Route::controller(UserAuthController::class)->withoutMiddleware('authorize.user.routes')->group(function ()
     {
         Route::get('login', 'login')->name('login');
         Route::post('login', 'postLogin');

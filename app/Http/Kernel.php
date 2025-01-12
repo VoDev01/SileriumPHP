@@ -47,7 +47,7 @@ class Kernel extends HttpKernel
             TrustProxies::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\TimezoneBasedOnIP::class
+            //\App\Http\Middleware\TimezoneBasedOnIP::class
         ],
     ];
 
@@ -75,6 +75,7 @@ class Kernel extends HttpKernel
         'authorize.admin.api' => \App\Http\Middleware\AuthorizeAdminApiMiddleware::class,
         'authorize.seller.api' => \App\Http\Middleware\AuthorizeSellerApiMiddleware::class,
         'authorize.seller.admin.api' => \App\Http\Middleware\AuthorizeSellerAdminApiMiddleware::class,
+        'authorize.user.routes' => \App\Http\Middleware\AuthorizeUserRouteMiddleware::class,
         'banned' => \App\Http\Middleware\CheckBannedUser::class
     ];
 }

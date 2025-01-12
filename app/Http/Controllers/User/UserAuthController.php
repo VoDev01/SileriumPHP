@@ -30,9 +30,14 @@ class UserAuthController extends Controller
     {
         if (Auth::viaRemember()) {
             $request->session()->regenerate();
-            if(Gate::allows('access-admin-panel', Auth::user()))
+            if(Gate::allows('access-admin-panel'))
             {
                 return redirect()->route('admin.index');
+            }
+            else if(Gate::allows('access-seller'))
+            {
+                $request->session()->put('seller_id', Auth::id());
+                return redirect()->route('seller.account');
             }
             else
             {
@@ -49,6 +54,11 @@ class UserAuthController extends Controller
                 if(Gate::allows('access-admin-panel', $user))
                 {
                     return response()->json(['redirect' => '/admin/index']);
+                }
+                else if(Gate::allows('access-seller'))
+                {
+                    $request->session()->put('seller_id', $user->id);
+                    return response()->json(['redirect' => '/seller/account']);
                 }
                 else
                 {

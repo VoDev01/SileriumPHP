@@ -9,18 +9,22 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderService 
 {
-    public function make(string $order_adress, $total_price, OrderStatus $order_status, int $user_id, array $products)
+    public function make(string $order_adress, OrderStatus $order_status, int $user_id, array $products)
     {
-        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact($order_adress, $total_price, $order_status, Auth::id()));
+        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact($order_adress, $order_status, Auth::id()));
         $orderId = Order::insertGetId($insert);
+        $totalPrice = null;
         for ($i=0; $i < count($products); $i++) { 
-            DB::insert('INSERT INTO orders_products (order_id, product_id, product_amount) VALUES (?, ?, ?)', 
+            $totalPrice += $products[$i]['priceRub'] * $products[$i]['amount'];
+            DB::insert('INSERT INTO orders_products (order_id, product_id, product_amount, totalPrice) VALUES (?, ?, ?, ?)', 
             [
                 $orderId, 
                 $products[$i]['id'], 
-                $products[$i]['amount']
+                $products[$i]['amount'],
+                
             ]);
         }
+        Order::where('id', $orderId)->update(['totalPrice' => $totalPrice]);
         $order = Order::find($orderId);
         return $order;
     }

@@ -97,7 +97,7 @@ class APIProductsController extends Controller
         {
             foreach ($seller->products as $product)
             {
-                $result = strpos($product->name, $validated['productName']) !== false;
+                $result = stripos($product->name, $validated['productName']) !== false;
                 if ($result != false)
                 {
                     $products->add($product);

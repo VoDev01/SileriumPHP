@@ -22,12 +22,12 @@ class OrderFactory extends Factory
     {
         return [
             'ulid' => Str::ulid()->toBase32(),
-            'totalPrice' => mt_rand(100, 1000000),
             'orderDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s'),
             'orderAdress' => fake()->address(),
             'orderStatus' => 'PENDING',
             'deleted_at' => null,
-            'updated_at' => null
+            'updated_at' => null,
+            'totalPrice' => random_int(1000, 100000000)
         ];
     }
 }

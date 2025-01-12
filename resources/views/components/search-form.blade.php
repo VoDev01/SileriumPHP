@@ -7,10 +7,10 @@
         @if ($hiddenInputs != null)
             @foreach ($hiddenInputs as $hiddenInput)
                 @if ($hiddenInput->inputId == null)
-                    <input hidden name="{{ $hiddenInput->inputName }}" value={{ $hiddenInput->inputValue }} />
+                    <input hidden name="{{ $hiddenInput->inputName }}" value="{{ $hiddenInput->inputValue }}" />
                 @else
                     <input hidden name="{{ $hiddenInput->inputName }}" id="{{ $hiddenInput->inputId }}"
-                        value={{ $hiddenInput->inputValue }} />
+                        value="{{ $hiddenInput->inputValue }}" />
                 @endif
             @endforeach
         @endif

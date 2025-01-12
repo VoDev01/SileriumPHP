@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerAuthController;
+use App\Http\Controllers\Seller\SellerOrdersController;
 use App\Http\Controllers\Seller\SellerProductsController;
 
 Route::middleware('banned')->group(function ()
@@ -34,10 +35,12 @@ Route::middleware('banned')->group(function ()
         Route::get('category/{id}/subcategories', 'categories');
         Route::get('reviews', 'reviews')->name('seller.products.reviews');
         Route::post('receive_product_reviews', 'receiveProductReviews');
-    });
-    Route::controller(SellerProductsController::class)->prefix('products')->group(function ()
-    {
         Route::post('search', 'searchProducts');
+    });
+    Route::controller(SellerOrdersController::class)->prefix('orders')->middleware('auth')->group(function ()
+    {
+        Route::get('list', 'orders')->name('seller.orders.list');
+        Route::post('searchOrders', 'searchProductsOrders');
     });
 });
 
