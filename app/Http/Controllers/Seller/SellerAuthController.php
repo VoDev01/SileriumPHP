@@ -22,12 +22,12 @@ class SellerAuthController extends Controller
     public function postLogin(SellerLoginRequest $request)
     {
         $validated = $request->validated();
-        $user = User::where('email', $validated["email"])->first();
-        $seller_id = Seller::where('user_id', $user->id)->first()->id;
+        $user = User::where('email', $validated["email"])->get()->first();
+        $seller_id = Seller::where('user_id', $user->id)->get()->first()->id;
         $response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
         if($response['success'])
         {
-            $request->session()->put('seller_id', $seller_id);
+            session(['seller_id' => $seller_id]);
             Auth::login($user);
             return response()->json(['redirect' => '/seller/account']);
         }

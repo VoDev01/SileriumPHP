@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FallbackController;
+use App\Http\Controllers\Seller\SellerAccountingReport;
+use App\Http\Controllers\Seller\SellerAccountingReportPDF;
+use App\Http\Controllers\Seller\SellerAccountingReports;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerAuthController;
 use App\Http\Controllers\Seller\SellerOrdersController;
@@ -41,6 +44,15 @@ Route::middleware('banned')->group(function ()
     {
         Route::get('list', 'orders')->name('seller.orders.list');
         Route::post('searchOrders', 'searchProductsOrders');
+    });
+    Route::controller(SellerAccountingReports::class)->prefix('accounting_reports')->middleware('auth')->group(function () {
+        Route::get('index', 'index');
+        Route::get('generic_report', 'genericReport');
+        Route::get('product_report', 'productReport');
+        Route::get('tax_report', 'taxReport');
+    });
+    Route::controller(SellerAccountingReportPDF::class)->prefix('accounting_reports/pdf')->middleware('auth')->group(function (){
+        Route::post('format', 'format');
     });
 });
 
