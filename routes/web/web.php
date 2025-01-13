@@ -29,6 +29,7 @@ Route::controller(CatalogController::class)->prefix('catalog')->group(function()
     Route::post('dol_currency','dolCurrency');
     Route::post('filter','filterProducts');
     Route::get('product/{productId}', 'product')->middleware('auth');
+    Route::post('/products/search', 'searchPorducts');
 });
 
 Route::get('/banned', [BannedController::class, 'banned'])->name('banned')->middleware('banned');

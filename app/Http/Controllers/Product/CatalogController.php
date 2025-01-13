@@ -9,9 +9,12 @@ use App\Services\ProductService;
 use App\Http\Controllers\Controller;
 use App\Services\OrderItemsService;
 use App\Facades\ProductCartServiceFacade as ProductCart;
+use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormCheckboxInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
+use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
+use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
 
 class CatalogController extends Controller
 {
@@ -21,13 +24,14 @@ class CatalogController extends Controller
             new SearchFormInput('name', 'Название товара', 'name', false)
         ];
         $checkboxInputs = [
-            new SearchFormCheckboxInput('available', 'В продаже', 'available', false)
+            new SearchFormCheckboxInput('available', 'В продаже', 'available', false, false, 'available', 1)
         ];
         $hiddenInputs = [
             new SearchFormHiddenInput('sortOrder', 'sortOrder',  $sortOrder),
             new SearchFormHiddenInput('available', 'availableHidden', 0),
             new SearchFormHiddenInput('subcategory', 'subcategory', $subcategory),
         ];
+        $queryInputs = new SearchFormQueryInput('/catalog/products/search', '/catalog/products', 'images, productSpecifications');
 
         $relationships = null;
         if(session('loadWith') != null)
@@ -48,7 +52,8 @@ class CatalogController extends Controller
             'available' => $available,
             'inputs' => $inputs,
             'checkboxInputs' => $checkboxInputs,
-            'hiddenInputs' => $hiddenInputs
+            'hiddenInputs' => $hiddenInputs,
+            'queryInputs' => $queryInputs
         ]);
     }
     public function filterProducts(Request $request)
@@ -73,5 +78,16 @@ class CatalogController extends Controller
     {
         session(['products_currency' => 'dol']);
         return redirect()->route('allproducts');
+    }
+    public function searchProducts(APIProductsSearchRequest $request)
+    {
+        $validated = $request->validated();
+
+        if (!array_key_exists('sellerName', $validated))
+            $validated['sellerName'] = null;
+        if (!array_key_exists('loadWith', $validated))
+            $validated['loadWith'] = null;
+
+        return SearchFormProductsSearchMethod::searchProducts($validated);
     }
 }

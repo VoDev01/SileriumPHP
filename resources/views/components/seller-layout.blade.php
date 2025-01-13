@@ -28,7 +28,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <div class="navbar-nav">
-                        @if(CheckUserRole::check('seller'))
+                        @if(CheckUserRole::check('seller') && session('seller_id') != null)
                             <a class="nav-item nav-link text-black text-decoration-none" href="/seller/orders/all">
                                 Заказы
                                 <i class="bi bi-truck"></i>

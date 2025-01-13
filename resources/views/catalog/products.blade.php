@@ -25,7 +25,8 @@
                 filterRubCurrencyLink="/catalog/rub_currency" filterDolCurrencyLink="/catalog/dol_currency" :$sortOrder
                 popularity="true" price="true" currency="true">
 
-                <x-search-form header="Поиск товаров" submit_id="filterProducts" loadWith="images, productSpecifications" :$hiddenInputs :$inputs :$checkboxInputs/>
+                <x-search-form header="Поиск товаров" submit_id="searchProducts" :$queryInputs :$inputs :$hiddenInputs
+                :$checkboxInputs />
 
             </x-filter-form>
             <div class="row flex-column flex-lg-row">
@@ -66,7 +67,7 @@
                                 </div>
                             </div>
                         </a>
-                        <hr />
+                        <hr>
                     @endforeach
                 </div>
             </div>

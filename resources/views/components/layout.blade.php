@@ -36,7 +36,7 @@
                             <i class="bi bi-justify"></i>
                         </a>
                         @auth
-                            <a class="nav-item nav-link text-black text-decoration-none" href="/user/orders/all">
+                            <a class="nav-item nav-link text-black text-decoration-none" href="/user/orders/history">
                                 Заказы
                                 <i class="bi bi-box"></i>
                                 @php

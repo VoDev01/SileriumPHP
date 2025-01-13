@@ -21,7 +21,6 @@ class Order extends Model
         'user_id',
         'product_id',
         'totalPrice',
-        'orderAmount',
         'orderAdress',
         'orderStatus'
     ];

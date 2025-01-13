@@ -9,6 +9,7 @@
                 <tr>
                     <td>Номер</td>
                     <td>Название(я) товара(ов)</td>
+                    <td>Количество</td>
                     <td>Руб.</td>
                     <td>Дата оформления</td>
                     <td>Адрес доставки</td>
@@ -25,6 +26,7 @@
                     <tr>
                         <td>{{ $order->ulid }}</td>
                         <td>{{ $productsNames }}</td>
+                        <td>{{ $productsAmounts }}</td>
                         <td>{{ $order->totalPrice }}</td>
                         <td>{{ $order->orderDate }}</td>
                         <td>{{ $order->orderAdress }}</td>

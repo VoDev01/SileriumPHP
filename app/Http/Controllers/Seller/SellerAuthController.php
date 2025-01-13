@@ -15,7 +15,7 @@ use App\Http\Requests\Seller\SellerRegisterRequest;
 
 class SellerAuthController extends Controller
 {
-    public function login()
+    public function login(Request $request)
     {
         return view('seller.auth.login');
     }

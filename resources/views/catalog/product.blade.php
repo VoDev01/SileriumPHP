@@ -56,7 +56,7 @@
                                 style="font-size: 2em; background: #1ac748; width: 200px;">{{ $product->priceRub }} &#8381;
                             </p>
                             <p class="col text-secondary">
-                                {{ $product->stockAmount . ' шт.' }}
+                                {{ $product->productAmount . ' шт.' }}
                             </p>
                             <p class="col text-secondary">{{ $product->available ? 'В наличии' : 'Нет в наличии' }}</p>
                         </div>

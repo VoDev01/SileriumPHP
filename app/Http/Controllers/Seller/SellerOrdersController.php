@@ -20,12 +20,17 @@ class SellerOrdersController extends Controller
     {
         $orders = SearchFormPaginateResponseService::paginateRelations($request, 'products', 'orders', 15);
         if (session('products') == null)
+        {
             $productsNames = null;
+            $productsAmounts = null;
+        }
         else
         {
             if ($orders->total() == 1)
             {
                 $productsNames = substr(session('products')[0]['name'], 0, 5);
+                dd(session('products'));
+                $productsAmounts = implode(session('products')[0]['orders']);
             }
             else
             {
