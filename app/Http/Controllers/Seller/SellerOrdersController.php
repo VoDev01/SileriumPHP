@@ -25,7 +25,7 @@ class SellerOrdersController extends Controller
         {
             if ($orders->total() == 1)
             {
-                $productsNames = session('products')[0]['name'];
+                $productsNames = substr(session('products')[0]['name'], 0, 5);
             }
             else
             {
@@ -34,7 +34,7 @@ class SellerOrdersController extends Controller
                 {
                     $productsNames->push($product['name']);
                 }
-                $productsNames = implode(', ', $productsNames->toArray());
+                $productsNames = substr(implode(', ', $productsNames->toArray()), 0, 5);
             }
         }
         $queryInputs = new SearchFormQueryInput("/seller/orders/searchOrders", "seller.orders.list", "orders, orders.user");
