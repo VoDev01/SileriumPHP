@@ -14,6 +14,7 @@ use App\Http\Requests\User\UserLoginRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\User\UserRegisterRequest;
+use App\Models\Seller;
 use App\Services\ValidatePasswordHashService;
 use App\Services\VerifyPhoneService;
 use Illuminate\Auth\Events\Registered;
@@ -36,7 +37,7 @@ class UserAuthController extends Controller
             }
             else if(Gate::allows('access-seller'))
             {
-                $request->session()->put('seller_id', Auth::id());
+                $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
                 return redirect()->route('seller.account');
             }
             else
@@ -57,7 +58,7 @@ class UserAuthController extends Controller
                 }
                 else if(Gate::allows('access-seller'))
                 {
-                    $request->session()->put('seller_id', $user->id);
+                    $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
                     return response()->json(['redirect' => '/seller/account']);
                 }
                 else

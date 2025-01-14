@@ -23,7 +23,7 @@ class AuthorizeSellerApiMiddleware
         $auth = $request->header('php-auth-pw');
         if(!$auth === $user->password)
             abort(404, 'Wrong password.');
-        $response = Gate::forUser($user)->inspect('access-seller-api');
+        $response = Gate::forUser($user)->inspect('access-seller');
         if ($response->allowed())
         {
             return $next($request);

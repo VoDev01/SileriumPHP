@@ -5,6 +5,8 @@ use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\Seller\SellerAccountingReport;
 use App\Http\Controllers\Seller\SellerAccountingReportPDF;
 use App\Http\Controllers\Seller\SellerAccountingReports;
+use App\Http\Controllers\Seller\SellerAccountingReportsController;
+use App\Http\Controllers\Seller\SellerAccountingReportsFormatterController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerAuthController;
 use App\Http\Controllers\Seller\SellerOrdersController;
@@ -45,14 +47,18 @@ Route::middleware('banned')->group(function ()
         Route::get('list', 'orders')->name('seller.orders.list');
         Route::post('searchOrders', 'searchProductsOrders');
     });
-    Route::controller(SellerAccountingReports::class)->prefix('accounting_reports')->middleware('auth')->group(function () {
+    Route::controller(SellerAccountingReportsController::class)->prefix('accounting_reports')->middleware('auth')->group(function ()
+    {
         Route::get('index', 'index');
-        Route::get('generic_report', 'genericReport');
-        Route::get('product_report', 'productReport');
-        Route::get('tax_report', 'taxReport');
+        Route::get('generic', 'genericReport');
+        Route::get('products', 'productsReports')->name('seller.accounting_reports.products');
+        Route::get('product/{ulid}', 'productReport');
+        Route::get('tax', 'taxReport');
+        Route::post('products/search', 'searchProducts');
     });
-    Route::controller(SellerAccountingReportPDF::class)->prefix('accounting_reports/pdf')->middleware('auth')->group(function (){
-        Route::post('format', 'format');
+    Route::controller(SellerAccountingReportsFormatterController::class)->prefix('accounting_reports/format')->middleware('auth')->group(function ()
+    {
+        Route::post('pdf', 'formatPDF');
     });
 });
 
