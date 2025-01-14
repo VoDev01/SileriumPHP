@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Fluent\AssertableJson;
 
 class UserAuthTest extends TestCase
 {
@@ -30,6 +31,10 @@ class UserAuthTest extends TestCase
         $response = $this->post('/user/login', ['email' => $user->email, 'password' => '1122334455']);
 
         $response->assertValid();
+
+        $response->assertJson(fn(AssertableJson $json) =>
+            $json->where('redirect', '/user/profile')
+        );
     }
 
     public function testRegister()

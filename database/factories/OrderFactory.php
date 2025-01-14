@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enum\OrderStatus;
+use App\Models\Seller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -23,11 +24,11 @@ class OrderFactory extends Factory
         return [
             'ulid' => Str::ulid()->toBase32(),
             'orderDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s'),
-            'orderAdress' => fake()->address(),
+            'orderAdress' => fake()->streetAddress(),
             'orderStatus' => 'PENDING',
             'deleted_at' => null,
             'updated_at' => null,
-            'totalPrice' => random_int(1000, 100000000)
+            'totalPrice' => (double)rand(1000, 100000000)
         ];
     }
 }

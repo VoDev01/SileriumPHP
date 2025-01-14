@@ -88,7 +88,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-seller', function (User $user)
+        Gate::define('access-seller-api', function (User $user)
         {
             if ($user->hasRoles('seller'))
                 return Response::allow();

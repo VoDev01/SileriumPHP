@@ -4,14 +4,15 @@ namespace Tests\Feature\User;
 
 use Carbon\Carbon;
 use Tests\TestCase;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Support\Str;
 use App\Models\ReviewsImages;
-use App\Models\Seller;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,7 +29,7 @@ class UserReviewTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         $productId = Seller::factory()->has(Product::factory())->create()->products()->first()->id;
         $review = Review::factory()->make();
 
@@ -63,7 +64,7 @@ class UserReviewTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         $productId = Seller::factory()->has(Product::factory())->create()->products()->first()->id;
         $review = Review::factory()->create();
 
@@ -94,7 +95,7 @@ class UserReviewTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         Seller::factory()->has(Product::factory())->create();
         $review = Review::factory()->create();
 

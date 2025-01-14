@@ -19,10 +19,13 @@ class Order extends Model
     protected $fillable = [
         'ulid',
         'user_id',
-        'product_id',
-        'totalPrice',
+        'orderDate',
         'orderAdress',
-        'orderStatus'
+        'orderStatus',
+        'seller_id',
+        'deleted_at',
+        'updated_at',
+        'totalPrice'
     ];
     
     protected $casts = [

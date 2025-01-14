@@ -11,8 +11,8 @@ class OrderService
 {
     public function make(string $order_adress, OrderStatus $order_status, int $user_id, array $products)
     {
-        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact($order_adress, $order_status, Auth::id()));
-        $orderId = Order::insertGetId($insert);
+        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact($order_adress, $order_status, $user_id));
+        $orderId = Order::insertGetId(array_merge($insert, ['totalPrice' => null]));
         $totalPrice = null;
         for ($i=0; $i < count($products); $i++) { 
             $totalPrice += $products[$i]['priceRub'] * $products[$i]['amount'];
@@ -21,10 +21,10 @@ class OrderService
                 $orderId, 
                 $products[$i]['id'], 
                 $products[$i]['amount'],
-                
+                $products[$i]['amount'] * $products[$i]['amount']
             ]);
         }
-        Order::where('id', $orderId)->update(['totalPrice' => $totalPrice]);
+        //Order::where('id', $orderId)->update(['totalPrice' => $totalPrice]);
         $order = Order::find($orderId);
         return $order;
     }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\User;
 
 use Tests\TestCase;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Seller;
 use App\Models\Product;
@@ -18,7 +19,7 @@ class UserCartTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         $product = Seller::factory()->has(Product::factory())->create()->products()->first();
 
         $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
@@ -29,7 +30,7 @@ class UserCartTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         $product = Seller::factory()->has(Product::factory())->create()->products()->first();
 
         $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
@@ -44,7 +45,7 @@ class UserCartTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         $product = Seller::factory()->has(Product::factory())->create()->products()->first();
 
         $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);

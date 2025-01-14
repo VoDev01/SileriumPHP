@@ -4,6 +4,7 @@ namespace Tests\Feature\User;
 
 use Carbon\Carbon;
 use Tests\TestCase;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Seller;
@@ -21,7 +22,7 @@ class UserOrderTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         $seller = Seller::factory()->has(Product::factory())->create();
         $order = Order::factory()->for($user)->for($seller)->create();
 
@@ -37,7 +38,7 @@ class UserOrderTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->has(Role::factory())->create();
         $seller = Seller::factory()->has(Product::factory())->create();
         $order = Order::factory()->for($user)->for($seller)->create();
 

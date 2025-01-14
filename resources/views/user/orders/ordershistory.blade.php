@@ -29,7 +29,7 @@
                 @endphp
                 <p style="color: {{ $orderStatusStr[App\Enum\color] }};">Статус заказа:
                     {{ $orderStatusStr[App\Enum\ru] }}</p>
-                <hr />
+                <hr>
             @endforeach
         @endif
         <a class="btn btn-outline-success" href="/user/cart">К корзине</a>
