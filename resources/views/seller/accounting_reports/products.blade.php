@@ -2,11 +2,30 @@
     <x-slot name="title">
         Отчетность товаров | Silerium Partner
     </x-slot>
+    <!--<style>
+        @php
+            include(public_path().'/css/bootstrap.min.css');
+        @endphp
+    </style>-->
+    <style>
+        tr {
+            border: 1px solid gray;
+            padding: 5px;
+        }
+        td {
+            border: 1px solid gray;
+            padding: 5px;
+        }
+        th {
+            border: 1px solid gray;
+            padding: 5px;
+        }
+    </style>
     <h1>Бухгалтерские отчености товаров</h1>
     <x-search-form header="Поиск товаров" submit_id="searchProducts" :$queryInputs :$inputs />
     @if ($products != null)
         <div class="table-responsive">
-            <table class="table table-bordered" style="border: black;">
+            <table style="border: 2px solid black; margin-bottom: 15px; border-collapse: collapse;">
                 <thead>
                     <tr>
                         <th>№</th>
@@ -47,8 +66,57 @@
     @endif
     <form action="/seller/accounting_reports/format/pdf" method="POST">
         @csrf
-        <button type="submit" class="btn btn-primary">
+        <input hidden type="text" class="form-control" name="pageHtml" id="pageHtml" value="" />
+        <button type="submit" id="formatButton" class="btn btn-primary">
             Форматировать
         </button>
     </form>
+    <script type="module">
+        $(document).ready(function() {
+            var html = document.createElement('html');
+            html.innerHTML = '<html>' + document.head.innerHTML + document.body.innerHTML + '</html>';
+
+            var navbar = html.getElementsByClassName('navbar');
+            while (navbar[0]) {
+                navbar[0].parentNode.removeChild(navbar[0]);
+            }
+            var form = html.getElementsByTagName('form');
+            while (form[0]) {
+                form[0].parentNode.removeChild(form[0]);
+            }
+            var link = html.getElementsByTagName('a');
+            while (link[0]) {
+                link[0].parentNode.removeChild(link[0]);
+            }
+            var tr = html.getElementsByTagName('tr');
+            $(tr).each(function(){
+
+                $(this).children('td').each(function(){
+                    if(this.innerHTML === '')
+                    {
+                        this.remove();
+                    }
+                });
+
+                $(this).children('th').each(function(){
+                    if(this.innerHTML === '')
+                    {
+                        this.remove();
+                    }
+                });
+            });
+            var head = html.getElementsByTagName('head')[0];
+            /*var foorter = html.getElementsByTagName('footer');
+            while(footer[0])
+            {
+                footer[0].parentNode.removeChild(footer[0]);
+            }*/
+
+            console.log(html.outerHTML);
+            $('#formatButton').on('click', function() {
+                $('#pageHtml').val(html.outerHTML);
+            });
+            
+        });
+    </script>
 </x-seller-layout>
