@@ -42,6 +42,10 @@ return new class extends Migration
             $table->integer('productAmount');
         });
         Schema::table('products', function(Blueprint $table){
+            $table->dropForeign(['seller_id']);    
+        });
+
+        Schema::table('products', function(Blueprint $table){
             $table->dropColumn('seller_id');
             $table->dropColumn('productAmount');
         });

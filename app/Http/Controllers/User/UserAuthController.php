@@ -31,7 +31,9 @@ class UserAuthController extends Controller
     {
         $validated = $request->validated();
         if ($validated['remember_me']) {
+            if(Auth::user()->token()->get)
             $request->session()->regenerate();
+            Auth::user()->createToken('accessToken');
             if(Gate::allows('access-admin-panel'))
             {
                 return redirect()->route('admin.index');
@@ -45,8 +47,8 @@ class UserAuthController extends Controller
             {
                 return redirect()->intended('/user/profile');
             }
-        } 
-        else 
+        }
+        else
         {
             $user = User::where('email', $validated['email'])->first();
             $response = ValidatePasswordHashService::validate($request, $validated['password'], $user);

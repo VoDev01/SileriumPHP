@@ -20,7 +20,7 @@ use App\Http\Controllers\API\V1\APISubcategoriesController;
 */
 
 
-Route::middleware(['api', 'banned', 'authorize.api.loggedin', 'authorize.api.key'])->prefix('/api/v1')->group(function ()
+Route::middleware(['api', 'banned', 'auth:sanctum', 'authorize.api.loggedin', 'authorize.api.key'])->prefix('/api/v1')->group(function ()
 {
     Route::get('home', [APIHomeController::class, 'index']);
 

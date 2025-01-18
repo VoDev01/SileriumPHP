@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df36fb9521ddfaa2c39fd38b1a36c192",
+    "content-hash": "2edd91f172c7d361f8e26d520623eb19",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2354,10 +2354,6 @@
                 "laravel",
                 "sanctum"
             ],
-            "support": {
-                "issues": "https://github.com/laravel/sanctum/issues",
-                "source": "https://github.com/laravel/sanctum"
-            },
             "time": "2023-12-19T18:44:48+00:00"
         },
         {

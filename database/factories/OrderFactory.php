@@ -28,7 +28,7 @@ class OrderFactory extends Factory
             'orderStatus' => 'PENDING',
             'deleted_at' => null,
             'updated_at' => null,
-            'totalPrice' => (double)rand(1000, 100000000)
+            'totalPrice' => (double)rand(1000, 10000000)
         ];
     }
 }

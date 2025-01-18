@@ -27,7 +27,10 @@ return new class extends Migration
     public function down()
     {
         Schema::table('banned_users', function(Blueprint $table) {
-            $table->dropForeign('admin_id');
+            $table->dropForeign(['admin_id']);
+        });
+
+        Schema::table('banned_users', function(Blueprint $table) {
             $table->bigInteger('admin_id')->change();
         });
     }

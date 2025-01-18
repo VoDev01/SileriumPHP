@@ -26,13 +26,13 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('orders', function(Blueprint $table){
+            $table->dropConstrainedForeignId('seller_id');
+        });
         Schema::create('sellers_orders', function (Blueprint $table) {
             $table->foreignId('seller_id')->constrained();
             $table->foreignId('order_id')->constrained();
-            $table->double('totalPrice', 10000000, 2);
-        });
-        Schema::table('orders', function(Blueprint $table){
-            $table->dropConstrainedForeignId('seller_id');
+            $table->double('totalPrice', 100, 2);
         });
     }
 };

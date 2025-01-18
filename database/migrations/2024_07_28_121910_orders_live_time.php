@@ -28,7 +28,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->timestamp('deleted_at')->change();
+            $table->dateTime('deleted_at')->change();
             $table->dropColumn('updated_at');
         });
     }
