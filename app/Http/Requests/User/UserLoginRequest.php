@@ -26,7 +26,8 @@ class UserLoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'exists:users,email', 'min: 5', 'max: 100'],
-            'password' => ['required', RulesPassword::min(10)->numbers(), 'max:50']
+            'password' => ['required', RulesPassword::min(10)->numbers(), 'max:50'],
+            'remember_me' => ['boolean']
         ];
     }
 }

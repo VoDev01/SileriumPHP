@@ -90,7 +90,7 @@ class APIProductTest extends TestCase
 
         $response->assertForbidden();
 
-        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/products/create/', [
+        $response = $this->withToken($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/products/create/', [
             'name' => $product->name,
             'description' => $product->description,
             'priceRub' => $product->priceRub,

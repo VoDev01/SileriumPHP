@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\BannedUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Laravel\Passport\Passport;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -34,6 +35,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+ 
+        Passport::tokensExpireIn(now()->addDays(15));
+        Passport::refreshTokensExpireIn(now()->addDays(30));
+        Passport::personalAccessTokensExpireIn(now()->addMonths(6));
 
         VerifyEmail::toMailUsing(function ($notifiable, $url)
         {

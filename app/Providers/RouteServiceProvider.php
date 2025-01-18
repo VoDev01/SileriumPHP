@@ -31,17 +31,10 @@ class RouteServiceProvider extends ServiceProvider
 
     public function map()
     {
-        $this->mapApiRoutes();
         $this->mapWebRoutes();
         $this->mapAdminRoutes();
         $this->mapUserRoutes();
         $this->mapSellerRoutes();
-    }
-    public function mapApiRoutes()
-    {
-        Route::middleware('api')
-            ->prefix('api/v1')
-            ->group(base_path('routes/api/api.php'));
     }
     public function mapWebRoutes()
     {
@@ -74,7 +67,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip());
         });
     }
 }

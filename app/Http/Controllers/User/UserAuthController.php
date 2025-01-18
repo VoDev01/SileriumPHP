@@ -29,7 +29,8 @@ class UserAuthController extends Controller
     }
     public function postLogin(UserLoginRequest $request)
     {
-        if (Auth::viaRemember()) {
+        $validated = $request->validated();
+        if ($validated['remember_me']) {
             $request->session()->regenerate();
             if(Gate::allows('access-admin-panel'))
             {
@@ -47,11 +48,11 @@ class UserAuthController extends Controller
         } 
         else 
         {
-            $validated = $request->validated();
             $user = User::where('email', $validated['email'])->first();
             $response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
             if($response['success'])
             {
+                Auth::login($user);
                 if(Gate::allows('access-admin-panel', $user))
                 {
                     return response()->json(['redirect' => '/admin/index']);

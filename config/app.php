@@ -181,6 +181,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -204,7 +205,7 @@ return [
         App\Providers\PhoneValidationProvider::class,
         App\Providers\EmailValidationProvider::class,
         App\Providers\CheckUserRoleProvider::class,
-        App\Providers\ProductCartServiceProvider::class,
+        App\Providers\ProductCartServiceProvider::class
     ],
 
     /*
