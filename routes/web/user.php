@@ -42,14 +42,14 @@ Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
         Route::get('review/product/{productId}', 'review')->middleware(['auth', 'verified']);
         Route::post('review', 'postReview');
         Route::get('review/edit_review/{review}', 'editReview');
-        Route::put('edit_review', 'postEditReview');
+        Route::patch('edit_review', 'postEditReview');
         Route::delete('delete_review', 'deleteReview');
     });
     Route::controller(UserOrderController::class)->group(function ()
     {
         Route::get('orders/all', 'allOrders')->middleware(['auth', 'verified']);
         Route::get('orders/edit_order/{order}', 'editOrder');
-        Route::put('orders/edit_order', 'postEditOrder');
+        Route::patch('orders/edit_order', 'postEditOrder');
         Route::delete('orders/close_order', 'closeOrder');
         Route::get('orders/history', 'ordersHistory');
         Route::post('orders/filter_shop_cart', 'filterShopCart');

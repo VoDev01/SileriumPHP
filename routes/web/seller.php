@@ -34,7 +34,7 @@ Route::middleware('banned')->group(function ()
         Route::get('create', 'create');
         Route::post('create', 'postProduct');
         Route::get('update', 'update')->name('seller.products.update');
-        Route::post('update', 'postUpdatedProduct');
+        Route::patch('update', 'postUpdatedProduct');
         Route::get('delete', 'delete')->name('seller.products.delete');
         Route::post('delete', 'postDeletedProduct');
         Route::get('category/{id}/subcategories', 'categories');

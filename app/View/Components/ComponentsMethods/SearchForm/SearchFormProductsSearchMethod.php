@@ -11,7 +11,7 @@ class SearchFormProductsSearchMethod
     public static function searchProducts(array $validated)
     {
         $user = User::with('apiKey')->where('ulid', Auth::user()->ulid)->get()->first();
-        $response = Http::withoutVerifying()->asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key' => $user->apiKey->api_key])->post('https://silerium.com/api/v1/products/by_name_seller', [
+        $response = Http::withoutVerifying()->asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key' => $user->apiKey->api_key])->post(env('APP_URL') . '/api/v1/products/by_name_seller', [
             'sellerName' => $validated['sellerName'],
             'productName' => $validated['productName'],
             'loadWith' => $validated['loadWith']

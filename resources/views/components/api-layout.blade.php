@@ -24,6 +24,14 @@
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link text-black text-decoration-none" href="/api/v1/profile">
+                            Личный кабинет
+                            <i class="bi bi-box-arrow-in-right"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>

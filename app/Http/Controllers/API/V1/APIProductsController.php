@@ -32,7 +32,7 @@ class APIProductsController extends Controller
     {
         $validated = $request->validated();
         $product = ProductService::make($validated);
-        return response()->json(['Url' => 'https://silerium.com/catalog/product/' . $product->ulid], 200);
+        return response()->json(['Url' => env('APP_URL') . '/catalog/product/' . $product->ulid], 200);
     }
     public function update(APIProductsUpdateRequest $request)
     {

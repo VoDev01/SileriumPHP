@@ -14,13 +14,13 @@ class BannedUserFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    private static $timeTypes = ['seconds', 'minutes', 'hours', 'days'];
+    private static $timeTypes = ['seconds', 'minutes', 'hours', 'days', 'years'];
     public function definition()
     {
         return [
             'reason' => fake()->sentences(10),
             'banTime' => rand(1, 10000),
-            'timeType' => self::$timeTypes[rand(0, 3)]
+            'timeType' => self::$timeTypes[rand(0, 4)]
         ];
     }
 }

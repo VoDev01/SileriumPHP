@@ -7,7 +7,7 @@ use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Http\Controllers\Controller;
-use App\Services\OrderItemsService;
+use App\Actions\OrderItemsAction;
 use App\Facades\ProductCartServiceFacade as ProductCart;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormCheckboxInput;
@@ -37,7 +37,7 @@ class CatalogController extends Controller
         if(session('loadWith') != null)
             $relationships = explode(', ', session('loadWith'));
         $query = ProductService::getFilterQuery($relationships, $subcategory, $product, $available);
-        $products = OrderItemsService::orderItem($query, $sortOrder, 15);
+        $products = OrderItemsAction::orderItem($query, $sortOrder, 15);
         if(session('products_currency') == 'dol')
         {
             ProductCart::convertCurrency($products);

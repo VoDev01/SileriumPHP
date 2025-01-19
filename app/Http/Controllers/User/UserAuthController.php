@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\HandleUserLoginAction;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Services\UserService;
+use App\Actions\UserAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\User\UserLoginRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\User\UserRegisterRequest;
-use App\Models\Seller;
-use App\Services\ValidatePasswordHashService;
 use App\Services\VerifyPhoneService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -30,48 +28,8 @@ class UserAuthController extends Controller
     public function postLogin(UserLoginRequest $request)
     {
         $validated = $request->validated();
-        if ($validated['remember_me']) {
-            if(Auth::user()->token()->get)
-            $request->session()->regenerate();
-            Auth::user()->createToken('accessToken');
-            if(Gate::allows('access-admin-panel'))
-            {
-                return redirect()->route('admin.index');
-            }
-            else if(Gate::allows('access-seller'))
-            {
-                $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
-                return redirect()->route('seller.account');
-            }
-            else
-            {
-                return redirect()->intended('/user/profile');
-            }
-        }
-        else
-        {
-            $user = User::where('email', $validated['email'])->first();
-            $response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
-            if($response['success'])
-            {
-                Auth::login($user);
-                if(Gate::allows('access-admin-panel', $user))
-                {
-                    return response()->json(['redirect' => '/admin/index']);
-                }
-                else if(Gate::allows('access-seller'))
-                {
-                    $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
-                    return response()->json(['redirect' => '/seller/account']);
-                }
-                else
-                {
-                    return response()->json(['redirect' => '/user/profile']);
-                }
-            }
-            else
-                return response()->json($response, 422);
-        }
+        $user = User::where('email', $validated['email'])->get()->first();
+        return HandleUserLoginAction::handle($user, $request, $validated);
     }
     public function forgotPassword()
     {
@@ -103,7 +61,8 @@ class UserAuthController extends Controller
 
         $status = PasswordUtil::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
+            function (User $user, string $password)
+            {
                 $user->forceFill([
                     'password' => Hash::make($password, ['rounds' => 10])
                 ])->setRememberToken(Str::random(60));
@@ -145,7 +104,7 @@ class UserAuthController extends Controller
     }
     public function validatePhoneVerification(int $code)
     {
-        if(VerifyPhoneService::$verification_code == $code)
+        if (VerifyPhoneService::$verification_code == $code)
         {
             Auth::user()->phoneVerified = true;
             return redirect()->route('profile');
@@ -162,12 +121,15 @@ class UserAuthController extends Controller
     public function postRegister(UserRegisterRequest $request)
     {
         $validated = $request->validated();
-        if ($request->pfp != null) {
+        if ($request->pfp != null)
+        {
             $pfpPath = Storage::putFile('pfp', $validated['pfp']);
-        } else {
+        }
+        else
+        {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
-        $user = UserService::make($validated, $pfpPath);
+        $user = UserAction::make($validated, $pfpPath);
         event(new Registered($user));
         return redirect()->route('login');
     }

@@ -7,10 +7,12 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\ManualPaginatorService;
+use App\Actions\ManualPaginatorAction;
 use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\User\UserBanRequest;
 use App\Http\Requests\API\Users\APIUserSearchRequest;
+use App\Models\ApiUser;
+use App\Models\BannedApiUser;
 use App\Models\BannedUser;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
@@ -55,14 +57,14 @@ class UsersAdminPanelController extends Controller
         if ($request->session()->get('orders') != null)
         {
             $orders = $request->session()->get('orders');
-            foreach($orders as $order)
+            foreach ($orders as $order)
             {
-                foreach($order['products'] as $product)
+                foreach ($order['products'] as $product)
                     array_push($order['productsNames'], $product['name']);
                 explode(', ', $order['productsNames']);
                 unset($order['products']);
             }
-            $orders = ManualPaginatorService::paginate($orders);
+            $orders = ManualPaginatorAction::paginate($orders);
         }
         if ($request->session()->get('user') != null)
             $user = $request->session()->get('user');
@@ -81,9 +83,9 @@ class UsersAdminPanelController extends Controller
     public function searchUserOrders(Request $request)
     {
         $user = User::with(['orders', 'orders.product'])->where('ulid', $request->id)->get()->first();
-        if($user != null)
+        if ($user != null)
         {
-            if($user->orders != null)
+            if ($user->orders != null)
             {
                 $orders = $user->orders->toArray();
                 return redirect()->route('admin.users.orders')->with('orders', $orders)->with('user', $user);
@@ -102,7 +104,7 @@ class UsersAdminPanelController extends Controller
         $message = null;
 
         if ($request->session()->get('reviews') != null)
-            $reviews = ManualPaginatorService::paginate($request->session()->get('reviews'));
+            $reviews = ManualPaginatorAction::paginate($request->session()->get('reviews'));
         if ($request->session()->get('user') != null)
             $user = $request->session()->get('user');
         if ($request->session()->get('message') != null)
@@ -120,9 +122,9 @@ class UsersAdminPanelController extends Controller
     public function searchUserReviews(Request $request)
     {
         $user = User::with(['reviews', 'reviews.product'])->where('ulid', $request->id)->get()->first();
-        if($user != null)
+        if ($user != null)
         {
-            if($user->reviews != null)
+            if ($user->reviews != null)
             {
                 $reviews = $user->reviews->toArray();
                 return redirect()->route('admin.users.reviews')->with('reviews', $reviews)->with('user', $user);
@@ -150,17 +152,33 @@ class UsersAdminPanelController extends Controller
     {
         $validated = $request->validated();
 
-        $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
         $admin_id = User::where('ulid', $validated['admin_id'])->get()->first()->ulid;
-        BannedUser::create([
-            'user_id' => $user_id,
-            'admin_id' => $admin_id,
-            'userIp' => $request->ip(),
-            'reason' => $validated['reason'],
-            'duration' => $validated['duration'],
-            'timeType' => $validated['timeType'],
-            'bannedAt' => Carbon::now()
-        ]);
+        if (!$validated['api_user'])
+        {
+            $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
+            BannedUser::create([
+                'user_id' => $user_id,
+                'admin_id' => $admin_id,
+                'userIp' => $request->ip(),
+                'reason' => $validated['reason'],
+                'duration' => $validated['duration'],
+                'timeType' => $validated['timeType'],
+                'bannedAt' => Carbon::now()
+            ]);
+        }
+        else
+        {
+            $user_id = ApiUser::where('id', $validated['user_id'])->get()->first()->ulid;
+            BannedApiUser::create([
+                'user_id' => $user_id,
+                'admin_id' => $admin_id,
+                'userIp' => $request->ip(),
+                'reason' => $validated['reason'],
+                'duration' => $validated['duration'],
+                'timeType' => $validated['timeType'],
+                'bannedAt' => Carbon::now()
+            ]);
+        }
         return redirect()->route('admin.users.ban');
     }
     public function searchUsers(APIUserSearchRequest $request)

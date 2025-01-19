@@ -23,7 +23,7 @@ class AuthorizeApiLoggedInMiddleware
         $auth = $request->header('php-auth-pw');
         if(!$auth === $user->password)
             abort(404, 'Wrong password.');
-        $response = Gate::forUser($user)->inspect('access-api');
+        $response = Gate::forUser($user)->inspect('access-all');
         if ($response->allowed())
         {
             return $next($request);

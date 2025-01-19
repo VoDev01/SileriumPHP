@@ -43,7 +43,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            //\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             TrustProxies::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -72,9 +72,9 @@ class Kernel extends HttpKernel
         'authorize.api.loggedin' => \App\Http\Middleware\AuthorizeApiLoggedInMiddleware::class,
         'authorize.api.key' => \App\Http\Middleware\AuthorizeApiKeyMiddleware::class,
         'authorize.admin' => \App\Http\Middleware\AuthorizeAdminPanelMiddleware::class,
-        'authorize.admin.api' => \App\Http\Middleware\AuthorizeAdminApiMiddleware::class,
-        'authorize.seller.api' => \App\Http\Middleware\AuthorizeSellerApiMiddleware::class,
-        'authorize.seller.admin.api' => \App\Http\Middleware\AuthorizeSellerAdminApiMiddleware::class,
+        //'authorize.admin' => \App\Http\Middleware\AuthorizeAdminApiMiddleware::class,
+        'authorize.seller' => \App\Http\Middleware\AuthorizeSellerMiddleware::class,
+        'authorize.seller.admin' => \App\Http\Middleware\AuthorizeSellerAdminMiddleware::class,
         'authorize.user.routes' => \App\Http\Middleware\AuthorizeUserRouteMiddleware::class,
         'banned' => \App\Http\Middleware\CheckBannedUser::class
     ];

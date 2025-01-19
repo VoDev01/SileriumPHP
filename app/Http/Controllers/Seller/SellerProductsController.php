@@ -11,9 +11,9 @@ use App\Http\Requests\API\Products\APIProductsCreateRequest;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\Http\Requests\API\Products\APIProductsUpdateRequest;
 use Illuminate\Support\Facades\Http;
-use App\Services\ManualPaginatorService;
+use App\Actions\ManualPaginatorAction;
 use App\Services\SearchFormPaginateResponseService;
-use App\Services\UpdateSessionValueJson;
+use App\Services\UpdateSessionValueJsonService;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
@@ -66,7 +66,7 @@ class SellerProductsController extends Controller
     public function postUpdatedProduct(Request $request)
     {
         $this->authorize('update', Product::class);
-        $response = Http::asJson()->put('silerium.com/api/v1/products/update', [
+        $response = Http::asJson()->put(env('APP_URL') . '/api/v1/products/update', [
             'id' => $request->id,
             'name' => $request->name,
             'description' => $request->description,
@@ -76,7 +76,7 @@ class SellerProductsController extends Controller
         ]);
         if ($response->ok())
         {
-            UpdateSessionValueJson::update($request, 'products', $response->json(['updated_product']), 'ulid');
+            UpdateSessionValueJsonService::update($request, 'products', $response->json(['updated_product']), 'ulid');
             return redirect()->route("seller.products.update");
         }
     }
@@ -93,10 +93,10 @@ class SellerProductsController extends Controller
     public function postDeletedProduct(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $response = Http::delete('silerium.com/api/v1/products/delete', ['id' => $request->id]);
+        $response = Http::delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
         if ($response->ok())
         {
-            UpdateSessionValueJson::delete($request, 'products', $response->json(['updated_product']), 'ulid');
+            UpdateSessionValueJsonService::delete($request, 'products', $response->json(['updated_product']), 'ulid');
             return redirect()->route("seller.products.delete");
         }
     }
@@ -127,7 +127,7 @@ class SellerProductsController extends Controller
         if (isset($request->productId))
             if ($product->ulid == $request->productId)
                 $reviews = $product->reviews;
-        return redirect()->route('seller.products.reviews', ['searchKey' => $request->session()->get('searchKey')])->with('reviews', ManualPaginatorService::paginate($reviews->toArray()));
+        return redirect()->route('seller.products.reviews', ['searchKey' => $request->session()->get('searchKey')])->with('reviews', ManualPaginatorAction::paginate($reviews->toArray()));
     }
 
     public function searchProducts(APIProductsSearchRequest $request)

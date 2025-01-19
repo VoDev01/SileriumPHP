@@ -31,10 +31,17 @@ class RouteServiceProvider extends ServiceProvider
 
     public function map()
     {
+        $this->mapAPIRoutes();
         $this->mapWebRoutes();
         $this->mapAdminRoutes();
         $this->mapUserRoutes();
         $this->mapSellerRoutes();
+    }
+    public function mapAPIRoutes()
+    {
+        Route::middleware('api')
+            ->prefix('/api/v1')
+            ->group(base_path('routes/api.php'));
     }
     public function mapWebRoutes()
     {

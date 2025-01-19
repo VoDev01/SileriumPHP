@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-class AuthorizeSellerAdminApiMiddleware
+class AuthorizeSellerAdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -22,7 +22,7 @@ class AuthorizeSellerAdminApiMiddleware
         $auth = $request->header('php-auth-pw');
         if(!$auth === $user->password)
             abort(404, 'Wrong password.');
-        $response = Gate::forUser($user)->inspect('access-seller-admin-api');
+        $response = Gate::forUser($user)->inspect('access-seller-admin');
         if ($response->allowed())
         {
             return $next($request);

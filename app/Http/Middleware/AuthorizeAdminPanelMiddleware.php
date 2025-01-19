@@ -18,7 +18,7 @@ class AuthorizeAdminPanelMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $response = Gate::inspect('access-admin-panel');
+        $response = Gate::inspect('access-admin-moderator');
         if ($response->allowed())
         {
             return $next($request);

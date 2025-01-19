@@ -18212,7 +18212,7 @@
          */ 
         public static function orderItem($query, $sortOrder, $onPage)
         {
-                        /** @var \App\Services\OrderItemsService $instance */
+                        /** @var \App\Services\OrderItemsAction $instance */
                         return $instance->orderItem($query, $sortOrder, $onPage);
         }
          
@@ -18229,7 +18229,7 @@
          */ 
         public static function validate($request, $inputPassword, $user)
         {
-                        return \App\Services\ValidatePasswordHashService::validate($request, $inputPassword, $user);
+                        return \App\Services\ValidatePasswordHashAction::validate($request, $inputPassword, $user);
         }
          
     }
@@ -18245,7 +18245,7 @@
          */ 
         public static function make($order_adress, $total_price, $order_status, $user_id, $products)
         {
-                        /** @var \App\Services\OrderService $instance */
+                        /** @var \App\Services\OrderAction $instance */
                         return $instance->make($order_adress, $total_price, $order_status, $user_id, $products);
         }
          
@@ -18262,7 +18262,7 @@
          */ 
         public static function make($validated_input, $pfp)
         {
-                        /** @var \App\Services\UserService $instance */
+                        /** @var \App\Services\UserAction $instance */
                         return $instance->make($validated_input, $pfp);
         }
          

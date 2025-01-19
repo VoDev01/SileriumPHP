@@ -82,10 +82,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Seller::class);
     }
-    public function apiKey()
-    {
-        return $this->hasOne(UserApiKey::class, 'user_id', 'ulid');
-    }
     public function banned()
     {
         return $this->hasOne(BannedUser::class);

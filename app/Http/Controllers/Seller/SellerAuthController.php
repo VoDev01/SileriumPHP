@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Services\ValidatePasswordHashService;
+use App\Actions\ValidatePasswordHashAction;
 use App\Http\Requests\Seller\SellerLoginRequest;
 use App\Http\Requests\Seller\SellerRegisterRequest;
 
@@ -24,7 +24,7 @@ class SellerAuthController extends Controller
         $validated = $request->validated();
         $user = User::where('email', $validated["email"])->get()->first();
         $seller_id = Seller::where('user_id', $user->id)->get()->first()->id;
-        $response = ValidatePasswordHashService::validate($request, $validated['password'], $user);
+        $response = ValidatePasswordHashAction::validate($request, $validated['password'], $user);
         if($response['success'])
         {
             session(['seller_id' => $seller_id]);

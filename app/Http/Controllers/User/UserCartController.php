@@ -7,7 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Services\ChangeCartAmount;
+use App\Actions\ChangeCartAmountAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
@@ -40,7 +40,7 @@ class UserCartController extends Controller
     }
     public function changeAmount(Request $request)
     {
-        ChangeCartAmount::changeAmount($request->amount, $request->amountChange, $request->productId, Auth::id());
+        ChangeCartAmountAction::changeAmount($request->amount, $request->amountChange, $request->productId, Auth::id());
         return redirect()->route('cart');
     }
     public function filterCart(Request $request)

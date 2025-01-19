@@ -20,6 +20,9 @@ class RolesSeeder extends Seeder
                 'role' => 'user'
             ],
             [
+                'role' => 'api_user'
+            ],
+            [
                 'role' => 'admin'
             ],
             [

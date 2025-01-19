@@ -28,7 +28,8 @@ class UserBanRequest extends FormRequest
             'admin_id' => ['ulid', 'required'],
             'reason' => ['min:4', 'max:500', 'required', 'string'],
             'duration' => ['numeric', 'required'],
-            'timeType' => ['string']
+            'timeType' => ['string'],
+            'api_user' => ['boolean']
         ];
     }
 }

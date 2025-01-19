@@ -4,7 +4,7 @@ namespace Tests\Feature\User;
 
 use Tests\TestCase;
 use App\Models\User;
-use App\Services\UserService;
+use App\Actions\UserAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 
@@ -18,7 +18,7 @@ class UserAuthTest extends TestCase
      */
     public function testLogin()
     {
-        $user = UserService::make(User::factory()->make()->toArray(), 'default');
+        $user = UserAction::make(User::factory()->make()->toArray(), 'default');
 
         $response = $this->post('/user/login', ['email' => 'harak32@gmail.com', 'password' => '1122334455']);
 

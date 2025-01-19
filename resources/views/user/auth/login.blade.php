@@ -34,6 +34,15 @@
                 }
             });
         });
+        $('#remember_me').on('click', function() {
+            if ($('#remember_me').prop('checked')) {
+                $('#remember_me').prop('checked', false);
+                $('#remember_me').val(0);
+            } else {
+                $('#remember_me').prop('checked', true);
+                $('#remember_me').val(1);
+            }
+        });
     </script>
 
     <h2 class="text-center">Вход</h2>
@@ -53,7 +62,7 @@
             <div class="mb-3 row">
                 <div class="col-6">
                     <label for="remember_me" class="form-label">Запомнить</label>
-                    <input type="checkbox" class="form-check" id="remember_me" name="remember_me" />
+                    <input type="checkbox" class="form-check" id="remember_me" value="0" name="remember_me" />
                 </div>
                 <div class="col-6">
                     <a class="d-block h-100 w-100 text-secondary text-decoration-underline text-end"

@@ -9,6 +9,6 @@ class APIHomeController extends Controller
 {
     public function index()
     {
-        return view('apihome');
+        return view('api.home');
     }
 }

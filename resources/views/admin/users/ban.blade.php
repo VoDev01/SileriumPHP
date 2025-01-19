@@ -68,9 +68,15 @@
                                 <option value="minutes" selected>Минутах</option>
                                 <option value="hours">Часах</option>
                                 <option value="days">Днях</option>
+                                <option value="years">Годах</option>
                             </select>
                         </div>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="0" id="api_user" name="api_user" />
+                        <label class="form-check-label" for="api_user"> API пользователь </label>
+                    </div>
+                    
                     <div class="mb-3">
                         <button type="submit" class="btn btn-danger">Забанить</button>
                     </div>
@@ -84,6 +90,18 @@
     </div>
     <script type="module">
         $(document).ready(function() {
+            $('#api_user').on('click', function(){
+                if($('#api_user').prop('checked'))
+                {
+                    $('#api_user').prop('checked', false);
+                    $('#api_user').val(0);
+                }
+                else
+                {
+                    $('#api_user').prop('checked', true);
+                    $('#api_user').val(1);
+                }
+            });
             var foundUsers = document.getElementById('foundUsers');
             foundUsers.addEventListener('show.bs.collapse', function() {
                 $('#foundUsersArrow').removeClass("bi-arrow-down");

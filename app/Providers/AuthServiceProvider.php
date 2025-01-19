@@ -56,6 +56,8 @@ class AuthServiceProvider extends ServiceProvider
                 $diff = true;
                 if ($banned->timeType == "seconds")
                     $diff = $banned->bannedAt->diffInSeconds(Carbon::now()) >= $banned->duration;
+                if ($banned->timeType == "minutes")
+                    $diff = $banned->bannedAt->diffInMinutes(Carbon::now()) >= $banned->duration;
                 else if ($banned->timeType == "hours")
                     $diff = $banned->bannedAt->diffInHours(Carbon::now()) >= $banned->duration;
                 else if ($banned->timeType == "days")
@@ -69,7 +71,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::allow();
         });
 
-        Gate::define('access-admin-panel', function (User $user)
+        Gate::define('access-admin-moderator', function (User $user)
         {
             if ($user->hasRoles(['admin', 'moderator']))
                 return Response::allow();
@@ -77,7 +79,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-api', function (User $user)
+        Gate::define('access-all', function (User $user)
         {
             if ($user->hasRoles(['user', 'seller', 'admin', 'moderator']))
                 return Response::allow();
@@ -85,7 +87,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-admin-api', function (User $user)
+        Gate::define('access-admin', function (User $user)
         {
             if ($user->hasRoles('admin'))
                 return Response::allow();
@@ -101,7 +103,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-seller-admin-api', function (User $user)
+        Gate::define('access-seller-admin', function (User $user)
         {
             if ($user->hasRoles(['admin', 'seller', 'moderator']))
                 return Response::allow();
