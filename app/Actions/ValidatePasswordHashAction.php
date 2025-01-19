@@ -1,12 +1,12 @@
 <?php
-namespace App\Services;
+namespace App\Actions;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class ValidatePasswordHashService 
+class ValidatePasswordHashAction 
 {
     public static function validate(Request $request, string $inputPassword, $user)
     {

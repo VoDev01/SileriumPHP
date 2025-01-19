@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace App\Actions;
 
 use App\Models\Order;
 use App\Enum\OrderStatus;
@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class OrderService 
+class OrderAction 
 {
     public function make(string $order_adress, OrderStatus $order_status, int $user_id, array $products)
     {

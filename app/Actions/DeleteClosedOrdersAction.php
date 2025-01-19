@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Actions;
 
 use Carbon\Carbon;
 
-class DeleteClosedOrdersService
+class DeleteClosedOrdersAction
 {
     public static function delete($orders)
     {

@@ -14,10 +14,10 @@ class SearchFormPaginateResponseService
             if (is_string($request->session()->get($queryModelSessionKeyName)))
             {
                 $json = json_decode($request->session()->get($queryModelSessionKeyName), true)[$queryModelSessionKeyName];
-                $paginated = ManualPaginatorService::paginate($json, $perPage, $request->page);
+                $paginated = ManualPaginatorAction::paginate($json, $perPage, $request->page);
             }
             else
-                $paginated = ManualPaginatorService::paginate($request->session()->get($queryModelSessionKeyName), $perPage, $request->page);
+                $paginated = ManualPaginatorAction::paginate($request->session()->get($queryModelSessionKeyName), $perPage, $request->page);
         }
         else
         {
@@ -43,7 +43,7 @@ class SearchFormPaginateResponseService
                         }
                     }
                 }
-                $paginated = ManualPaginatorService::paginate($relations->toArray(), $perPage, $request->page);
+                $paginated = ManualPaginatorAction::paginate($relations->toArray(), $perPage, $request->page);
             }
             else
             {
@@ -59,7 +59,7 @@ class SearchFormPaginateResponseService
                         }
                     }
                 }
-                $paginated = ManualPaginatorService::paginate($relations->toArray(), $perPage, $request->page);
+                $paginated = ManualPaginatorAction::paginate($relations->toArray(), $perPage, $request->page);
             }
         }
         else

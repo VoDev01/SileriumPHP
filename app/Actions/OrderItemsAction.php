@@ -1,9 +1,9 @@
 <?php
-namespace App\Services;
+namespace App\Actions;
 
 use App\Enum\SortOrder;
 
-class OrderItemsService 
+class OrderItemsAction 
 {
     public static function orderItem($query, int $sortOrder, int $onPage)
     {

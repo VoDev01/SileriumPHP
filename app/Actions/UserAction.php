@@ -1,12 +1,12 @@
 <?php
-namespace App\Services;
+namespace App\Actions;
 
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
-class UserService 
+class UserAction 
 {
     public static function make(array $input, string $pfp)
     {

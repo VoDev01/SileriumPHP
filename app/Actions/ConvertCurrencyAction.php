@@ -1,6 +1,6 @@
 <?php
-namespace App\Services;
-class ConvertCurrencyService
+namespace App\Actions;
+class ConvertCurrencyAction
 {
     /**
      * Converts a specified currency of a product to another. Converts rub to dol.

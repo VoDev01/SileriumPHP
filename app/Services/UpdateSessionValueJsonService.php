@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 
-class UpdateSessionValueJson
+class UpdateSessionValueJsonService
 {
     public static function update(Request $request, string $key, $newVal, string $evalKey = 'id')
     {

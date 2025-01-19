@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Actions;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class CheckUserRoleService
+class CheckUserRoleAction
 {
     public function check(string $role)
     {

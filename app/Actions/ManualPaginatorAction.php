@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Actions;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
-class ManualPaginatorService
+class ManualPaginatorAction
 {
     public static function paginate(array $items, int $perPage = 5, ?int $page = null, $options = []): LengthAwarePaginator
     {

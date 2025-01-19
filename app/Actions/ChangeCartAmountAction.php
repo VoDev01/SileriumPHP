@@ -1,9 +1,9 @@
 <?php
-namespace App\Services;
+namespace App\Actions;
 
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 
-class ChangeCartAmount
+class ChangeCartAmountAction
 {
     public static function changeAmount(int $amount, string $amountChange, int $productId, int $userId)
     {
