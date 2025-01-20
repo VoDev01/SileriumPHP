@@ -16,6 +16,6 @@ class ValidatePasswordHashAction
             return ['success' => true];
         }
         else
-            return ['success' => false, 'errors' => ['password' => ['Пароль не совпадает.']]];
+            return ['success' => false, 'errors' => ['password' => 'Пароль не совпадает.']];
     }
 }

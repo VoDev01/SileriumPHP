@@ -25,7 +25,7 @@ class APILoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'email', 'exists:users,email', 'min: 5', 'max: 100'],
+            'email' => ['required', 'email', 'exists:api_users,email', 'min: 5', 'max: 150'],
             'password' => ['required', RulesPassword::min(10)->numbers(), 'max:50']
         ];
     }

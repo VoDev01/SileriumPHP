@@ -21,13 +21,11 @@ use App\Http\Controllers\API\V1\APISubcategoriesController;
 |
 */
 
-
-Route::middleware(['banned', 'auth:api'])->group(function ()
-{
+Route::withoutMiddleware('api')->middleware(['web'])->group(function(){
     Route::get('home', [APIHomeController::class, 'index']);
 
     Route::controller(APIAuthController::class)->group(function(){
-        Route::get('login', 'login');
+        Route::get('login', 'login')->name('api.login');
         Route::post('login', 'postLogin');
         Route::get('register', 'register');
         Route::post('register', 'postRegister');
@@ -36,10 +34,13 @@ Route::middleware(['banned', 'auth:api'])->group(function ()
 
     Route::controller(APIProfileController::class)->prefix('profile')->group(function(){
         Route::post('refresh', 'refreshToken');
-        Route::get('profile', 'profile');
+        Route::get('profile', 'profile')->name('api.profile');
         Route::post('logout', 'logout');
     });
+});
 
+Route::middleware(['auth:api'])->group(function ()
+{
     Route::controller(APIProductsController::class)->prefix('products')->group(function ()
     {
         Route::get('index/{itemsPerPage?}', 'index');

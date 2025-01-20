@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Models\User;
-use App\Models\Seller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Actions\UserAction;
 use App\Http\Controllers\Controller;
 use App\Services\VerifyPhoneService;
 use Illuminate\Support\Facades\Auth;
@@ -17,28 +14,30 @@ use Illuminate\Validation\Rules\Password;
 use App\Actions\ValidatePasswordHashAction;
 use App\Http\Requests\API\Profile\APILoginRequest;
 use App\Http\Requests\API\Profile\APIRegisterRequest;
+use App\Models\ApiUser;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Password as PasswordUtil;
 
 class APIAuthController extends Controller
 {
     public function login()
-    {
+{
         return view('user.auth.login');
     }
     public function postLogin(APILoginRequest $request)
     {
         $validated = $request->validated();
-        $user = User::where('email', $validated['email'])->get()->first();
-        if (Auth::attempt(['email' => $validated['email'], 'password' => $user->password]))
+        $user = ApiUser::where('email', $validated['email'])->get()->first();
+        if (!$user)
+            return redirect()->back()->withErrors(['email' => 'Пользователя с таким email не существует.']);
+        $response = ValidatePasswordHashAction::validate($request, $validated['password'], $user);
+        if ($response['success'])
         {
-            $request->session()->regenerate();
-            $response = ValidatePasswordHashAction::validate($request, $validated['password'], $user);
-            if ($response['success'])
-            {
-                Auth::login($user);
-                return redirect()->intended('/api/v1/profile');
-            }
+            return redirect()->intended('/api/v1/profile');
+        }
+        else
+        {
+            return redirect()->back()->withErrors(['password' => $response['errors']['password']]);
         }
     }
     public function forgotPassword()
@@ -71,7 +70,7 @@ class APIAuthController extends Controller
 
         $status = PasswordUtil::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password)
+            function (APIUser $user, string $password)
             {
                 $user->forceFill([
                     'password' => Hash::make($password, ['rounds' => 10])
@@ -94,7 +93,7 @@ class APIAuthController extends Controller
     public function emailVerificationHandler(EmailVerificationRequest $request)
     {
         $request->fulfill();
-        return redirect()->route('profile');
+        return redirect()->route('api.profile');
     }
     public function resendEmailVerification(Request $request)
     {
@@ -117,7 +116,7 @@ class APIAuthController extends Controller
         if (VerifyPhoneService::$verification_code == $code)
         {
             Auth::user()->phoneVerified = true;
-            return redirect()->route('profile');
+            return redirect()->route('api.profile');
         }
         else
         {
@@ -131,16 +130,8 @@ class APIAuthController extends Controller
     public function postRegister(APIRegisterRequest $request)
     {
         $validated = $request->validated();
-        if ($request->pfp != null)
-        {
-            $pfpPath = Storage::putFile('pfp', $validated['pfp']);
-        }
-        else
-        {
-            $pfpPath = '\\images\\pfp\\default_user.png';
-        }
-        $user = UserAction::make($validated, $pfpPath);
+        $user = ApiUser::create($validated);
         event(new Registered($user));
-        return redirect()->route('login');
+        return redirect()->route('api.login');
     }
 }
