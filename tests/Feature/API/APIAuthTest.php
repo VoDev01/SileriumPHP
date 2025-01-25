@@ -28,10 +28,7 @@ class APIAuthTest extends TestCase
 
         $response->assertValid();
 
-        $response->assertJson(
-            fn(AssertableJson $json) =>
-            $json->where('redirect', '/api/v1/profile')
-        );
+        $response->assertRedirect('/api/v1/profile');
     }
 
     public function testRegister()

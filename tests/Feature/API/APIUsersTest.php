@@ -5,9 +5,10 @@ namespace Tests\Feature\API;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\UserApiKey;
+use App\Models\ApiUser;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Passport\Passport;
 
 class APIUsersTest extends TestCase
 {
@@ -20,14 +21,10 @@ class APIUsersTest extends TestCase
     public function testSearch()
     {
         $role = Role::factory()->create(['role' => 'admin']);
-        $user = User::factory()->hasAttached($role, [], 'roles')->create();
-        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
+        $user = User::factory()->create();
+        Passport::actingAs(ApiUser::factory()->hasAttached($role, [], 'roles')->create(), ['search']);
 
-        $response = $this->withBasicAuth($user->email, $user->password)->postJson('/api/v1/user/search/');
-
-        $response->assertForbidden();
-
-        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/user/search/', ['email' => $user->email]);
+        $response = $this->postJson('/api/v1/user/search/', ['email' => $user->email]);
         
         $response->assertSessionHasNoErrors();
 

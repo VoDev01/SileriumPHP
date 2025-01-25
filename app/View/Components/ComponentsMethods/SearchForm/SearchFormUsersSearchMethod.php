@@ -13,7 +13,7 @@ class SearchFormUsersSearchMethod
     public static function searchUsers(Request $request, array $validated)
     {
         $user = User::with('apiKey')->where('ulid', Auth::user()->ulid)->get()->first();
-        $response = Http::asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key' => $user->apiKey->api_key])->post(env('APP_URL') . '/api/v1/user/search', [
+        $response = Http::asJson()->withHeaders(['API-Key' => $user->apiKey->api_key])->post(env('APP_URL') . '/api/v1/user/search', [
             'email' => $validated["email"],
             'loadWith' => $validated["loadWith"],
             'name' => $validated["name"],

@@ -29,21 +29,9 @@ class CheckBannedUser
             else
                 return redirect()->route('banned');
         }
-        else if (null !== $request->header('php-auth-user'))
+        else
         {
-            $user = User::where('email', $request->header('php-auth-user'))->get()->first();
-            $auth = $request->header('php-auth-pw');
-            if (!$auth === $user->password)
-                abort(404, 'Wrong password.');
-            $response = Gate::forUser($user)->inspect('banned');
-            if ($response->allowed())
-            {
-                return $next($request);
-            }
-            else
-            {
-                abort(403, 'Your profile has been banned and you are unable to access this api resource. Check your api profile for further information.');
-            }
+            abort(401, 'You are not authenticated.');
         }
         return $next($request);
     }

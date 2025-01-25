@@ -19,6 +19,7 @@ class ApiUserFactory extends Factory
     public function definition()
     {
         return [
+            'id' => Str::ulid()->toBase32(),
             'name' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => '1122334455',

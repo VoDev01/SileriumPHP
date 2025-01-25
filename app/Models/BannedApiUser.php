@@ -9,10 +9,10 @@ class BannedApiUser extends Model
 {
     use HasFactory;
 
-    protected $table = 'banned_users';
+    protected $table = 'banned_api_users';
 
     protected $fillable = [
-        'user_id',
+        'api_user_id',
         'userIp',
         'admin_id',
         'reason',

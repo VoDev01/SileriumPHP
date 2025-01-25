@@ -19,11 +19,7 @@ class AuthorizeSellerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = User::where('email', $request->header('php-auth-user'))->get()->first();
-        $auth = $request->header('php-auth-pw');
-        if(!$auth === $user->password)
-            abort(404, 'Wrong password.');
-        $response = Gate::forUser($user)->inspect('access-seller');
+        $response = Gate::inspect('access-seller');
         if ($response->allowed())
         {
             return $next($request);

@@ -22,7 +22,7 @@ class ApiUser extends User implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'ulid',
+        'id',
         'name',
         'email',
         'password',
@@ -49,7 +49,7 @@ class ApiUser extends User implements MustVerifyEmail
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'api_users_roles', 'api_user_id', 'role_id');
     }
 
     public function password() : Attribute

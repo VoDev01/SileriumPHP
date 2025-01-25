@@ -48,7 +48,7 @@ class ProductsAdminPanelController extends Controller
     {
         $this->authorize('update', Product::class);
         $user = User::with('apiKey')->where('id', Auth::id())->get()->first();
-        $response = Http::asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key', $user->apiKey])->put(env('APP_URL') . '/api/v1/products/update', [
+        $response = Http::asJson()->withHeaders(['API-Key', $user->apiKey])->put(env('APP_URL') . '/api/v1/products/update', [
             'id' => $request->id,
             'name' => $request->name,
             'description' => $request->description,
@@ -77,7 +77,7 @@ class ProductsAdminPanelController extends Controller
     {
         $this->authorize('delete', Product::class);
         $user = User::with('apiKey')->where('id', Auth::id())->get()->first();
-        $response = Http::asJson()->withBasicAuth($user->email, $user->password)->withHeaders(['API-Key', $user->apiKey])->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
+        $response = Http::asJson()->withHeaders(['API-Key', $user->apiKey])->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
         if ($response->ok())
         {
             UpdateSessionValueJsonService::delete($request, 'products', $response->json(['updated_product']), 'ulid');

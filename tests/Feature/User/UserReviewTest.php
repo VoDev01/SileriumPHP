@@ -68,7 +68,7 @@ class UserReviewTest extends TestCase
         $productId = Seller::factory()->has(Product::factory())->create()->products()->first()->id;
         $review = Review::factory()->create();
 
-        $response = $this->actingAs($user)->put('/user/edit_review', [
+        $response = $this->actingAs($user)->patch('/user/edit_review', [
             'review_id' => $review->id,
             'title' => 'New title',
             'pros' => 'New pros',

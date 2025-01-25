@@ -5,6 +5,7 @@ namespace Tests\Feature\API;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\ApiUser;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,15 +17,15 @@ class APIBanTest extends TestCase
     public function testBan()
     {
         $adminRole = Role::factory()->create(['role' => 'admin']);
-        $admin = ApiUser::factory()->hasAttached($adminRole, [], 'roles')->create();
-        $role = Role::where('role', 'api_user')->get()->first();
-        $user = ApiUser::factory()->hasAttached($role, [], 'roles')->create();
+        $admin = User::factory()->hasAttached($adminRole, [], 'roles')->create();
+        $user = ApiUser::factory()->create();
 
         $response = $this->actingAs($admin)->post('/admin/users/ban', 
             [
-                'user_id' => $user->ulid,
+                'user_id' => $user->id,
                 'admin_id' => $admin->ulid,
-                'reason' => 'Spam',
+                'api_user' => true,
+                'reason' => 'Too many requests',
                 'duration' => 100,
                 'timeType' => 'hours'
             ]
@@ -34,7 +35,7 @@ class APIBanTest extends TestCase
 
         $response->assertValid();
 
-        $this->assertDatabaseHas('banned_users', ['user_id' => $user->ulid]);
+        $this->assertDatabaseHas('banned_api_users', ['api_user_id' => $user->id]);
 
         $response = $this->actingAs($user)->get('/api/v1/profile');
 

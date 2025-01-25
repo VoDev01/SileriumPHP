@@ -153,7 +153,7 @@ class UsersAdminPanelController extends Controller
         $validated = $request->validated();
 
         $admin_id = User::where('ulid', $validated['admin_id'])->get()->first()->ulid;
-        if (!$validated['api_user'])
+        if (!key_exists('api_user', $validated))
         {
             $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
             BannedUser::create([
@@ -168,16 +168,32 @@ class UsersAdminPanelController extends Controller
         }
         else
         {
-            $user_id = ApiUser::where('id', $validated['user_id'])->get()->first()->ulid;
-            BannedApiUser::create([
-                'user_id' => $user_id,
-                'admin_id' => $admin_id,
-                'userIp' => $request->ip(),
-                'reason' => $validated['reason'],
-                'duration' => $validated['duration'],
-                'timeType' => $validated['timeType'],
-                'bannedAt' => Carbon::now()
-            ]);
+            if ($validated['api_user'])
+            {
+                $user_id = ApiUser::where('id', $validated['user_id'])->get()->first()->id;
+                BannedApiUser::create([
+                    'api_user_id' => $user_id,
+                    'admin_id' => $admin_id,
+                    'userIp' => $request->ip(),
+                    'reason' => $validated['reason'],
+                    'duration' => $validated['duration'],
+                    'timeType' => $validated['timeType'],
+                    'bannedAt' => Carbon::now()
+                ]);
+            }
+            else
+            {
+                $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
+                BannedUser::create([
+                    'user_id' => $user_id,
+                    'admin_id' => $admin_id,
+                    'userIp' => $request->ip(),
+                    'reason' => $validated['reason'],
+                    'duration' => $validated['duration'],
+                    'timeType' => $validated['timeType'],
+                    'bannedAt' => Carbon::now()
+                ]);
+            }
         }
         return redirect()->route('admin.users.ban');
     }

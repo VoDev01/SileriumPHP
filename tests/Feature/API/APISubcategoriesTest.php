@@ -5,9 +5,11 @@ namespace Tests\Feature\API;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\ApiUser;
 use App\Models\Category;
 use App\Models\UserApiKey;
 use App\Models\Subcategory;
+use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,16 +25,11 @@ class APISubcategoriesTest extends TestCase
     public function testIndex()
     {
         Category::factory()->create();
-        $user = User::factory()->has(Role::factory())->create();
+        Passport::actingAs(ApiUser::factory()->has(Role::factory())->create(), ['index']);
         $subcategories = Subcategory::factory()->count(20)->create();
         $subcategory = $subcategories->first();
-        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->withBasicAuth($user->email, $user->password)->getJson('/api/v1/subcategories/index/15');
-
-        $response->assertForbidden();
-
-        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->getJson('/api/v1/subcategories/index/15');
+        $response = $this->getJson('/api/v1/subcategories/index/15');
 
         $response
             ->assertOk()
@@ -49,15 +46,10 @@ class APISubcategoriesTest extends TestCase
     public function testShow()
     {
         Category::factory()->create();
-        $user = User::factory()->has(Role::factory())->create();
+        Passport::actingAs(ApiUser::factory()->has(Role::factory())->create(), ['show']);
         $subcategory = Subcategory::factory()->create();
-        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->withBasicAuth($user->email, $user->password)->getJson('/api/v1/subcategories/show/' . $subcategory->id);
-
-        $response->assertForbidden();
-
-        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->getJson('/api/v1/subcategories/show/' . $subcategory->id);
+        $response = $this->getJson('/api/v1/subcategories/show/' . $subcategory->id);
 
         $response->assertOk();
 
@@ -72,15 +64,10 @@ class APISubcategoriesTest extends TestCase
     {
         Category::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
-        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(ApiUser::factory()->hasAttached($role, [], 'roles')->create(), ['create']);
         $subcategory = Subcategory::factory()->create();
-        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->withBasicAuth($user->email, $user->password)->postJson('/api/v1/subcategories/create');
-
-        $response->assertForbidden();
-
-        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->postJson('/api/v1/subcategories/create', 
+        $response = $this->postJson('/api/v1/subcategories/create', 
             [
                 'name' => $subcategory->name, 
                 'image' => $subcategory->image, 
@@ -95,15 +82,10 @@ class APISubcategoriesTest extends TestCase
     {
         Category::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
-        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(ApiUser::factory()->hasAttached($role, [], 'roles')->create(), ['update']);
         $subcategory = Subcategory::factory()->create();
-        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->withBasicAuth($user->email, $user->password)->putJson('/api/v1/subcategories/update');
-
-        $response->assertForbidden();
-
-        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->putJson('/api/v1/subcategories/update', 
+        $response = $this->patchJson('/api/v1/subcategories/update', 
             [
                 'id' => $subcategory->id, 
                 'name' => $subcategory->name, 
@@ -118,15 +100,10 @@ class APISubcategoriesTest extends TestCase
     {   
         Category::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
-        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(ApiUser::factory()->hasAttached($role, [], 'roles')->create(), ['delete']);
         $subcategory = Subcategory::factory()->create();
-        $userAPIKey = UserApiKey::factory()->create(['user_id' => $user->ulid]);
 
-        $response = $this->withBasicAuth($user->email, $user->password)->deleteJson('/api/v1/subcategories/delete');
-        
-        $response->assertForbidden();
-
-        $response = $this->withBasicAuth($user->email, $user->password)->withHeader('API-Key', $userAPIKey->api_key)->deleteJson('/api/v1/subcategories/delete', ['id' => $subcategory->id]);
+        $response = $this->deleteJson('/api/v1/subcategories/delete', ['id' => $subcategory->id]);
 
         $response->assertOk();
     }

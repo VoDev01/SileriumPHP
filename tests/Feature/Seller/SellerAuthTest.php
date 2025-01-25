@@ -6,7 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Seller;
 use App\Enum\TaxSystem;
-use App\Services\UserAction;
+use App\Actions\UserAction;
 use App\Enum\OrganizationType;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
