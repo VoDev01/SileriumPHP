@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71394a0d4bfecb56226422666e098f38",
+    "content-hash": "56fbc757f06eaa0860372a441eb8ddf2",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -9745,11 +9745,6 @@
                 "testing",
                 "xunit"
             ],
-            "support": {
-                "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.32"
-            },
             "funding": [
                 {
                     "url": "https://github.com/sebastianbergmann",

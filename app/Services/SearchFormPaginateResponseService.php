@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Actions\ManualPaginatorAction;
 
 class SearchFormPaginateResponseService
 {

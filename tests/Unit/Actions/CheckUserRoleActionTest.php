@@ -15,7 +15,7 @@ class CheckUserRoleActionTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function testCheckRoles()
     {
         $roles = array(Role::factory()->create(), Role::factory()->create(['role' => 'admin']));
         $user = User::factory()->hasAttached($roles, [], 'roles')->create();
