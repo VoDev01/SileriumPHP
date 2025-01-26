@@ -2,10 +2,14 @@
 
 namespace Tests\Unit\Actions;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CheckUserRoleActionTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic unit test example.
      *
@@ -13,6 +17,11 @@ class CheckUserRoleActionTest extends TestCase
      */
     public function test_example()
     {
-        $this->assertTrue(true);
+        $roles = array(Role::factory()->create(), Role::factory()->create(['role' => 'admin']));
+        $user = User::factory()->hasAttached($roles, [], 'roles')->create();
+
+        $this->assertFalse($user->hasRoles('seller'));
+
+        $this->assertTrue($user->hasRoles(['user', 'admin']));
     }
 }

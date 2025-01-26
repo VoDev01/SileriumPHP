@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Hash;
 use Illuminate\Support\Str;
 
-class CheckBannedUser
+class CheckBannedUserMiddleware
 {
     /**
      * Handle an incoming request.
@@ -28,10 +28,6 @@ class CheckBannedUser
                 return $next($request);
             else
                 return redirect()->route('banned');
-        }
-        else
-        {
-            abort(401, 'You are not authenticated.');
         }
         return $next($request);
     }

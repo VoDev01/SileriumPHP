@@ -34,7 +34,7 @@ class HandleUserLoginAction
         }
         else
         {
-            $response = ValidatePasswordHashAction::validate($request, $validated['password'], $user);
+            $response = ValidatePasswordHashAction::validate($validated['password'], $user, $request);
             if ($response['success'])
             {
                 Auth::login($user);

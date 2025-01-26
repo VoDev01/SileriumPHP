@@ -38,7 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CheckBannedUser::class,
+            \App\Http\Middleware\CheckBannedUserMiddleware::class,
        //     \App\Http\Middleware\TimezoneBasedOnIP::class
         ],
 
@@ -77,6 +77,6 @@ class Kernel extends HttpKernel
         'authorize.seller' => \App\Http\Middleware\AuthorizeSellerMiddleware::class,
         'authorize.seller.admin' => \App\Http\Middleware\AuthorizeSellerAdminMiddleware::class,
         'authorize.user.routes' => \App\Http\Middleware\AuthorizeUserRouteMiddleware::class,
-        'banned' => \App\Http\Middleware\CheckBannedUser::class
+        'banned' => \App\Http\Middleware\CheckBannedUserMiddleware::class
     ];
 }

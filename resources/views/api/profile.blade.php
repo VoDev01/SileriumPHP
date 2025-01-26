@@ -1,6 +1,6 @@
 <x-api-layout>
     <x-slot name="title">
-        Профиль | Silerium
+        Профиль | Silerium API
     </x-slot>
     <style>
         #logout{

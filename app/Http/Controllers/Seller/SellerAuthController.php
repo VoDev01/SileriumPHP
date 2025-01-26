@@ -24,7 +24,7 @@ class SellerAuthController extends Controller
         $validated = $request->validated();
         $user = User::where('email', $validated["email"])->get()->first();
         $seller_id = Seller::where('user_id', $user->id)->get()->first()->id;
-        $response = ValidatePasswordHashAction::validate($request, $validated['password'], $user);
+        $response = ValidatePasswordHashAction::validate($validated['password'], $user, $request);
         if($response['success'])
         {
             session(['seller_id' => $seller_id]);
