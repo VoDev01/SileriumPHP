@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\API;
 
-use App\Models\ApiUser;
+use App\Models\User;
 use Tests\TestCase;
 use App\Models\Role;
-use App\Models\User;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Product;
@@ -28,8 +27,8 @@ class APIReviewTest extends TestCase
 
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
-        $apiUser = ApiUser::factory()->has(Role::factory())->create();
-        Passport::actingAs($apiUser, ['index']);
+        $user = User::factory()->has(Role::factory())->create();
+        Passport::actingAs($user, ['index']);
         $user = User::factory()->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
@@ -52,8 +51,8 @@ class APIReviewTest extends TestCase
 
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
-        $apiUser = ApiUser::factory()->has(Role::factory())->create();
-        Passport::actingAs($apiUser, ['index']);
+        $user = User::factory()->has(Role::factory())->create();
+        Passport::actingAs($user, ['index']);
         $user = User::factory()->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
@@ -80,8 +79,8 @@ class APIReviewTest extends TestCase
 
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
-        $apiUser = ApiUser::factory()->has(Role::factory())->create();
-        Passport::actingAs($apiUser, ['index']);
+        $user = User::factory()->has(Role::factory())->create();
+        Passport::actingAs($user, ['index']);
         $user = User::factory()->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
@@ -100,8 +99,8 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
-        $apiUser = ApiUser::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs($apiUser, ['index']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs($user, ['index']);
         $user = User::factory()->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
@@ -130,8 +129,8 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
-        $apiUser = ApiUser::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs($apiUser, ['index']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs($user, ['index']);
         $user = User::factory()->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 

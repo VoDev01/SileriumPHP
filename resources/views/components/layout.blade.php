@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script type="module">
-        var stars = new StarRating('.star-rating', {tooltip: false});
+        let stars = new StarRating('.star-rating', {tooltip: false});
     </script>
     <title>{{ $title }}</title>
 </head>

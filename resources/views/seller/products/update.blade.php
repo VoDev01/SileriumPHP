@@ -121,7 +121,7 @@
                         else
                             $('#available').val(0);
                     });
-                    var foundProducts = document.getElementById('foundProducts');
+                    let foundProducts = document.getElementById('foundProducts');
                     foundProducts.addEventListener('show.bs.collapse', function() {
                         $('#foundProductsArrow').removeClass("bi-arrow-down");
                         $('#foundProductsArrow').addClass("bi-arrow-up");
@@ -130,7 +130,7 @@
                         $('#foundProductsArrow').removeClass("bi-arrow-up");
                         $('#foundProductsArrow').addClass("bi-arrow-down");
                     });
-                    var productEdit = document.getElementById('productEdit');
+                    let productEdit = document.getElementById('productEdit');
                     productEdit.addEventListener('show.bs.collapse', function() {
                         $('#productEditArrow').removeClass("bi-arrow-down");
                         $('#productEditArrow').addClass("bi-arrow-up");

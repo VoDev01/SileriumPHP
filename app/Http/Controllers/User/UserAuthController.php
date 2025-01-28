@@ -21,9 +21,9 @@ use Illuminate\Support\Facades\Password as PasswordUtil;
 
 class UserAuthController extends Controller
 {
-    public function login()
+    public function login(Request $request)
     {
-        return view('user.auth.login');
+        return view('user.auth.login', ['api' => $request->api]);
     }
     public function postLogin(UserLoginRequest $request)
     {

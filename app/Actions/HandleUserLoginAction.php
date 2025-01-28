@@ -26,6 +26,10 @@ class HandleUserLoginAction
                     $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
                     return redirect()->route('seller.account');
                 }
+                else if(key_exists('api', $validated))
+                {
+                    return redirect()->intended('/api/v1/profile');
+                }
                 else
                 {
                     return redirect()->intended('/user/profile');
@@ -37,6 +41,7 @@ class HandleUserLoginAction
             $response = ValidatePasswordHashAction::validate($validated['password'], $user, $request);
             if ($response['success'])
             {
+                $request->session()->regenerate();
                 Auth::login($user);
                 if (Gate::allows('access-admin-moderator', $user))
                 {
@@ -46,6 +51,10 @@ class HandleUserLoginAction
                 {
                     $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
                     return response()->json(['redirect' => '/seller/account']);
+                }
+                else if(key_exists('api', $validated))
+                {
+                    return response()->json(['redirect' => '/api/v1/profile']);
                 }
                 else
                 {

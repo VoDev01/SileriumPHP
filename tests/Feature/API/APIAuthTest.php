@@ -3,7 +3,7 @@
 namespace Tests\Feature\API;
 
 use Tests\TestCase;
-use App\Models\ApiUser;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,7 +14,7 @@ class APIAuthTest extends TestCase
 
     public function testLogin()
     {
-        $user = ApiUser::factory(10)->create()->first();
+        $user = User::factory(10)->create()->first();
 
         $response = $this->post('/api/v1/login', ['email' => 'harak32@gmail.com', 'password' => '1122334455']);
 
@@ -28,12 +28,16 @@ class APIAuthTest extends TestCase
 
         $response->assertValid();
 
-        $response->assertRedirect('/api/v1/profile');
+        $response->assertOk();
+        
+        $response->assertJson(fn(AssertableJson $json) => 
+            $json->where('redirect', '/api/v1/profile')
+            ->etc());
     }
 
     public function testRegister()
     {
-        $user = ApiUser::factory()->make();
+        $user = User::factory()->make();
 
         $response = $this->post('/api/v1/register', [
             'name' => $user->name,

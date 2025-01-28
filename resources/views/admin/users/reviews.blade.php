@@ -81,7 +81,7 @@
     </div>
     <script type="module">
         $(document).ready(function() {
-                    var foundUsers = document.getElementById('foundUsers');
+                    let foundUsers = document.getElementById('foundUsers');
                     foundUsers.addEventListener('show.bs.collapse', function() {
                         $('#foundUsersArrow').removeClass("bi-arrow-down");
                         $('#foundUsersArrow').addClass("bi-arrow-up");

@@ -10,15 +10,10 @@ use Illuminate\Support\Facades\Hash;
 
 class ValidatePasswordHashAction
 {
-    public static function validate(string $inputPassword, User|ApiUser $user, Request $request = null)
+    public static function validate(string $inputPassword, User|ApiUser $user)
     {
         if (Hash::check($inputPassword, $user->password))
         {
-            if (isset($request))
-            {
-                $request->session()->regenerate();
-                Auth::login($user, $request->remember_me);
-            }
             return ['success' => true];
         }
         else

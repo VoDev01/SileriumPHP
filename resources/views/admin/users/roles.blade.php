@@ -58,7 +58,7 @@
         </div>
         <script type="module">
             $(document).ready(function(){
-                var foundUsers = document.getElementById('foundUsers');
+                let foundUsers = document.getElementById('foundUsers');
                 foundUsers.addEventListener('show.bs.collapse', function(){
                     $('#foundUsersArrow').addClass('bi-arrow-up');
                     $('#foundUsersArrow').removeClass('bi-arrow-down');
@@ -67,7 +67,7 @@
                     $('#foundUsersArrow').addClass('bi-arrow-down');
                     $('#foundUsersArrow').removeClass('bi-arrow-up');
                 });
-                var roles = document.getElementById('roles');
+                let roles = document.getElementById('roles');
                 roles.addEventListener('show.bs.collapse', function(){
                     $('#rolesArrow').addClass('bi-arrow-up');
                     $('#rolesArrow').removeClass('bi-arrow-down');

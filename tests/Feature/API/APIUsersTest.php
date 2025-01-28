@@ -5,7 +5,6 @@ namespace Tests\Feature\API;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\ApiUser;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
@@ -22,7 +21,7 @@ class APIUsersTest extends TestCase
     {
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->create();
-        Passport::actingAs(ApiUser::factory()->hasAttached($role, [], 'roles')->create(), ['search']);
+        Passport::actingAs(User::factory()->hasAttached($role, [], 'roles')->create(), ['search']);
 
         $response = $this->postJson('/api/v1/user/search/', ['email' => $user->email]);
         

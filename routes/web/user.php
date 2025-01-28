@@ -20,7 +20,7 @@ Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
     });
     Route::controller(UserAuthController::class)->withoutMiddleware('authorize.user.routes')->group(function ()
     {
-        Route::get('login', 'login')->name('login');
+        Route::get('login/{api?}', 'login')->name('login');
         Route::post('login', 'postLogin');
         Route::get('register', 'register');
         Route::post('register', 'postRegister');

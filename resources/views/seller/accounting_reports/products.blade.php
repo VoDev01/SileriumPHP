@@ -73,22 +73,22 @@
     </form>
     <script type="module">
         $(document).ready(function() {
-            var html = document.createElement('html');
+            let html = document.createElement('html');
             html.innerHTML = '<html>' + document.head.innerHTML + document.body.innerHTML + '</html>';
 
-            var navbar = html.getElementsByClassName('navbar');
+            let navbar = html.getElementsByClassName('navbar');
             while (navbar[0]) {
                 navbar[0].parentNode.removeChild(navbar[0]);
             }
-            var form = html.getElementsByTagName('form');
+            let form = html.getElementsByTagName('form');
             while (form[0]) {
                 form[0].parentNode.removeChild(form[0]);
             }
-            var link = html.getElementsByTagName('a');
+            let link = html.getElementsByTagName('a');
             while (link[0]) {
                 link[0].parentNode.removeChild(link[0]);
             }
-            var tr = html.getElementsByTagName('tr');
+            let tr = html.getElementsByTagName('tr');
             $(tr).each(function(){
 
                 $(this).children('td').each(function(){
@@ -105,8 +105,8 @@
                     }
                 });
             });
-            var head = html.getElementsByTagName('head')[0];
-            /*var foorter = html.getElementsByTagName('footer');
+            let head = html.getElementsByTagName('head')[0];
+            /*let foorter = html.getElementsByTagName('footer');
             while(footer[0])
             {
                 footer[0].parentNode.removeChild(footer[0]);

@@ -5,13 +5,13 @@
 
     @section('scripts')
         <script type="module">
-            var basePrice =
+            let basePrice =
                 $("#amount").change(function() {
-                    var amount = $(this).val();
-                    var basePrice = $("#basePrice").val();
-                    var totalPrice = (basePrice * amount).toFixed(1);
+                    let amount = $(this).val();
+                    let basePrice = $("#basePrice").val();
+                    let totalPrice = (basePrice * amount).toFixed(1);
                     console.log(totalPrice);
-                    var strPrice = new Intl.NumberFormat("ru", {
+                    let strPrice = new Intl.NumberFormat("ru", {
                         minimumFractionDigits: 1
                     }).format(totalPrice);
                     console.log(strPrice)

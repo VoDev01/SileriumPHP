@@ -82,7 +82,7 @@
 
         <script type="module">
             $(document).ready(function() {
-                var foundProducts = document.getElementById('foundProducts');
+                let foundProducts = document.getElementById('foundProducts');
                 foundProducts.addEventListener('show.bs.collapse', function() {
                     $('#foundProductsArrow').removeClass("bi-arrow-down");
                     $('#foundProductsArrow').addClass("bi-arrow-up");
@@ -91,7 +91,7 @@
                     $('#foundProductsArrow').removeClass("bi-arrow-up");
                     $('#foundProductsArrow').addClass("bi-arrow-down");
                 });
-                var productReviews = document.getElementById('foundReviews');
+                let productReviews = document.getElementById('foundReviews');
                 productReviews.addEventListener('show.bs.collapse', function() {
                     $('#foundReviewsArrow').removeClass("bi-arrow-down");
                     $('#foundReviewsArrow').addClass("bi-arrow-up");

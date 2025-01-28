@@ -3,8 +3,8 @@
         Подтверждение телефона | Silerium
     </x-slot>
     <script type="module">
-        var linkSent = window.sessionStorage.getItem('link_sent');
-        var timer = 60,
+        let linkSent = window.sessionStorage.getItem('link_sent');
+        let timer = 60,
         seconds;
         if (linkSent) {
             $('#send_code_button').prop('disabled', true);

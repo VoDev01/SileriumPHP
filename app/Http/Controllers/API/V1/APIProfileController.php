@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ApiUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -11,7 +12,8 @@ class APIProfileController extends Controller
 {
     public function profile()
     {
-        return view('api.profile');
+        $user = Auth::user();
+        return view('api.profile', ['user' => $user]);
     }
 
     public function refreshToken(Request $request)
@@ -34,7 +36,7 @@ class APIProfileController extends Controller
 
     public function logout()
     {
-        Auth::user()->token()->delete();
+        Auth::logout();
 
         return response()->json([
             'success' => true,

@@ -102,7 +102,7 @@
                     $('#api_user').val(1);
                 }
             });
-            var foundUsers = document.getElementById('foundUsers');
+            let foundUsers = document.getElementById('foundUsers');
             foundUsers.addEventListener('show.bs.collapse', function() {
                 $('#foundUsersArrow').removeClass("bi-arrow-down");
                 $('#foundUsersArrow').addClass("bi-arrow-up");
@@ -111,7 +111,7 @@
                 $('#foundUsersArrow').removeClass("bi-arrow-up");
                 $('#foundUsersArrow').addClass("bi-arrow-down");
             });
-            var banUser = document.getElementById('banUser');
+            let banUser = document.getElementById('banUser');
             banUser.addEventListener('show.bs.collapse', function() {
                 $('#banUserArrow').removeClass("bi-arrow-down");
                 $('#banUserArrow').addClass("bi-arrow-up");

@@ -21,26 +21,32 @@ use App\Http\Controllers\API\V1\APISubcategoriesController;
 |
 */
 
-Route::withoutMiddleware('api')->middleware(['web'])->group(function(){
-    Route::get('home', [APIHomeController::class, 'index']);
+Route::withoutMiddleware(['api'])->middleware(['web'])->group(function ()
+{
+    Route::get('/', [APIHomeController::class, 'index']);
 
-    Route::controller(APIAuthController::class)->group(function(){
+    Route::controller(APIAuthController::class)->group(function ()
+    {
         Route::get('login', 'login')->name('api.login');
         Route::post('login', 'postLogin');
         Route::get('register', 'register');
         Route::post('register', 'postRegister');
-       
     });
-
-    Route::controller(APIProfileController::class)->prefix('profile')->group(function(){
-        Route::post('refresh', 'refreshToken');
-        Route::get('profile', 'profile')->name('api.profile');
-        Route::post('logout', 'logout');
+    
+    Route::middleware(['auth'])->group(function ()
+    {
+        Route::controller(APIProfileController::class)->group(function ()
+        {
+            Route::post('refresh', 'refreshToken');
+            Route::get('profile', 'profile')->name('api.profile');
+            Route::post('logout', 'logout');
+        });
     });
 });
 
-Route::middleware(['auth:api'])->group(function ()
+Route::middleware(['auth:api', 'auth'])->group(function ()
 {
+
     Route::controller(APIProductsController::class)->prefix('products')->group(function ()
     {
         Route::get('index/{itemsPerPage?}', 'index');

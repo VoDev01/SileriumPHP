@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\API;
 
-use App\Models\ApiUser;
+use App\Models\User;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\Review;
@@ -28,7 +28,7 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         Passport::actingAs(
-            ApiUser::factory()->hasAttached($role, [], 'roles')->create(),
+            User::factory()->hasAttached($role, [], 'roles')->create(),
             ['index']
         );
         $product = Seller::factory()->has(Product::factory(20))->create()->first();
@@ -60,7 +60,7 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         Passport::actingAs(
-            ApiUser::factory()->hasAttached($role, [], 'roles')->create(),
+            User::factory()->hasAttached($role, [], 'roles')->create(),
             ['show']
         );
         $seller = Seller::factory()->has(Product::factory(15))->create();
@@ -93,7 +93,7 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'seller']);
         Passport::actingAs(
-            ApiUser::factory()->hasAttached($role, [], 'roles')->create(),
+            User::factory()->hasAttached($role, [], 'roles')->create(),
             ['create']
         );
         $seller = Seller::factory()->has(Product::factory())->create();
@@ -133,7 +133,7 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         Passport::actingAs(
-            ApiUser::factory()->hasAttached($role, [], 'roles')->create(),
+            User::factory()->hasAttached($role, [], 'roles')->create(),
             ['update']
         );
         $seller = Seller::factory()->has(Product::factory())->create();
@@ -164,7 +164,7 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         Passport::actingAs(
-            ApiUser::factory()->hasAttached($role, [], 'roles')->create(),
+            User::factory()->hasAttached($role, [], 'roles')->create(),
             ['delete']
         );
         $seller = Seller::factory()->has(Product::factory())->create();
@@ -186,7 +186,7 @@ class APIProductTest extends TestCase
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         Passport::actingAs(
-            ApiUser::factory()->hasAttached($role, [], 'roles')->create(),
+            User::factory()->hasAttached($role, [], 'roles')->create(),
             ['by_name_seller']
         );
         $seller = Seller::factory()->has(Product::factory())->create();

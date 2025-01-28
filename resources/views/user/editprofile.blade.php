@@ -18,8 +18,8 @@
                     console.log('User validated');
                 },
                 error: function(data) {
-                    var response = data.responseJSON;
-                    var all_errors = response.errors;
+                    let response = data.responseJSON;
+                    let all_errors = response.errors;
 
                     $.each(all_errors, function(key, value) {
                         $('#error-'+key).text("");

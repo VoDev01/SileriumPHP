@@ -17,14 +17,14 @@
                     window.location.href = data.redirect;
                 },
                 error: function(data){
-                    var all_errors = data.responseJSON.errors;
+                    let all_errors = data.responseJSON.errors;
                     $.each(all_errors, function(key, value) {
-                        var error_text = document.createElement('span');
+                        let error_text = document.createElement('span');
                         error_text.id = key + '-error';
                         error_text.classList.add('error');
                         error_text.classList.add('text-danger');
                         error_text.innerHTML = value[0];
-                        var field_id = '#' + key;
+                        let field_id = '#' + key;
                         $(field_id).after(error_text);
                     });
                 }

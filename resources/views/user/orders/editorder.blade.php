@@ -3,13 +3,13 @@
         Редактирование заказа | Silerium
     </x-slot>
     <script type="text/javascript">
-        var basePrice =
+        let basePrice =
             $("#amount").change(function() {
-                var amount = $(this).val();
-                var basePrice = $("#basePrice").val();
-                var totalPrice = (basePrice * amount).toFixed(2);
+                let amount = $(this).val();
+                let basePrice = $("#basePrice").val();
+                let totalPrice = (basePrice * amount).toFixed(2);
                 console.log(totalPrice);
-                var strPrice = new Intl.NumberFormat("ru").format(totalPrice);
+                let strPrice = new Intl.NumberFormat("ru").format(totalPrice);
                 console.log(strPrice)
                 $("#price").text(strPrice);
             });

@@ -5,7 +5,7 @@
     <script type="module">
         $('#login_button').on('click', function(event) {
             event.preventDefault();
-            var existing_errors = document.getElementsByClassName('error');
+            let existing_errors = document.getElementsByClassName('error');
             for (let index = 0; index < existing_errors.length; index++) {
                 existing_errors[index].remove();
             }
@@ -20,15 +20,16 @@
                 success: function(data) {
                     window.location.href = data.redirect;
                 },
-                error: function(data) {
-                    var all_errors = data.responseJSON.errors;
+                error: function(data, xhr) {
+                    let all_errors = data.responseJSON.errors;
+                    console.log(xhr.responseText);
                     $.each(all_errors, function(key, value) {
-                        var error_text = document.createElement('span');
+                        let error_text = document.createElement('span');
                         error_text.id = key + '-error';
                         error_text.classList.add('error');
                         error_text.classList.add('text-danger');
                         error_text.innerHTML = value[0];
-                        var field_id = '#' + key;
+                        let field_id = '#' + key;
                         $(field_id).after(error_text);
                     });
                 }
@@ -45,19 +46,17 @@
         });
     </script>
 
+
     <h2 class="text-center">Вход</h2>
     <div class="container" style="width: 500px;">
         <form id="login_form" action="/api/v1/login" method="POST">
-            @csrf
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>
                 <input class="form-control" type="email" id="email" name="email" value="{{ old('email') }}" />
-                <x-error field="email" id="error-email" />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="password">Пароль</label>
                 <input class="form-control" type="password" id="password" name="password" />
-                <x-error field="password" id="error-password" />
             </div>
             <div class="mb-3 row">
                 <div class="col-6">
@@ -72,11 +71,11 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-center">
-                <a class="btn btn-outline-secondary text-decoration-none col-4" href="/api/v1/register">
+                <a class="btn btn-outline-secondary text-decoration-none col-5" href="/api/v1/register">
                     Зарегистрироваться
                 </a>
                 <div class="col-2"></div>
-                <button class="btn btn-outline-primary col-4" id="login_button" type="submit">Войти</button>
+                <button class="btn btn-outline-primary col-5" id="login_button" type="submit">Войти</button>
             </div>
         </form>
     </div>
