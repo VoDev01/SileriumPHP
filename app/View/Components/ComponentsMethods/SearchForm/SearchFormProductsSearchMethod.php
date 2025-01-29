@@ -3,15 +3,16 @@
 namespace App\View\Components\ComponentsMethods\SearchForm;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class SearchFormProductsSearchMethod
 {
-    public static function searchProducts(array $validated)
+    public static function searchProducts(Request $request, array $validated)
     {
         $user = User::with('apiKey')->where('ulid', Auth::user()->ulid)->get()->first();
-        $response = Http::withoutVerifying()->asJson()->withHeaders(['API-Key' => $user->apiKey->api_key])->post(env('APP_URL') . '/api/v1/products/by_name_seller', [
+        $response = Http::withoutVerifying()->asJson()->withHeaders(['API-Secret' => $request->api_secret])->post(env('APP_URL') . '/api/v1/products/by_name_seller', [
             'sellerName' => $validated['sellerName'],
             'productName' => $validated['productName'],
             'loadWith' => $validated['loadWith']

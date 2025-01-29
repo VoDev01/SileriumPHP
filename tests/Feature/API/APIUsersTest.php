@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\API;
 
+use DateTime;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
+use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\DB;
+use Laravel\Passport\ClientRepository;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Passport\Passport;
 
 class APIUsersTest extends TestCase
 {
@@ -21,9 +24,24 @@ class APIUsersTest extends TestCase
     {
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->create();
-        Passport::actingAs(User::factory()->hasAttached($role, [], 'roles')->create(), ['search']);
+        $admin = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs($admin, ['create']);
 
-        $response = $this->postJson('/api/v1/user/search/', ['email' => $user->email]);
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $admin->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $admin->createToken($admin->email . ' token');
+        $secret = $admin->tokens->first()->id;
+
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/user/search/', ['email' => $user->email]);
         
         $response->assertSessionHasNoErrors();
 

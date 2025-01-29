@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\ApiUser;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -13,7 +13,25 @@ class APIProfileController extends Controller
     public function profile()
     {
         $user = Auth::user();
+        if($user->tokens !== null)
+        {
+            $token = $user->tokens->first()->id;
+            session()->flash('accessToken', $token);
+        }
         return view('api.profile', ['user' => $user]);
+    }
+
+    public function generateToken()
+    {
+        $user = Auth::user();
+        if($user->tokens === null)
+        {
+            $user->createToken($user->email . ' token');
+            $token = $user->tokens->first()->id;
+        }
+        else
+            $token = $user->tokens->first()->id;
+        return redirect()->back()->with('accessToken', $token);
     }
 
     public function refreshToken(Request $request)
@@ -38,10 +56,6 @@ class APIProfileController extends Controller
     {
         Auth::logout();
 
-        return response()->json([
-            'success' => true,
-            'statusCode' => 204,
-            'message' => 'Logged out successfully.',
-        ], 204);
+        return redirect()->route('login');
     }
 }

@@ -6,6 +6,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\Seller;
+use App\Traits\PassportTokenPrint;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
@@ -21,7 +22,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, HasUlids, Notifiable;
+    use HasApiTokens, PassportTokenPrint, HasFactory, HasUlids, Notifiable;
     
     //protected $primaryKey = 'ulid';
 

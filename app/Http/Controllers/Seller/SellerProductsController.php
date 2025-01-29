@@ -46,7 +46,7 @@ class SellerProductsController extends Controller
     public function postProduct(APIProductsCreateRequest $request)
     {
         $this->authorize('create', Product::class);
-        $response = Http::post('/api/v1/products/create', ['request' => $request]);
+        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->post('/api/v1/products/create', ['request' => $request]);
         if ($response->ok())
         {
             return redirect()->route("seller.products.products-list");
@@ -66,7 +66,7 @@ class SellerProductsController extends Controller
     public function postUpdatedProduct(Request $request)
     {
         $this->authorize('update', Product::class);
-        $response = Http::asJson()->put(env('APP_URL') . '/api/v1/products/update', [
+        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->put(env('APP_URL') . '/api/v1/products/update', [
             'id' => $request->id,
             'name' => $request->name,
             'description' => $request->description,
@@ -93,7 +93,7 @@ class SellerProductsController extends Controller
     public function postDeletedProduct(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $response = Http::delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
+        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
         if ($response->ok())
         {
             UpdateSessionValueJsonService::delete($request, 'products', $response->json(['updated_product']), 'ulid');
@@ -139,6 +139,6 @@ class SellerProductsController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::searchProducts($validated);
+        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
     }
 }

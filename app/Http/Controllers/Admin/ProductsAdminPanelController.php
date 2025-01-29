@@ -47,8 +47,8 @@ class ProductsAdminPanelController extends Controller
     public function postUpdatedProduct(Request $request)
     {
         $this->authorize('update', Product::class);
-        $user = User::with('apiKey')->where('id', Auth::id())->get()->first();
-        $response = Http::asJson()->withHeaders(['API-Key', $user->apiKey])->put(env('APP_URL') . '/api/v1/products/update', [
+        $user = User::where('id', Auth::id())->get()->first();
+        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->put(env('APP_URL') . '/api/v1/products/update', [
             'id' => $request->id,
             'name' => $request->name,
             'description' => $request->description,
@@ -76,8 +76,8 @@ class ProductsAdminPanelController extends Controller
     public function postDeletedProduct(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $user = User::with('apiKey')->where('id', Auth::id())->get()->first();
-        $response = Http::asJson()->withHeaders(['API-Key', $user->apiKey])->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
+        $user = User::where('id', Auth::id())->get()->first();
+        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
         if ($response->ok())
         {
             UpdateSessionValueJsonService::delete($request, 'products', $response->json(['updated_product']), 'ulid');
@@ -127,6 +127,6 @@ class ProductsAdminPanelController extends Controller
         if (!array_key_exists('reviewsCount', $validated))
             $validated['reviewsCount'] = false;
 
-        return SearchFormProductsSearchMethod::searchProducts($validated);
+        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
     }
 }

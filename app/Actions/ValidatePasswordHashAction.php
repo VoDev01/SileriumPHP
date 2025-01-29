@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\Models\ApiUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class ValidatePasswordHashAction
 {
-    public static function validate(string $inputPassword, User|ApiUser $user)
+    public static function validate(string $inputPassword, User $user)
     {
         if (Hash::check($inputPassword, $user->password))
         {

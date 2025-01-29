@@ -47,6 +47,7 @@ class Kernel extends HttpKernel
             TrustProxies::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\VerifyApiSecret::class,
             //\App\Http\Middleware\CheckBannedUser::class,
             //\App\Http\Middleware\TimezoneBasedOnIP::class
         ],

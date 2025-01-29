@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\ApiUser;
 use App\Models\BannedApiUser;
 use App\Models\User;
 use App\Models\BannedUser;
@@ -49,17 +48,17 @@ class AuthServiceProvider extends ServiceProvider
                 ->action('Подтвердить', $url);
         });
 
-        Gate::define('banned', function (User|ApiUser $user)
+        Gate::define('banned', function (User $user)
         {
             $className = explode('\\', get_class($user)); 
             if(end($className) == 'User')
             {
                 $banned = BannedUser::where('user_id', $user->ulid)->get()->first();
             }
-            else
-            {
-                $banned = BannedApiUser::where('api_user_id', $user->id)->get()->first();
-            }
+            // else
+            // {
+            //     $banned = BannedApiUser::where('api_user_id', $user->id)->get()->first();
+            // }
             if ($banned !== null)
             {
                 $diff = true;
@@ -80,7 +79,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::allow();
         });
 
-        Gate::define('access-admin-moderator', function (User|ApiUser $user)
+        Gate::define('access-admin-moderator', function (User $user)
         {
             if ($user->hasRoles(['admin', 'moderator']))
                 return Response::allow();
@@ -88,7 +87,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-all', function (User|ApiUser $user)
+        Gate::define('access-all', function (User $user)
         {
             if ($user->hasRoles(['user', 'seller', 'admin', 'moderator']))
                 return Response::allow();
@@ -96,7 +95,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-admin', function (User|ApiUser $user)
+        Gate::define('access-admin', function (User $user)
         {
             if ($user->hasRoles('admin'))
                 return Response::allow();
@@ -104,7 +103,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-seller', function (User|ApiUser $user)
+        Gate::define('access-seller', function (User $user)
         {
             if ($user->hasRoles('seller'))
                 return Response::allow();
@@ -112,7 +111,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
 
-        Gate::define('access-seller-admin', function (User|ApiUser $user)
+        Gate::define('access-seller-admin', function (User $user)
         {
             if ($user->hasRoles(['admin', 'seller', 'moderator']))
                 return Response::allow();
@@ -120,7 +119,7 @@ class AuthServiceProvider extends ServiceProvider
                 return Response::denyAsNotFound();
         });
         
-        Gate::define('access-user', function (User|ApiUser $user) {
+        Gate::define('access-user', function (User $user) {
             if($user->hasRoles('user'))
                 return Response::allow();
             else

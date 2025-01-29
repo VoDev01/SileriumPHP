@@ -2,17 +2,20 @@
 
 namespace Tests\Feature\API;
 
-use App\Models\User;
+use DateTime;
 use Tests\TestCase;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
+use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\DB;
+use Laravel\Passport\ClientRepository;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Passport\Passport;
 
 class APIProductTest extends TestCase
 {
@@ -24,20 +27,36 @@ class APIProductTest extends TestCase
      */
     public function testIndex()
     {
+
         Category::factory()->create();
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
         Passport::actingAs(
-            User::factory()->hasAttached($role, [], 'roles')->create(),
+            $user,
             ['index']
         );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $product = Seller::factory()->has(Product::factory(20))->create()->first();
 
-        // $response = $this->getJson('/api/v1/products/index/15');
+        // $response = $this->withHeader('Api-Secret', $secret)->getJson('/api/v1/products/index/15');
 
         // $response->assertForbidden();
 
-        $response = $this->getJson('/api/v1/products/index/15');
+        $response = $this->withHeader('Api-Secret', $secret)->getJson('/api/v1/products/index/15');
 
         $response
             ->assertOk()
@@ -59,17 +78,32 @@ class APIProductTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
         Passport::actingAs(
-            User::factory()->hasAttached($role, [], 'roles')->create(),
+            $user,
             ['show']
         );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $seller = Seller::factory()->has(Product::factory(15))->create();
 
-        // $response = $this->getJson('/api/v1/products/show/' . Product::max('id'));
+        // $response = $this->withHeader('Api-Secret', $secret)->getJson('/api/v1/products/show/' . Product::max('id'));
 
         // $response->assertForbidden();
 
-        $response = $this->getJson('/api/v1/products/show/' . Product::max('id'));
+        $response = $this->withHeader('Api-Secret', $secret)->getJson('/api/v1/products/show/' . Product::max('id'));
 
         $response
             ->assertOk()
@@ -92,19 +126,34 @@ class APIProductTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'seller']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
         Passport::actingAs(
-            User::factory()->hasAttached($role, [], 'roles')->create(),
+            $user,
             ['create']
         );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
 
-        // $response = $this->postJson('/api/v1/products/create/');
+        // $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/products/create/');
 
         // $response->assertForbidden();
 
-        $response = $this->postJson('/api/v1/products/create/', [
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/products/create/', [
             'name' => $product->name,
             'description' => $product->description,
             'priceRub' => $product->priceRub,
@@ -132,10 +181,25 @@ class APIProductTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
         Passport::actingAs(
-            User::factory()->hasAttached($role, [], 'roles')->create(),
+            $user,
             ['update']
         );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
@@ -144,7 +208,7 @@ class APIProductTest extends TestCase
 
         // $response->assertForbidden();
 
-        $response = $this->patchJson('/api/v1/products/update', [
+        $response = $this->withHeader('Api-Secret', $secret)->patchJson('/api/v1/products/update', [
             'id' => $product->ulid,
             'name' => $product->name,
             'description' => $product->description,
@@ -163,19 +227,34 @@ class APIProductTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
         Passport::actingAs(
-            User::factory()->hasAttached($role, [], 'roles')->create(),
+            $user,
             ['delete']
         );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
 
-        // $response = $this->deleteJson('/api/v1/products/delete');
+        // $response = $this->withHeader('Api-Secret', $secret)->deleteJson('/api/v1/products/delete');
 
         // $response->assertForbidden();
 
-        $response = $this->deleteJson('/api/v1/products/delete', ['id' => $product->ulid]);
+        $response = $this->withHeader('Api-Secret', $secret)->deleteJson('/api/v1/products/delete', ['id' => $product->ulid]);
 
         $response->assertOk();
     }
@@ -185,19 +264,34 @@ class APIProductTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
         Passport::actingAs(
-            User::factory()->hasAttached($role, [], 'roles')->create(),
-            ['by_name_seller']
+            $user,
+            ['create']
         );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $seller = Seller::factory()->has(Product::factory())->create();
 
         $product = $seller->products->first();
 
-        // $response = $this->postJson('/api/v1/products/by_name_seller/');
+        // $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/products/by_name_seller/');
 
         // $response->assertForbidden();
 
-        $response = $this->postJson('/api/v1/products/by_name_seller/', [
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/products/by_name_seller/', [
             'sellerName' => $seller->nickname,
             'productName' => $product->name
         ]);

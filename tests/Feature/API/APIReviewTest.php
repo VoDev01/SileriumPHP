@@ -2,19 +2,22 @@
 
 namespace Tests\Feature\API;
 
-use App\Models\User;
+use DateTime;
 use Tests\TestCase;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\UserApiKey;
 use App\Models\Subcategory;
+use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\DB;
+use Laravel\Passport\ClientRepository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Passport\Passport;
 
 class APIReviewTest extends TestCase
 {
@@ -28,11 +31,27 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
-        Passport::actingAs($user, ['index']);
-        $user = User::factory()->create();
+        Passport::actingAs(
+            $user,
+            ['index']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->getJson('/api/v1/reviews/index');
+        $response = $this->withHeader('Api-Secret', $secret)->getJson('/api/v1/reviews/index');
 
         $response->assertOk()
             ->assertJson(fn (AssertableJson $json) => 
@@ -52,11 +71,27 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
-        Passport::actingAs($user, ['index']);
-        $user = User::factory()->create();
+        Passport::actingAs(
+            $user,
+            ['update']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->patchJson('/api/v1/reviews/update', [
+        $response = $this->withHeader('Api-Secret', $secret)->patchJson('/api/v1/reviews/update', [
             'id' => $review->ulid,
             'title' => $review->title,
             'pros' => null,
@@ -78,13 +113,29 @@ class APIReviewTest extends TestCase
         Subcategory::factory()->create();
 
         $seller = Seller::factory()->has(Product::factory())->create();
-        $product = $seller->products->first();
+        $product = $seller->products->first();$user = User::factory()->has(Role::factory())->create();
         $user = User::factory()->has(Role::factory())->create();
-        Passport::actingAs($user, ['index']);
-        $user = User::factory()->create();
+        Passport::actingAs(
+            $user,
+            ['delete']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->deleteJson('/api/v1/reviews/delete', ['id' => $review->ulid]);
+        $response = $this->withHeader('Api-Secret', $secret)->deleteJson('/api/v1/reviews/delete', ['id' => $review->ulid]);
 
         $response->assertOk();
 
@@ -100,11 +151,27 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs($user, ['index']);
-        $user = User::factory()->create();
+        Passport::actingAs(
+            $user,
+            ['delete']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->postJson('/api/v1/reviews/search_user_reviews', [
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/search_user_reviews', [
             'userEmail' => $user->email,
             'userId' => $user->ulid
         ]);
@@ -130,11 +197,27 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs($user, ['index']);
-        $user = User::factory()->create();
+        Passport::actingAs(
+            $user,
+            ['delete']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->postJson('/api/v1/reviews/search_product_reviews', [
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/search_product_reviews', [
             'sellerName' => $seller->nickname,
             'productName' => $product->name
         ]);

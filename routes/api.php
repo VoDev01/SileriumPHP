@@ -25,19 +25,12 @@ Route::withoutMiddleware(['api'])->middleware(['web'])->group(function ()
 {
     Route::get('/', [APIHomeController::class, 'index']);
 
-    Route::controller(APIAuthController::class)->group(function ()
-    {
-        Route::get('login', 'login')->name('api.login');
-        Route::post('login', 'postLogin');
-        Route::get('register', 'register');
-        Route::post('register', 'postRegister');
-    });
-    
     Route::middleware(['auth'])->group(function ()
     {
         Route::controller(APIProfileController::class)->group(function ()
         {
-            Route::post('refresh', 'refreshToken');
+            Route::post('secret/refresh', 'refreshToken');
+            Route::post('secret', 'generateToken');
             Route::get('profile', 'profile')->name('api.profile');
             Route::post('logout', 'logout');
         });
