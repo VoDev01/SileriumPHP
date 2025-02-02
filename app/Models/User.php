@@ -87,6 +87,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(BannedUser::class);
     }
+
+    public function cardCredentials()
+    {
+        return $this->hasOne(UserCardPaymentCredentials::class);
+    }
+
     public function hasRoles(array|string $roles)
     {
         if(gettype($roles) == "string")
