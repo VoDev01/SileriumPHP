@@ -2,30 +2,31 @@
 namespace App\Actions;
 
 use App\Models\Order;
-use App\Enum\OrderStatus;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class OrderAction 
 {
-    public function make(string $order_adress, OrderStatus $order_status, int $user_id, array $products)
+    public static function make(string $orderAdress, string $orderStatus, int $user_id)
     {
-        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact($order_adress, $order_status, $user_id));
-        $orderId = Order::insertGetId(array_merge($insert, ['totalPrice' => null]));
-        $totalPrice = null;
-        for ($i=0; $i < count($products); $i++) { 
-            $totalPrice += $products[$i]['priceRub'] * $products[$i]['amount'];
-            DB::insert('INSERT INTO orders_products (order_id, product_id, product_amount, totalPrice) VALUES (?, ?, ?, ?)', 
+        $cartContent = Cart::session($user_id)->getContent();
+        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact('orderAdress', 'orderStatus', 'user_id'));
+        $orderId = Order::create(array_merge($insert, ['totalPrice' => 0.0]))->ulid;
+        $totalOrderPrice = null;
+        foreach($cartContent as $product) { 
+            $productsPrice = $product->model->priceRub * $product->quantity;
+            $totalOrderPrice += $productsPrice;
+            DB::insert('INSERT INTO orders_products (order_id, product_id, productAmount, productsPrice) VALUES (?, ?, ?, ?)', 
             [
-                $orderId, 
-                $products[$i]['id'], 
-                $products[$i]['amount'],
-                $products[$i]['amount'] * $products[$i]['amount']
+                $orderId,
+                $product->model->id, 
+                $product->quantity,
+                $productsPrice
             ]);
         }
-        //Order::where('id', $orderId)->update(['totalPrice' => $totalPrice]);
-        $order = Order::find($orderId);
-        return $order;
+        Order::where('ulid', $orderId)->update(['totalPrice' => $totalOrderPrice]);
+        return Order::where('ulid', $orderId)->get()->first();
     }
 }

@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Models\User;
 use App\Models\Order;
+use App\Actions\OrderAction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\DeleteClosedOrdersAction;
+use App\Enum\OrderStatus;
+use App\Models\Product;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserOrderController extends Controller
 {
@@ -31,5 +37,11 @@ class UserOrderController extends Controller
         $orders = Order::withTrashed()->where('user_id', Auth::id())->with(['products', 'products.images'])->get();
         DeleteClosedOrdersAction::delete($orders);
         return view('user.orders.ordershistory', ['orders' => $orders]);
+    }
+    public function checkoutOrder()
+    {
+        $user = Auth::user();
+        $order = OrderAction::make($user->homeAdress, 'Pending', $user->id);
+        return redirect()->route('payment.receiveOrderId', ['orderId' => $order->ulid]);
     }
 }

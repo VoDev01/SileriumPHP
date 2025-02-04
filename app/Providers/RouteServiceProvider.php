@@ -33,6 +33,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapAPIRoutes();
         $this->mapWebRoutes();
+        $this->mapPaymentRoutes();
+        $this->mapProductsRoutes();
         $this->mapAdminRoutes();
         $this->mapUserRoutes();
         $this->mapSellerRoutes();
@@ -42,6 +44,17 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('api')
             ->prefix('/api/v1')
             ->group(base_path('routes/api.php'), ['guard' => 'api']);
+    }
+    public function mapPaymentRoutes()
+    {
+        Route::middleware(['web', 'auth', 'auth:web'])
+            ->prefix('payment')
+            ->group(base_path('routes/web/payment.php'));
+    }
+    public function mapProductsRoutes()
+    {
+        Route::middleware('web')
+            ->group(base_path('routes/web/products.php'));
     }
     public function mapWebRoutes()
     {

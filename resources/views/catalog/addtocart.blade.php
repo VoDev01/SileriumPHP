@@ -23,7 +23,7 @@
     <div class="container" style="width: 650px;">
         <h1>{{ $product->name }}</h1>
         <img alt="картинка товара" src="{{ asset($product->images->first()) }}" />
-        <form action="/catalog/cart" method="POST">
+        <form action="/user/cart/add_to_cart" method="POST">
             @csrf
             <div class="row">
                 <div class="col-6">

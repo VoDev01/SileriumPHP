@@ -39,28 +39,29 @@ Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
     Route::controller(UserReviewController::class)->group(function ()
     {
         Route::get('reviews', 'userReviews')->middleware(['auth', 'verified'])->name('userReviews');
-        Route::get('review/product/{productId}', 'review')->middleware(['auth', 'verified']);
+        Route::get('review/product/{productId}', 'review')->middleware(['auth', /*'verified'*/]);
         Route::post('review', 'postReview');
         Route::get('review/edit_review/{review}', 'editReview');
         Route::patch('edit_review', 'postEditReview');
         Route::delete('delete_review', 'deleteReview');
     });
-    Route::controller(UserOrderController::class)->group(function ()
+    Route::controller(UserOrderController::class)->prefix('orders')->group(function ()
     {
-        Route::get('orders/all', 'allOrders')->middleware(['auth', 'verified']);
-        Route::get('orders/edit_order/{order}', 'editOrder');
-        Route::patch('orders/edit_order', 'postEditOrder');
-        Route::delete('orders/close_order', 'closeOrder');
-        Route::get('orders/history', 'ordersHistory');
-        Route::post('orders/filter_shop_cart', 'filterShopCart');
+        Route::get('all', 'allOrders')->middleware(['auth', /*'verified'*/]);
+        Route::get('edit_order/{order}', 'editOrder');
+        Route::patch('edit_order', 'postEditOrder');
+        Route::delete('close_order', 'closeOrder');
+        Route::get('history', 'ordersHistory');
+        Route::post('filter_shop_cart', 'filterShopCart');
+        Route::post('checkout_order', 'checkoutOrder');
     });
-    Route::controller(UserCartController::class)->group(function ()
+    Route::controller(UserCartController::class)->prefix('cart')->group(function ()
     {
-        Route::get('cart', 'cart')->middleware(['auth', 'verified'])->name('cart');
-        Route::get('cart/add_to_cart/{product}', 'addToCart')->middleware('verified');
-        Route::post('cart/add_to_cart', 'postCart')->middleware('auth');
-        Route::post('cart/change_amount', 'changeAmount')->middleware('auth');
-        Route::delete('cart/remove_from_cart', 'removeFromCart')->middleware('auth');
+        Route::get('/', 'cart')->middleware(['auth', /*'verified'*/])->name('cart');
+        Route::get('add_to_cart/{productId}', 'addToCart');//->middleware('verified');
+        Route::post('add_to_cart', 'postCart')->middleware('auth');
+        Route::post('change_amount', 'changeAmount')->middleware('auth');
+        Route::post('remove_from_cart', 'removeFromCart')->middleware('auth');
     });
 });
 Route::fallback(FallbackController::class);

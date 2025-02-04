@@ -2,6 +2,9 @@
     <x-slot name="title">
         Корзина | Silerium
     </x-slot>
+    @php
+        $count = $products->count();
+    @endphp
     @section('scripts')
         <script type="module">
             function deliveryWarn() {
@@ -18,6 +21,11 @@
             function decreaseAmount() {
                 $('#amount_change').val("down");
             }
+
+            $('#checkoutOrderButton').on('click', function(e) {
+                e.preventDefault();
+                $('#checkoutOrder').submit();
+            });
         </script>
     @endsection
     <div class="container-fluid mx-3 pt-3">
@@ -75,7 +83,10 @@
                     <hr />
                 </div>
             @endforeach
-            <a class="btn btn-outline-success" href="/user/checkoutorder">Оформить</a>
+            <form action="/user/orders/checkout_order" id="checkoutOrder" method="POST">
+                @csrf
+                <button class="btn btn-outline-success" type="submit" id="checkoutOrderButton">Оформить</button>
+            </form>
     </div>
     {{-- <div class="col-3 mt-1">
                     <h3>Фильтровать по статусу</h3>

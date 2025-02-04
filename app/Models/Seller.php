@@ -35,10 +35,6 @@ class Seller extends Model
 
     public $timestamps = false;
 
-    public function orders()
-    {
-        return $this->HasMany(Order::class);
-    }
     public function products()
     {
         return $this->hasMany(Product::class);

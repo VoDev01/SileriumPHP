@@ -22,7 +22,6 @@ class Order extends Model
         'orderDate',
         'orderAdress',
         'orderStatus',
-        'seller_id',
         'deleted_at',
         'updated_at',
         'totalPrice'
@@ -42,10 +41,6 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'orders_products', 'order_id', 'product_id');
-    }
-    public function seller()
-    {
-        return $this->belongsTo(Seller::class);
     }
     public static function boot()
     {
