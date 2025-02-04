@@ -26,7 +26,7 @@ class HandleUserLoginAction
                     $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
                     return redirect()->route('seller.account');
                 }
-                else if(key_exists('api', $validated))
+                else if(isset($validated['api']))
                 {
                     return redirect()->intended('/api/v1/profile');
                 }
@@ -52,7 +52,7 @@ class HandleUserLoginAction
                     $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
                     return response()->json(['redirect' => '/seller/account']);
                 }
-                else if(key_exists('api', $validated))
+                else if(isset($validated['api']))
                 {
                     return response()->json(['redirect' => '/api/v1/profile']);
                 }

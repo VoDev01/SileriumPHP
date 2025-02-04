@@ -29,7 +29,7 @@ class ProductCartService
             'name' => $product->name,
             'price' => session('products_currency') == "dol" ? round(ConvertCurrency::convertToDol($product->priceRub), 1) : $product->priceRub,
             'quantity' => $amount,
-            'associatedModel' => 'Product'
+            'associatedModel' => $product
         ));
     }
 }

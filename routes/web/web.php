@@ -20,18 +20,6 @@ use App\Http\Controllers\Product\CategoriesController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/categories/all', [CategoriesController::class, 'index']);
-Route::get('/categories/{category}/subcategories', [CategoriesController::class, 'subcategories']);
-
-Route::controller(CatalogController::class)->prefix('catalog')->group(function(){
-    Route::get('products/{sortOrder?}/{available?}/{subcategory?}/{product?}', 'products')->name('allproducts');
-    Route::post('rub_currency', 'rubCurrency');
-    Route::post('dol_currency','dolCurrency');
-    Route::post('filter','filterProducts');
-    Route::get('product/{productId}', 'product')->middleware('auth');
-    Route::post('/products/search', 'searchPorducts');
-});
-
 Route::get('/banned', [BannedController::class, 'banned'])->name('banned')->middleware('banned');
 
 Route::fallback(FallbackController::class);

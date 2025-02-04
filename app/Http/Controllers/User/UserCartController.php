@@ -19,10 +19,11 @@ class UserCartController extends Controller
     public function cart()
     {
         $products = Cart::session(Auth::id())->getContent();
-        return view('user.cart', ['products' => $products]);
+        return view('user.cart', ['products' => $products, 'user_id' => Auth::user()->id]);
     }
-    public function addToCart(Product $product)
+    public function addToCart(int $productId)
     {
+        $product = Product::find($productId);
         return view('catalog.addtocart', ['product' => $product]);
     }
     public function postCart(Request $request)
@@ -36,7 +37,7 @@ class UserCartController extends Controller
                 'homeAdress' => 'Заполните данные местоположения перед оформлением заказов'
             ]);
         ProductCart::addProductToCart($user, $request, (int)$validated['amount']);
-        return redirect()->route('allproducts');
+        return redirect()->route('cart');
     }
     public function changeAmount(Request $request)
     {

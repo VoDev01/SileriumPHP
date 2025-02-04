@@ -24,7 +24,7 @@ class UserOrderTest extends TestCase
         Subcategory::factory()->create();
         $user = User::factory()->has(Role::factory())->create();
         $seller = Seller::factory()->has(Product::factory())->create();
-        $order = Order::factory()->for($user)->for($seller)->create();
+        $order = Order::factory()->for($user)->create();
 
         $this->actingAs($user)->delete('/user/orders/close_order', ['ulid' => $order->ulid]);
 
@@ -40,7 +40,7 @@ class UserOrderTest extends TestCase
         Subcategory::factory()->create();
         $user = User::factory()->has(Role::factory())->create();
         $seller = Seller::factory()->has(Product::factory())->create();
-        $order = Order::factory()->for($user)->for($seller)->create();
+        $order = Order::factory()->for($user)->create();
 
         $this->actingAs($user)->get('/user/orders/history');
 
