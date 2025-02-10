@@ -27,6 +27,7 @@ class OrderAction
             ]);
         }
         Order::where('ulid', $orderId)->update(['totalPrice' => $totalOrderPrice]);
+        Cart::session($user_id)->clear();
         return Order::where('ulid', $orderId)->get()->first();
     }
 }
