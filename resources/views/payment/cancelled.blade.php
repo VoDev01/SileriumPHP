@@ -1,11 +1,13 @@
 <x-layout>
     <x-slot name="title">
-        Оплата завершена | Silerium
+        Оплата отклонена | Silerium
     </x-slot>
-    <h1>Оплата завершена!</h1>
-    <p>Ожидайте доставки и следите за статусом заказа.</p>
-    <p>Текущий статус заказа:</p>
+    <h1>Оплата отклонена!</h1>
     <p>Номер заказа - {{ $order->ulid }}</p>
+    <br>
+    <p>Инициатор отмены платежа: {{$cancellationParty}}</p>
+    <p>Причина отмены платежа: {{$cancellationReason}}</p>
+    <br>
     <p>Товары: </p>
     <div class="scroll-container">
         @foreach ($order->products as $product)
@@ -21,6 +23,7 @@
     </div>
     <p>Цена итого: {{ $order->totalPrice }} &#8381;</p>
     <p>Оформлен: {{ $order->orderDate }}</p>
+    <p>Отклонен: {{ $order->deleted_at }}</p>
     @php
         $orderStatusDB = $order->orderStatus;
         $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);

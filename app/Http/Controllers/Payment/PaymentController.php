@@ -1,12 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Payment;
 
+use App\Actions\DisplayPaymentCancellationMessage;
+use YooKassa\Client;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Payment\PaymentRequest;
-use YooKassa\Client;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -46,8 +51,29 @@ class PaymentController extends Controller
             ],
             $idempotenceKey,
         );
-        $confirmationToken = $response->getConfirmation()->getConfirmationToken();
-        return redirect()->route('payment.sendConfirmationToken', ['confirmationToken' => $confirmationToken, 'orderId' => $order->ulid]);
+        if($response->status == 'succeeded')
+        {
+            $confirmationToken = $response->getConfirmation()->getConfirmationToken();
+            Payment::create([
+                'payment_id' => $response->id,
+                'user_id' => Auth::user()->ulid,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+            return redirect()->route('payment.sendConfirmationToken', ['confirmationToken' => $confirmationToken, 'orderId' => $order->ulid]);
+        }
+        else if($response->status == 'canceled')
+        {
+            $order = Order::find($validated['orderId']);
+            $order->delete();
+            return redirect()->route('payment.cancelled')->with('cancellationMessage', DisplayPaymentCancellationMessage::display(
+                $response->cancellation_details->party,
+                $response->cancellation_details->reason
+            ));
+        }
+        else
+        {
+            return redirect()->route('payment.confirm');
+        }
     }
     public function receiveConfirmationToken(Request $request)
     {
@@ -57,5 +83,17 @@ class PaymentController extends Controller
     {
         $order = Order::where('ulid', session('orderId'))->get()->first();
         return view('payment.finished', ['order' => $order]);
+    }
+    public function cancelled()
+    {
+        $cancellationMessage = session('cancellationMessage');
+        return view('payment.cancelled', [
+            'cancellationParty' => $cancellationMessage['cancellationParty'], 
+            'cancellationReason' => $cancellationMessage['cancellationReason']
+        ]);
+    }
+    public function confirmation()
+    {
+        return view('payment.confirmation');
     }
 }
