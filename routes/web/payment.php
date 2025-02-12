@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Payment\PaymentController;
 
 Route::controller(PaymentController::class)->group(function(){
     Route::get('credentials', 'credentialsForm');

@@ -6,9 +6,11 @@ const color = 2;
 enum OrderStatus: string
 {
     case ISSUING = "Issuing, Ожидает оформления, #7a7a7a";
-    case PENDING = "Pending, Обрабатывается, #a0a147";
-    case CLOSED = "Closed, Отозван, #e83225";
+    case PENDING = "Pending, Обрабатывается, #fffb00";
+    case CACNCELLED = "Cancelled, Отклонен, #e83225";
     case DELIVERY = "Delivery, Отправлен, #0b78a1";
+    case REFUND = "Refund, Подлежит возврату, #ff4118";
+    case PARTIAL_REFUND = "Partial_refund, Подлежит частичному возврату, #e400ff";
     case RECEIVED = "Received, Получен, #1aa922";
     public static function fromName(string $name){
         

@@ -8,7 +8,36 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
+ * App\Models\Order
+ *
  * @mixin IdeHelperOrder
+ * @property string $ulid
+ * @property float $totalPrice
+ * @property string $orderDate
+ * @property string $orderAdress
+ * @property string $orderStatus
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $user_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
+ * @property-read int|null $products_count
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderAdress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUlid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withoutTrashed()
+ * @mixin \Eloquent
  */
 class Order extends Model
 {

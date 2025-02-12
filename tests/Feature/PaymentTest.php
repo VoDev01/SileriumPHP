@@ -28,9 +28,9 @@ class PaymentTest extends TestCase
         $user = User::factory()->has(Role::factory())->create();
         $seller = Seller::factory()->has(Product::factory())->create();
         
-        $response = $this->actingAs($user)->post('/user/add_to_cart', ['amount' => 10, 'productId' => $seller->products->first()->ulid]);
+        $response = $this->actingAs($user)->post('/user/add_to_cart', ['amount' => 10, 'productId' => $seller->products->first()->id]);
 
-        $this->assertTrue(Cart::session($user)->has($seller->products->first()->ulid));
+        $this->assertTrue(Cart::session($user)->has($seller->products->first()->id));
 
         $response = $this->actingAs($user)->post('/user/orders/checkout_order');
 

@@ -41,7 +41,7 @@ class UserOrderController extends Controller
     public function checkoutOrder()
     {
         $user = Auth::user();
-        $order = OrderAction::make($user->homeAdress, 'Pending', $user->id);
+        $order = OrderAction::make($user->homeAdress, \App\Enum\OrderStatus::fromName('Pending')->value, $user->id);
         return redirect()->route('payment.receiveOrderId', ['orderId' => $order->ulid]);
     }
 }
