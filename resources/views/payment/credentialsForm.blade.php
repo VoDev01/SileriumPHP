@@ -30,7 +30,7 @@
         //Инициализация виджета. Все параметры обязательные.
         const checkout = new window.YooMoneyCheckoutWidget({
             confirmation_token: '{{$confirmationToken}}', //Токен, который перед проведением оплаты нужно получить от ЮKassa
-            return_url: 'https://silerium.com/payment/finished?orderId={{$orderId}}', //Ссылка на страницу завершения оплаты, это может быть любая ваша страница
+            //return_url: 'https://silerium.com/payment/finished?orderId={{$orderId}}', Ссылка на страницу завершения оплаты, это может быть любая ваша страница
 
             //При необходимости можно изменить цвета виджета, подробные настройки см. в документации
             //customization: {
@@ -46,6 +46,11 @@
             error_callback: function(error) {
                 console.log(error)
             }
+        });
+
+        checkout.on('complete', () => {
+            checkout.destroy();
+            window.location.href = '/payment/finished?orderId={{$orderId}}';
         });
 
         //Отображение платежной формы в контейнере

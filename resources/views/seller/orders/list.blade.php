@@ -30,7 +30,11 @@
                         <td>{{ $order->totalPrice }}</td>
                         <td>{{ $order->orderDate }}</td>
                         <td>{{ $order->orderAdress }}</td>
-                        <td>{{ $order->orderStatus }}</td>
+                        @php
+                            $orderStatusDB = $order->orderStatus;
+                            $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);
+                        @endphp
+                        <td>{{ $orderStatusStr[\App\Enum\ru] }}</td>
                         <td>{{ $order->user->phone . ' ' . $order->user->name }}</td>
                     </tr>
                 @endforeach

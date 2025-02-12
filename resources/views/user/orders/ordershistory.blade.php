@@ -4,7 +4,7 @@
     </x-slot>
     <div class="mx-3 pt-3">
         @if ($orders->count() == 0)
-            <h3>У вас нету закрытых заказов.</h3>
+            <h3>У вас нету истории заказов.</h3>
         @else
             @foreach ($orders as $order)
                 <p>Номер заказа - {{ $order->ulid }}</p>
@@ -30,6 +30,15 @@
                 <p style="color: {{ $orderStatusStr[App\Enum\color] }};">Статус заказа:
                     {{ $orderStatusStr[App\Enum\ru] }}</p>
                 <hr>
+                @if ($orderStatusStr[App\Enum\ru] == 'Обрабатывается')
+                    <a class="btn btn-danger text-decoration-none" href="/orders/refund?orderId={{$order->ulid}}">Отменить заказ</a>
+                @elseif(
+                    $orderStatusStr[App\Enum\ru] == 'Получен' &&
+                    \Carbon\Carbon::now()->diffInDays($order->orderDate) >= 7)
+                    <a class="btn btn-danger text-decoration-none" href="/orders/refund?orderId={{$order->ulid}}">Отменить заказ</a>
+                @else
+                    <a class="btn btn-danger text-decoration-none disabled" href="/orders/refund?orderId={{$order->ulid}}">Отменить заказ</a>
+                @endif
             @endforeach
         @endif
         <a class="btn btn-outline-success" href="/user/cart">К корзине</a>

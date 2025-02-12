@@ -1,10 +1,9 @@
 <x-layout>
     <x-slot name="title">
-        Оплата завершена | Silerium
+        Возврат завершен | Silerium
     </x-slot>
     <div class="container">
-        <h1>Оплата завершена!</h1>
-        <p>Ожидайте доставки и следите за статусом заказа.</p>
+        <h1>Возврат завершен!</h1>
         <p>Номер заказа - {{ $order->ulid }}</p>
         <p>Товары: </p>
         <div class="scroll-container">

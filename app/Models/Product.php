@@ -10,7 +10,44 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
+ * App\Models\Product
+ *
  * @mixin IdeHelperProduct
+ * @property string $ulid
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property float $priceRub
+ * @property bool $available
+ * @property int $subcategory_id
+ * @property int $timesPurchased
+ * @property int $productAmount
+ * @property int $seller_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
+ * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductSpecifications> $productSpecifications
+ * @property-read int|null $product_specifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Review> $reviews
+ * @property-read int|null $reviews_count
+ * @property-read \App\Models\Seller $seller
+ * @property-read \App\Models\Subcategory|null $subcategory
+ * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereAvailable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product wherePriceRub($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereProductAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereSellerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereSubcategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereTimesPurchased($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereUlid($value)
+ * @mixin \Eloquent
  */
 class Product extends Model
 {

@@ -13,7 +13,7 @@ class RefundRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class RefundRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'paymentId' => ['exists:payments,payment_id'],
+            'orderId' => ['ulid', 'exists:orders,ulid']
         ];
     }
 }

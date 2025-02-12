@@ -18,7 +18,69 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
+ * App\Models\User
+ *
  * @mixin IdeHelperUser
+ * @property string $ulid
+ * @property int $id
+ * @property string $name
+ * @property string|null $surname
+ * @property string $email
+ * @property-write string $password
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $birthDate
+ * @property string $country
+ * @property string $city
+ * @property string $homeAdress
+ * @property string|null $phone
+ * @property string|null $profilePicture
+ * @property int $phoneVerified
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property-read \App\Models\BannedUser|null $banned
+ * @property-write mixed $birth_date
+ * @property-read \App\Models\UserCardPaymentCredentials|null $cardCredentials
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Passport\Client> $clients
+ * @property-read int|null $clients_count
+ * @property mixed $home_adress
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Payment> $payments
+ * @property-read int|null $payments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Refund> $refunds
+ * @property-read int|null $refunds_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Review> $reviews
+ * @property-read int|null $reviews_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Role> $roles
+ * @property-read int|null $roles_count
+ * @property-read Seller|null $sellers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Passport\Token> $tokens
+ * @property-read int|null $tokens_count
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBirthDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCountry($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereHomeAdress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhoneVerified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProfilePicture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSurname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUlid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
