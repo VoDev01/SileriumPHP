@@ -4,15 +4,16 @@ namespace App\Http\Controllers\User;
 
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Payment;
+use App\Models\Product;
+use App\Enum\OrderStatus;
 use App\Actions\OrderAction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\DeleteClosedOrdersAction;
-use App\Enum\OrderStatus;
-use App\Models\Product;
-use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Database\Eloquent\Collection;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class UserOrderController extends Controller
 {
@@ -41,7 +42,13 @@ class UserOrderController extends Controller
     public function checkoutOrder()
     {
         $user = Auth::user();
-        $order = OrderAction::make($user->homeAdress, \App\Enum\OrderStatus::fromName('Pending')->value, $user->id);
+        $order = OrderAction::make($user->homeAdress, 'Pending', $user->id);
         return redirect()->route('payment.receiveOrderId', ['orderId' => $order->ulid]);
+    }
+    public function refund(Request $request)
+    {
+        $order = Order::with(['products', 'products.images', 'user'])->where('ulid', $request->orderId)->get()->first();
+        $paymentId = Payment::where('user_id', $order->user->ulid)->get()->first()->payment_id;
+        return view('user.orders.refund', ['order' => $order, 'paymentId' => $paymentId]);
     }
 }

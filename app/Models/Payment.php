@@ -41,7 +41,7 @@ class Payment extends Model
     protected $fillable = [
         'id',
         'payment_id',
-        'user_id',
+        'order_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -52,8 +52,8 @@ class Payment extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
     ];
-    public function user()
+    public function order()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Order::class);
     }
 }

@@ -24,8 +24,9 @@ class RefundRequest extends FormRequest
     public function rules()
     {
         return [
-            'paymentId' => ['exists:payments,payment_id'],
-            'orderId' => ['ulid', 'exists:orders,ulid']
+            'paymentId' => ['required', 'exists:payments,payment_id'],
+            'products' => ['required', 'exists:products,ulid'],
+            'orderId' => ['required', 'ulid', 'exists:orders,ulid']
         ];
     }
 }

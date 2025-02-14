@@ -42,7 +42,7 @@ class PaymentService
             $confirmationToken = $response->getConfirmation()->getConfirmationToken();
             Payment::create([
                 'payment_id' => $response->id,
-                'user_id' => Auth::user()->ulid,
+                'order_id' => $order->ulid,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'status' => $response->status
             ]);
@@ -59,7 +59,8 @@ class PaymentService
     }
     public static function cancel(Request $request)
     {
-        if (isset($request->paymentId))
+        $validated = $request->validated();
+        if (isset($validated['paymentId']))
         {
             Payment::where('payment_id', $request->paymentId)->update(['status' => 'cancelled']);
             Payment::destroy($request->paymentId);

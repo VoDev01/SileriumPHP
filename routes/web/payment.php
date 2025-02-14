@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Payment\PaymentController;
+use App\Http\Controllers\Payment\RefundController;
 
 Route::controller(PaymentController::class)->group(function(){
     Route::get('credentials', 'credentialsForm');
@@ -10,4 +11,8 @@ Route::controller(PaymentController::class)->group(function(){
     Route::post('receive_confirmation_token', 'receiveConfirmationToken')->name('payment.receiveConfirmationToken');
     Route::post('create_payment_request', 'createPaymentRequest')->name('payment.createPaymentRequest');
     Route::get('finished', 'finished');
+});
+Route::controller(RefundController::class)->group(function(){
+    Route::get('listRefunds', 'listRefunds');
+    Route::post('refund', 'refund');
 });

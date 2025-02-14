@@ -149,16 +149,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(BannedUser::class);
     }
-
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
-    public function refunds()
-    {
-        return $this->hasMany(Refund::class);
-    }
-
     public function cardCredentials()
     {
         return $this->hasOne(UserCardPaymentCredentials::class);
