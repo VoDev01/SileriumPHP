@@ -34,6 +34,8 @@ Route::middleware(['authorize.admin', 'banned'])->group(function ()
         Route::post('reviews', 'searchUserReviews');
         Route::get('ban', 'ban')->name("admin.users.ban");
         Route::post('ban', 'postBan');
+        Route::get('payments', 'payments');
+        Route::post('searchPayments')->name('admin.payments.search');
         Route::post('search', 'searchUsers')->name('admin.users.search');
     });
 });

@@ -35,20 +35,18 @@ class UserOrderController extends Controller
     }
     public function ordersHistory()
     {
-        $orders = Order::withTrashed()->where('user_id', Auth::id())->with(['products', 'products.images'])->get();
+        $orders = Order::with('payment')->withTrashed()->where('user_id', Auth::id())->with(['products', 'products.images'])->get();
         DeleteClosedOrdersAction::delete($orders);
         return view('user.orders.ordershistory', ['orders' => $orders]);
     }
     public function checkoutOrder()
     {
-        $user = Auth::user();
-        $order = OrderAction::make($user->homeAdress, 'Pending', $user->id);
-        return redirect()->route('payment.receiveOrderId', ['orderId' => $order->ulid]);
+        return redirect()->route('payment.createPayment');
     }
     public function refund(Request $request)
     {
-        $order = Order::with(['products', 'products.images', 'user'])->where('ulid', $request->orderId)->get()->first();
-        $paymentId = Payment::where('user_id', $order->user->ulid)->get()->first()->payment_id;
+        $order = Order::with(['products', 'products.images'])->where('ulid', $request->orderId)->get()->first();
+        $paymentId = Payment::where('order_id', $order->ulid)->get()->first()->payment_id;
         return view('user.orders.refund', ['order' => $order, 'paymentId' => $paymentId]);
     }
 }

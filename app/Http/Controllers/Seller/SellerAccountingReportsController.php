@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Models\Payment;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Services\SearchFormPaginateResponseService;
+use App\Http\Requests\Payment\SearchPaymentsRequest;
+use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
+use App\View\Components\ComponentsMethods\SearchForm\SearchFormPaymentsSearchMethod;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
-use Illuminate\Http\Request;
 
 class SellerAccountingReportsController extends Controller
 {
@@ -20,6 +23,16 @@ class SellerAccountingReportsController extends Controller
     public function genericReport()
     {
         return view('seller.accounting_reports.generic');
+    }
+    public function paymentsReport(Request $request)
+    {
+        $payments = SearchFormPaginateResponseService::paginate($request, 'payments', 15) ?? Payment::with(['order', 'order.user'])->paginate(15);
+        $inputs = [
+            new SearchFormInput('name', 'Имя заказчика', 'name', true),
+            new SearchFormInput('surname', 'Фамилия заказчика', 'surname', true)
+        ];
+        $queryInputs = new SearchFormQueryInput('/seller/accounting_reports/payments/search', 'seller.accounting_reports.payments', 'order, order.user');
+        return view('seller.accounting_reports.payments', ['payments' => $payments, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
     public function productsReports(Request $request)
     {
@@ -48,6 +61,12 @@ class SellerAccountingReportsController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::searchProducts($validated);
+        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
+    }
+    public function searchPayments(SearchPaymentsRequest $request)
+    {
+        $validated = $request->validated();
+
+        return SearchFormPaymentsSearchMethod::searchPayments($validated);
     }
 }

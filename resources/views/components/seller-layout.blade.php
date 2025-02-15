@@ -28,30 +28,27 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <div class="navbar-nav">
-                        @if(CheckUserRole::check('seller') && session('seller_id') != null)
-                            <a class="nav-item nav-link text-black text-decoration-none" href="/seller/orders/all">
-                                Заказы
-                                <i class="bi bi-truck"></i>
-                            </a>
-                            <a class="nav-item nav-link text-black text-decoration-none" href="/seller/products">
-                                Товары
-                                <i class="bi bi-box-seam"></i>
-                            </a>
-                            <a class="nav-item nav-link text-black text-decoration-none" href="/seller/products/reviews">
-                                Отзывы
-                                <i class="bi bi-chat-dots"></i>
-                            </a>
+                        @if (Auth::user())
+                            @if (auth()->user()->hasRoles('seller') && session('seller_id') != null)
+                                <a class="nav-item nav-link text-black text-decoration-none" href="/seller/orders/list">
+                                    Заказы
+                                    <i class="bi bi-truck"></i>
+                                </a>
+                                <a class="nav-item nav-link text-black text-decoration-none" href="/seller/products">
+                                    Товары
+                                    <i class="bi bi-box-seam"></i>
+                                </a>
+                                <a class="nav-item nav-link text-black text-decoration-none"
+                                    href="/seller/products/reviews">
+                                    Отзывы
+                                    <i class="bi bi-chat-dots"></i>
+                                </a>
+                            @endif
                         @endif
                         <a class="nav-item nav-link text-black text-decoration-none" href="/seller/account">
                             Личный кабинет
                             <i class="bi bi-box-arrow-in-right"></i>
                         </a>
-                        @if(!Auth::user())
-                            <a class="nav-item nav-link text-black text-decoration-none" href="/seller/register">
-                                Зарегистрироваться
-                                <i class="bi bi-cash"></i>
-                            </a>
-                        @endif
                     </div>
                 </div>
             </div>

@@ -204,7 +204,6 @@ return [
         App\Providers\ConvertCurrencyServiceProvider::class,
         App\Providers\PhoneValidationProvider::class,
         App\Providers\EmailValidationProvider::class,
-        App\Providers\CheckUserRoleProvider::class,
         App\Providers\ProductCartServiceProvider::class
     ],
 
@@ -224,7 +223,6 @@ return [
         'ConvertCurrency' => App\Facades\ConvertCurrencyFacade::class,
         'ValidatePhone' => App\Facades\ValidatePhoneFacade::class,
         'ValidateEmail' => App\Facades\ValidateEmailFacade::class,
-        'CheckUserRole' => App\Facades\CheckUserRoleFacade::class,
         'ProductCart' => App\Facades\ProductCartServiceFacade::class
     ])->toArray(),
 

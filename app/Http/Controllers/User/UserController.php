@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerate();
         return redirect()->route('home');
     }
     public function profile()

@@ -71,9 +71,9 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class, 'orders_products', 'order_id', 'product_id');
     }
-    public function payments()
+    public function payment()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasOne(Payment::class);
     }
     public function refunds()
     {

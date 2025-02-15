@@ -85,7 +85,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, PassportTokenPrint, HasFactory, HasUlids, Notifiable;
-    
     //protected $primaryKey = 'ulid';
 
     /**

@@ -32,10 +32,10 @@
                     {{ $orderStatusStr[App\Enum\ru] }}</p>
                 @if ($orderStatusStr[App\Enum\ru] == ' Обрабатывается')
                     <a class="btn btn-danger text-decoration-none"
-                        href="/user/orders/refund?orderId={{ $order->ulid }}">Отменить заказ</a>
+                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Отменить заказ</a>
                 @elseif($orderStatusStr[App\Enum\ru] == ' Получен' && \Carbon\Carbon::now()->diffInDays($order->orderDate) >= 7)
                     <a class="btn btn-danger text-decoration-none"
-                        href="/user/orders/refund?orderId={{ $order->ulid }}">Вернуть средства</a>
+                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Вернуть средства</a>
                 @else
                     <a class="btn text-decoration-none disabled" href="#"
                         style="background-color: black; color: white;">Отменить заказ</a>

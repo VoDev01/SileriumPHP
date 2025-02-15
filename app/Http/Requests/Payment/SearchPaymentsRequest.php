@@ -4,7 +4,7 @@ namespace App\Http\Requests\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RefundRequest extends FormRequest
+class SearchPaymentsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,7 @@ class RefundRequest extends FormRequest
     public function rules()
     {
         return [
-            'paymentId' => ['required', 'exists:payments,payment_id'],
-            'products' => ['required', 'exists:products,ulid'],
-            'orderId' => ['required', 'ulid', 'exists:orders,ulid'],
-            'refund_reason' => ['required', 'string']
+            //
         ];
     }
 }
