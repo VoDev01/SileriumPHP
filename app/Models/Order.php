@@ -71,6 +71,14 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class, 'orders_products', 'order_id', 'product_id');
     }
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
     public static function boot()
     {
         parent::boot();

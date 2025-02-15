@@ -17,6 +17,11 @@ class RefundController extends Controller
     {
 
     }
+    public function refundFinished(Request $request)
+    {
+        $order = Order::where('ulid', $request->orderId)->get()->first();
+        return view('payment.refundFinished', ['order' => $order]);
+    }
     public function refund(RefundRequest $request)
     {
         return PaymentService::refund($request, ['login' => '1026235', 'password' => 'test_dfoZBZwwXDoC1gXWqeg_wNhYFsAqv-dU91hezVx04Y0']);

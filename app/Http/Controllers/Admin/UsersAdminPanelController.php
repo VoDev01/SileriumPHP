@@ -5,19 +5,20 @@ namespace App\Http\Controllers\Admin;
 use Str;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\ApiUser;
+use App\Models\Payment;
+use App\Models\BannedUser;
 use Illuminate\Http\Request;
+use App\Models\BannedApiUser;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Actions\ManualPaginatorAction;
-use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\User\UserBanRequest;
+use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\API\Users\APIUserSearchRequest;
-use App\Models\ApiUser;
-use App\Models\BannedApiUser;
-use App\Models\BannedUser;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormUsersSearchMethod;
-use Illuminate\Support\Carbon;
 
 class UsersAdminPanelController extends Controller
 {
@@ -119,6 +120,16 @@ class UsersAdminPanelController extends Controller
         $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.reviews', 'reviews');
         return view('admin.users.reviews', ['users' => $users, 'user' => $user, 'reviews' => $reviews, 'message' => $message, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
+    public function payments(Request $request)
+    {
+        $payments = SearchFormPaginateResponseService::paginate($request, 'payments', 15) ?? Payment::with(['order', 'order.user'])->paginate(15);
+        $inputs = [
+            new SearchFormInput('name', 'Имя заказчика', 'name', true),
+            new SearchFormInput('surname', 'Фамилия заказчика', 'surname', true)
+        ];
+        $queryInputs = new SearchFormQueryInput('/admin/users/payments/search', 'admin.users.payments', 'order, order.user');
+        return view('admin.users.payments', ['payments' => $payments, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
+    }
     public function searchUserReviews(Request $request)
     {
         $user = User::with(['reviews', 'reviews.product'])->where('ulid', $request->id)->get()->first();
@@ -168,32 +179,16 @@ class UsersAdminPanelController extends Controller
         }
         else
         {
-            if ($validated['api_user'])
-            {
-                $user_id = ApiUser::where('id', $validated['user_id'])->get()->first()->id;
-                BannedApiUser::create([
-                    'api_user_id' => $user_id,
-                    'admin_id' => $admin_id,
-                    'userIp' => $request->ip(),
-                    'reason' => $validated['reason'],
-                    'duration' => $validated['duration'],
-                    'timeType' => $validated['timeType'],
-                    'bannedAt' => Carbon::now()
-                ]);
-            }
-            else
-            {
-                $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
-                BannedUser::create([
-                    'user_id' => $user_id,
-                    'admin_id' => $admin_id,
-                    'userIp' => $request->ip(),
-                    'reason' => $validated['reason'],
-                    'duration' => $validated['duration'],
-                    'timeType' => $validated['timeType'],
-                    'bannedAt' => Carbon::now()
-                ]);
-            }
+            $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
+            BannedUser::create([
+                'user_id' => $user_id,
+                'admin_id' => $admin_id,
+                'userIp' => $request->ip(),
+                'reason' => $validated['reason'],
+                'duration' => $validated['duration'],
+                'timeType' => $validated['timeType'],
+                'bannedAt' => Carbon::now()
+            ]);
         }
         return redirect()->route('admin.users.ban');
     }

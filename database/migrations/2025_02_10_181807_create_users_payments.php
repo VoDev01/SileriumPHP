@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('payment_id', 100);
-            $table->foreignUlid('user_id')->references('ulid')->on('users');
+            $table->foreignUlid('order_id')->references('ulid')->on('orders');
             $table->dateTime('created_at');
         });
     }

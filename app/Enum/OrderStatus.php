@@ -6,7 +6,7 @@ const color = 2;
 enum OrderStatus: string
 {
     case ISSUING = "Issuing, Ожидает оформления, #7a7a7a";
-    case PENDING = "Pending, Обрабатывается, #fffb00";
+    case PENDING = "Pending, Обрабатывается, #d1cd00";
     case CACNCELLED = "Cancelled, Отклонен, #e83225";
     case DELIVERY = "Delivery, Отправлен, #0b78a1";
     case REFUND = "Refund, Подлежит возврату, #ff4118";

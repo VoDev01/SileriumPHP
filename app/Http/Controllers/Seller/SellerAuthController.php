@@ -39,6 +39,8 @@ class SellerAuthController extends Controller
     {
         $request->session()->forget('seller_id');
         Auth::logout(Auth::user());
+        $request->session()->invalidate();
+        $request->session()->regenerate();
         return redirect()->route('seller.login');
     }
     public function register()

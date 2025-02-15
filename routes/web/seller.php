@@ -51,6 +51,8 @@ Route::middleware('banned')->group(function ()
     {
         Route::get('index', 'index');
         Route::get('generic', 'genericReport');
+        Route::get('payments', 'paymentsReport');
+        Route::get('refunds', 'refundsReport');
         Route::get('products', 'productsReports')->name('seller.accounting_reports.products');
         Route::get('product/{ulid}', 'productReport');
         Route::get('tax', 'taxReport');

@@ -85,7 +85,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, PassportTokenPrint, HasFactory, HasUlids, Notifiable;
-    
     //protected $primaryKey = 'ulid';
 
     /**
@@ -149,16 +148,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(BannedUser::class);
     }
-
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
-    public function refunds()
-    {
-        return $this->hasMany(Refund::class);
-    }
-
     public function cardCredentials()
     {
         return $this->hasOne(UserCardPaymentCredentials::class);

@@ -14,12 +14,11 @@
     @endphp
     <script type="module">
         $(function() {
-            $('#sendOrderId').submit();
+            $('#createPayment').submit();
         });
     </script>
-    <form action="/payment/create_payment_request" id="sendOrderId" method="post">
+    <form action="/payment/create_payment_request" id="createPayment" method="post">
         @csrf
-        <input type="hidden" id="orderId" name="orderId" value="{{ $orderId }}">
     </form>
 </body>
 

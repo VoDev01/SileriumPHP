@@ -54,6 +54,7 @@ Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
         Route::get('history', 'ordersHistory');
         Route::post('filter_shop_cart', 'filterShopCart');
         Route::post('checkout_order', 'checkoutOrder');
+        Route::get('refund', 'refund');
     });
     Route::controller(UserCartController::class)->prefix('cart')->group(function ()
     {

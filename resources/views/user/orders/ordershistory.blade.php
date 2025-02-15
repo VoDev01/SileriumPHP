@@ -2,7 +2,8 @@
     <x-slot name="title">
         История заказов | Silerium
     </x-slot>
-    <div class="mx-3 pt-3">
+    <div class="container">
+        <h1>История заказов</h1>
         @if ($orders->count() == 0)
             <h3>У вас нету истории заказов.</h3>
         @else
@@ -29,16 +30,17 @@
                 @endphp
                 <p style="color: {{ $orderStatusStr[App\Enum\color] }};">Статус заказа:
                     {{ $orderStatusStr[App\Enum\ru] }}</p>
-                <hr>
-                @if ($orderStatusStr[App\Enum\ru] == 'Обрабатывается')
-                    <a class="btn btn-danger text-decoration-none" href="/orders/refund?orderId={{$order->ulid}}">Отменить заказ</a>
-                @elseif(
-                    $orderStatusStr[App\Enum\ru] == 'Получен' &&
-                    \Carbon\Carbon::now()->diffInDays($order->orderDate) >= 7)
-                    <a class="btn btn-danger text-decoration-none" href="/orders/refund?orderId={{$order->ulid}}">Отменить заказ</a>
+                @if ($orderStatusStr[App\Enum\ru] == ' Обрабатывается')
+                    <a class="btn btn-danger text-decoration-none"
+                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Отменить заказ</a>
+                @elseif($orderStatusStr[App\Enum\ru] == ' Получен' && \Carbon\Carbon::now()->diffInDays($order->orderDate) >= 7)
+                    <a class="btn btn-danger text-decoration-none"
+                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Вернуть средства</a>
                 @else
-                    <a class="btn btn-danger text-decoration-none disabled" href="/orders/refund?orderId={{$order->ulid}}">Отменить заказ</a>
+                    <a class="btn text-decoration-none disabled" href="#"
+                        style="background-color: black; color: white;">Отменить заказ</a>
                 @endif
+                <hr>
             @endforeach
         @endif
         <a class="btn btn-outline-success" href="/user/cart">К корзине</a>

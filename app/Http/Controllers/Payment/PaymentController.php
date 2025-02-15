@@ -2,39 +2,23 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Actions\DisplayPaymentCancellationMessage;
-use YooKassa\Client;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Payment\PaymentRequest;
 use App\Services\PaymentService;
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Payment\PaymentRequest;
+use App\Models\Refund;
 
 class PaymentController extends Controller
 {
-    public function credentialsForm()
+    public function createPayment()
     {
-        return view('payment.credentialsForm', ['confirmationToken' => session('confirmationToken'), 'orderId' => session('orderId')]);
+        return view('payment.createPayment');
     }
-    public function sendConfirmationToken(Request $request)
+    public function createPaymentRequest()
     {
-        return view('payment.sendConfirmationToken', ['confirmationToken' => $request->confirmationToken, 'orderId' => $request->orderId]);
-    }
-    public function receiveOrderId(Request $request)
-    {
-        return view('payment.receiveOrderId', ['orderId' => $request->orderId]);
-    }
-    public function createPaymentRequest(PaymentRequest $request)
-    {
-        return PaymentService::create($request, ['login' => '1026235', 'password' => 'test_dfoZBZwwXDoC1gXWqeg_wNhYFsAqv-dU91hezVx04Y0']);
-    }
-    public function receiveConfirmationToken(Request $request)
-    {
-        return redirect('/payment/credentials')->with('confirmationToken', $request->confirmationToken)->with('orderId', $request->orderId);
+        return PaymentService::create(['login' => '1026235', 'password' => 'test_dfoZBZwwXDoC1gXWqeg_wNhYFsAqv-dU91hezVx04Y0']);
     }
     public function finished(Request $request)
     {
@@ -53,5 +37,54 @@ class PaymentController extends Controller
     public function confirmation()
     {
         return view('payment.confirmation');
+    }
+    public function onStatusChanged()
+    {
+        $source = file_get_contents('php://input');
+        $requestBody = json_decode($source, true);
+
+        $factory = new \YooKassa\Model\Notification\NotificationFactory();
+        $notificationObject = $factory->factory($requestBody);
+        $responseObject = $notificationObject->getObject();
+
+        $client = new \YooKassa\Client();
+
+        if (!$client->isNotificationIPTrusted($_SERVER['REMOTE_ADDR']))
+        {
+            header('HTTP/1.1 400 Something went wrong');
+            exit();
+        }
+
+        if ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_SUCCEEDED) {
+            $responseData = [
+                'paymentId' => $responseObject->getId(),
+                'paymentStatus' => $responseObject->getStatus(),
+            ];
+            Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
+        } elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE) {
+            $responseData = [
+                'paymentId' => $responseObject->getId(),
+                'paymentStatus' => $responseObject->getStatus(),
+            ];
+            Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
+        } elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_CANCELED) {
+            $responseData = [
+                'paymentId' => $responseObject->getId(),
+                'paymentStatus' => $responseObject->getStatus(),
+            ];
+            Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
+        } elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::REFUND_SUCCEEDED) {
+            $responseData = [
+                'refundId' => $responseObject->getId(),
+                'refundStatus' => $responseObject->getStatus(),
+                'paymentId' => $responseObject->getPaymentId(),
+            ];
+            Refund::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['refundStatus']]);
+        } else {
+            header('HTTP/1.1 400 Something went wrong');
+            exit();
+        }
+
+        return response();
     }
 }

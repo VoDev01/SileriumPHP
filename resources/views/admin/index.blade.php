@@ -24,6 +24,7 @@
             <a class="text-decoration-none" href="/admin/users/orders">Заказы</a>
             <a class="text-decoration-none" href="/admin/users/reviews">Отзывы</a>
             <a class="text-decoration-none" href="/admin/users/roles">Роли</a>
+            <a class="text-decoration-none" href="/admin/users/payments">Платежи</a>
             <a class="text-decoration-none" href="/admin/users/ban">Заблокировать</a>
             <a class="text-decoration-none" href="/admin/users/delete">Удалить</a>
         </nav>
