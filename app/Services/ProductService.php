@@ -30,7 +30,7 @@ class ProductService
                 DB::insert('INSERT INTO products_images (imagePath, product_id) VALUES (?, ?)', [$images[$i], $productId]);
             }
         }
-        $product = DB::table('products')->select($select)->where('ulid', $productId);
+        $product = DB::table('products')->select($select)->where('id', $productId)->get()->first();
         return $product;
     }
     public static function getProductsFilterQuery(
