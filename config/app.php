@@ -219,6 +219,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Redis' => Illuminate\Support\Facades\Redis::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
         'ConvertCurrency' => App\Facades\ConvertCurrencyFacade::class,
         'ValidatePhone' => App\Facades\ValidatePhoneFacade::class,
