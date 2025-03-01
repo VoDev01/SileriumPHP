@@ -31,7 +31,7 @@ class APIProductsController extends Controller
     public function create(APIProductsCreateRequest $request)
     {
         $validated = $request->validated();
-        $product = ProductService::make($validated);
+        $product = ProductService::make($validated, null, ['*']);
         return response()->json(['Url' => env('APP_URL') . '/catalog/product/' . $product->ulid], 200);
     }
     public function update(APIProductsUpdateRequest $request)

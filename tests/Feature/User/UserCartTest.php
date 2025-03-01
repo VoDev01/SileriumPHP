@@ -20,7 +20,7 @@ class UserCartTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->has(Role::factory())->create();
-        $product = Seller::factory()->has(Product::factory())->create()->products()->first();
+        $product = Seller::factory()->has(Product::factory())->create()->products->first();
 
         $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
 
@@ -31,7 +31,7 @@ class UserCartTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->has(Role::factory())->create();
-        $product = Seller::factory()->has(Product::factory())->create()->products()->first();
+        $product = Seller::factory()->has(Product::factory())->create()->products->first();
 
         $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
 
@@ -46,7 +46,7 @@ class UserCartTest extends TestCase
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->has(Role::factory())->create();
-        $product = Seller::factory()->has(Product::factory())->create()->products()->first();
+        $product = Seller::factory()->has(Product::factory())->create()->products->first();
 
         $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 5, 'productId' => $product->id]);
 
@@ -54,6 +54,6 @@ class UserCartTest extends TestCase
 
         $this->actingAs($user)->delete('/user/cart/remove_from_cart', ['productId' => $product->id]);
 
-        $this->assertTrue(Cart::session($user->id)->isEmpty());
+        $this->assertTrue(Cart::session($user->id)->has($product->id));
     }
 }

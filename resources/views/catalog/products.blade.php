@@ -59,7 +59,7 @@
                                     @endif
                                 </p>
                                 <div class="col">
-                                    <p>{{ $product->stockAmount <= 0 ? 'Нет в наличии' : $product->stockAmount . ' шт.' }}
+                                    <p>{{ $product->stockAmount . ' шт.' }}
                                     </p>
                                 </div>
                                 <div class="col">

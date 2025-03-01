@@ -5,27 +5,27 @@ use App\Enum\SortOrder;
 
 class OrderItemsAction 
 {
-    public static function orderItem($query, int $sortOrder, int $onPage)
+    public static function orderItem(int $sortOrder)
     {
         switch($sortOrder)
         {
             case SortOrder::NAME_ASC->value:
-                $items = $query->orderBy('name', 'asc')->paginate($onPage);
+                $items = 'ORDER BY name ASC';
                 break;
             case SortOrder::NAME_DESC->value:
-                $items = $query->orderBy('name', 'desc')->paginate($onPage);
+                $items = 'ORDER BY name desc';
                 break;
             case SortOrder::POP_ASC->value:
-                $items = $query->orderBy('timesPurchased', 'asc')->paginate($onPage);
+                $items = 'ORDER BY timesPurchased asc';
                 break;
             case SortOrder::POP_DESC->value:
-                $items = $query->orderBy('timesPurchased', 'desc')->paginate($onPage);
+                $items = 'ORDER BY timesPurchased desc';
                 break;
             case SortOrder::PRICE_ASC->value:
-                $items = $query->orderBy('priceRub', 'asc')->paginate($onPage);
+                $items = 'ORDER BY priceRub asc';
                 break;
             case SortOrder::PRICE_DESC->value:
-                $items = $query->orderBy('priceRub', 'desc')->paginate($onPage);
+                $items = 'ORDER BY priceRub desc';
                 break;
         }
         return $items;

@@ -18,7 +18,7 @@ use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMet
 
 class CatalogController extends Controller
 {
-    public function products(int $sortOrder = 1, int $available = 1, string $subcategory = "all", string $product = "")
+    public function products(int $sortOrder = 1, int $available = 1, string $subcategory = "all", string $name = "")
     {
         $inputs = [
             new SearchFormInput('name', 'Название товара', 'name', false)
@@ -31,13 +31,18 @@ class CatalogController extends Controller
             new SearchFormHiddenInput('available', 'availableHidden', 0),
             new SearchFormHiddenInput('subcategory', 'subcategory', $subcategory),
         ];
-        $queryInputs = new SearchFormQueryInput('/catalog/products/search', '/catalog/products', 'images, productSpecifications');
-
-        $relationships = null;
-        if(session('loadWith') != null)
-            $relationships = explode(', ', session('loadWith'));
-        $query = ProductService::getFilterQuery($relationships, $subcategory, $product, $available);
-        $products = OrderItemsAction::orderItem($query, $sortOrder, 15);
+        $queryInputs = new SearchFormQueryInput('/catalog/products/search', '/catalog/products', 'images');
+        $products = ProductService::getProductsFilterQuery(
+            $sortOrder, ['images'], 
+            [
+                'id', 
+                'name', 
+                'available', 
+                'priceRub', 
+                'productAmount'
+            ], 
+            $subcategory, $name, $available
+        );
         if(session('products_currency') == 'dol')
         {
             ProductCart::convertCurrency($products);
@@ -47,7 +52,7 @@ class CatalogController extends Controller
             'sortOrder' => $sortOrder, 
             'subcategories' => Subcategory::all(), 
             'subcategory' => $subcategory, 
-            'product' => $product,
+            'product' => $name,
             'categories' => Category::all(), 
             'available' => $available,
             'inputs' => $inputs,
@@ -88,6 +93,6 @@ class CatalogController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::searchProducts($validated);
+        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
     }
 }
