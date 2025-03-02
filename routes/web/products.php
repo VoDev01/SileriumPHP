@@ -18,7 +18,7 @@ Route::get('/categories/all', [CategoriesController::class, 'index']);
 Route::get('/categories/{category}/subcategories', [CategoriesController::class, 'subcategories']);
 
 Route::controller(CatalogController::class)->prefix('catalog')->group(function(){
-    Route::get('products/{sortOrder?}/{available?}/{subcategory?}/{name?}', 'products')->name('allproducts');
+    Route::get('products/{subcategory?}/{sortOrder?}/{available?}/{name?}', 'products')->name('allproducts');
     Route::post('rub_currency', 'rubCurrency');
     Route::post('dol_currency','dolCurrency');
     Route::post('filter','filterProducts');

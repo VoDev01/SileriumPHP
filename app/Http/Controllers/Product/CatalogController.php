@@ -18,7 +18,7 @@ use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMet
 
 class CatalogController extends Controller
 {
-    public function products(int $sortOrder = 1, int $available = 1, string $subcategory = "all", string $name = "")
+    public function products(string $subcategory = "all", int $sortOrder = 1, int $available = 1, string $name = "")
     {
         $inputs = [
             new SearchFormInput('name', 'Название товара', 'name', false)
@@ -33,7 +33,7 @@ class CatalogController extends Controller
         ];
         $queryInputs = new SearchFormQueryInput('/catalog/products/search', '/catalog/products', 'images');
         $products = ProductService::getProductsFilterQuery(
-            $sortOrder, ['images'], 
+            ['images'], 
             [
                 'id', 
                 'name', 
@@ -41,7 +41,7 @@ class CatalogController extends Controller
                 'priceRub', 
                 'productAmount'
             ], 
-            $subcategory, $name, $available
+            $subcategory, $name, $available, $sortOrder
         );
         if(session('products_currency') == 'dol')
         {

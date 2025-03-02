@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\User;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\Product;
-use App\Enum\OrderStatus;
-use App\Actions\OrderAction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\DeleteClosedOrdersAction;
-use Illuminate\Database\Eloquent\Collection;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class UserOrderController extends Controller
