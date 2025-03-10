@@ -3,9 +3,11 @@
 namespace Tests\Feature\API;
 
 use DateTime;
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Review;
 use App\Models\Seller;
 use App\Models\Product;
@@ -311,5 +313,136 @@ class APIProductTest extends TestCase
                 )
                     ->etc()
             );
+    }
+    public function testProductsProfitBetweenDate()
+    {
+        Category::factory()->create();
+        Subcategory::factory()->create();
+        $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(
+            $user,
+            ['create']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
+        $seller = Seller::factory()->has(Product::factory(10))->create();
+
+        $products = $seller->products;
+        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10]);
+
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/products/profit_between_date/', 
+        [
+            'productName' => $products->first()->name,
+            'sellerName' => $seller->nickname,
+            'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
+            'upperDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s')
+        ]);
+
+        $response->assertOk()->assertJson(fn (AssertableJson $json) => 
+            $json->has('products', 1, fn ($json) => $json->where('id', $products->first()->id)->etc())->etc()
+        );
+    }
+    public function testProductsConsumptionBetweenDate()
+    {
+
+        Category::factory()->create();
+        Subcategory::factory()->create();
+        $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(
+            $user,
+            ['create']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
+        $seller = Seller::factory()->has(Product::factory(10))->create();
+
+        $products = $seller->products;
+        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10, 'productsPrice' => 10*$products->first()->priceRub])->for($user)->create();
+
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/products/consumption_between_date/', 
+            [
+                'productName' => $products->first()->name,
+                'sellerName' => $seller->nickname,
+                'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
+                'upperDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s')
+            ]);
+
+        $response->assertOk()->assertJson(fn (AssertableJson $json) => 
+            $json->has('consumption', 1, fn ($json) => 
+                $json->where('product_id', $products->first()->id)
+                ->etc()
+            )->etc()
+        );
+    }
+    public function testProductsAmountExpiry()
+    {
+
+        Category::factory()->create();
+        Subcategory::factory()->create();
+        $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(
+            $user,
+            ['create']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
+        $seller = Seller::factory()->has(Product::factory(10))->create();
+
+        $products = $seller->products;
+        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10, 'productsPrice' => 10*$products->first()->priceRub])->for($user)->create();
+
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/products/est_amount_expiry/',
+        [
+            'productName' => $products->first()->name,
+            'sellerName' => $seller->nickname,
+            'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
+            'upperDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s')
+        ]);
+
+        $response->assertOk()->assertJson(fn (AssertableJson $json) => 
+            $json->has('expiresAt', 1, fn ($json) => 
+                $json->where('product_id', $products->first()->id)
+                ->etc()
+            )->etc()
+        );
     }
 }

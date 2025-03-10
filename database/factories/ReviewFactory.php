@@ -32,7 +32,7 @@ class ReviewFactory extends Factory
             'pros' => fake()->sentence(),
             'cons' => fake()->sentence(),
             'comment' => fake()->sentence(),
-            'rating' => fake()->randomDigit()+1,
+            'rating' => rand(1, 5),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'product_id' => Product::max('id'),

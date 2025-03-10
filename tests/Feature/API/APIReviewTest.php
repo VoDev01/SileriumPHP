@@ -233,4 +233,91 @@ class APIReviewTest extends TestCase
         
         $response->assertSessionHasNoErrors();
     }
+
+    public function testProductAverageRating()
+    {
+
+        Category::factory()->create();
+        Subcategory::factory()->create();
+
+        $seller = Seller::factory()->has(Product::factory())->create();
+        $product = $seller->products->first();
+        $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(
+            $user,
+            ['delete']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
+        $review = Review::factory(30)->for($user)->for($product)->create()->first();
+
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/average_rating', [
+            'productName' => $product->name
+        ]);
+
+        $response->assertOk()
+            ->assertJson( fn(AssertableJson $json) => 
+                $json->has('avgRating', 1, fn($json) =>
+                    $json->where('product_id', $product->id)
+                        ->etc()
+                )
+                ->etc()
+        );
+    }
+    public function testProductRatingCount()
+    {
+
+        Category::factory()->create();
+        Subcategory::factory()->create();
+
+        $seller = Seller::factory()->has(Product::factory())->create();
+        $product = $seller->products->first();
+        $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
+        Passport::actingAs(
+            $user,
+            ['delete']
+        );
+
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            $user->id, 'Test Personal Access Client', 'http://localhost'
+        );
+
+        DB::table('oauth_personal_access_clients')->insert([
+            'client_id' => $client->id,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime,
+        ]);
+
+        $user->createToken($user->email . ' token');
+        $secret = $user->tokens->first()->id;
+        $review = Review::factory(30)->for($user)->for($product)->create()->first();
+
+        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/rating_count', [
+            'productName' => $product->name
+        ]);
+
+        $response->assertOk()
+            ->assertJson( fn(AssertableJson $json) => 
+                $json->has('ratingCount', 1, fn($json) =>
+                    $json->where('product_id', $product->id)
+                        ->etc()
+                )
+                ->etc()
+        );
+    }
 }
