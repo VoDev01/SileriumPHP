@@ -39,11 +39,11 @@
                             <div class="col">
                                 <h3> {{ $product->name }}</h3>
 
-                                @if ($product->images->first() == null)
+                                @if ($product->images == null)
                                     <img src="#" class="col" alt="картинка товара" width="128"
                                         height="256">
                                 @else
-                                    <img src="{{ asset($product->images->first()->imagePath) }}" class="col"
+                                    <img src="{{ asset($product->images->first()) }}" class="col"
                                         alt="картинка товара" width="128" height="256">
                                 @endif
                             </div>
@@ -59,7 +59,7 @@
                                     @endif
                                 </p>
                                 <div class="col">
-                                    <p>{{ $product->stockAmount . ' шт.' }}
+                                    <p>{{ $product->productAmount . ' шт.' }}
                                     </p>
                                 </div>
                                 <div class="col">

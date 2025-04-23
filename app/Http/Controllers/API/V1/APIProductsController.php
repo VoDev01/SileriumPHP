@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Models\Seller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\Products\APIAmountExpirySearchRequest;
+use Illuminate\Database\Eloquent\Collection;
 use App\Http\Requests\API\Products\APIProductsCreateRequest;
 use App\Http\Requests\API\Products\APIProductsDeleteRequest;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\Http\Requests\API\Products\APIProductsUpdateRequest;
-use App\Models\Seller;
-use Illuminate\Database\Eloquent\Collection;
+use App\Http\Requests\API\Products\APIProfitSearchRequest;
+use App\Http\Requests\API\Products\APIConsumptionSearchRequest;
+use Illuminate\Support\Carbon;
 
 class APIProductsController extends Controller
 {
@@ -108,5 +113,56 @@ class APIProductsController extends Controller
             return response()->json(['products' => $products->toArray()], 200);
         else
             return response()->json(['message' => 'Не было найдено товаров с таким именем'], 404);
+    }
+    public function profitBetweenDate(APIProfitSearchRequest $request)
+    {
+        $validated = $request->validated();
+        $products = DB::table('products')
+            ->selectRaw('products.ulid, products.id, SUM(op.productsPrice) as profit')
+            ->leftJoinSub(
+                DB::table('orders_products')->whereIn('order_id', function($query) use ($validated){
+                    $query->select('ulid')->from('orders')
+                    ->whereBetween('orderDate', [$validated['lowerDate'], $validated['upperDate']])->get();
+                })
+                ,'op', 'products.id', '=', 'op.product_id'
+            )
+            ->where('name', 'like', '%'.$validated['productName'].'%')
+            ->groupBy('products.ulid', 'products.id')
+            ->get();
+        if($products != null)
+            return response()->json(['products' => $products->toArray()], 200);
+        else
+            return response()->json(['message' => 'За данный период не найдено доходов.']);
+    }
+    public function consumptionBetweenDate(APIConsumptionSearchRequest $request)
+    {
+        $validated = $request->validated();
+        $consumption = DB::select('SELECT cons.product_id, SUM(cons.consumption) as consumption, cons.consumptionDate FROM (
+            SELECT orders_products.product_id as product_id, SUM(orders_products.productAmount) as consumption, orders.orderDate as consumptionDate FROM orders_products
+            INNER JOIN orders ON orders_products.order_id = orders.ulid
+            WHERE orders.orderDate BETWEEN :lowerDate AND :upperDate
+            GROUP BY product_id, consumptionDate
+        ) as cons
+        GROUP BY cons.product_id, cons.consumptionDate
+        ORDER BY cons.consumptionDate DESC LIMIT 1', ['lowerDate' => $validated['lowerDate'], 'upperDate' => $validated['upperDate']]);
+        if($consumption != null)
+            return response()->json(['consumption' => $consumption], 200);
+        else
+            return response()->json(['message' => 'Количество продаж товара за указанный период не найдено.'], 404);
+    }
+    public function amountExpiry(APIAmountExpirySearchRequest $request)
+    {
+        $validated = $request->validated();
+        $expiresAt = DB::select('SELECT exp.product_id, exp.est_expiry_time FROM ( 
+            SELECT orders_products.product_id AS product_id, (products.productAmount / AVG(orders_products.productAmount)) AS est_expiry_time FROM orders_products
+            INNER JOIN orders ON orders_products.order_id = orders.ulid
+            INNER JOIN products ON orders_products.product_id = products.id 
+            WHERE orders.orderDate BETWEEN :lowerDate AND :upperDate
+            GROUP BY product_id, products.productAmount
+        ) as exp', ['lowerDate' => $validated['lowerDate'], 'upperDate' => $validated['upperDate']]);
+        if($expiresAt != null)
+            return response()->json(['expiresAt' => $expiresAt], 200);
+        else
+            return response()->json(['message' => 'За данный период не найдено товаров.'], 404);
     }
 }

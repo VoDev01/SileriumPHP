@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Product;
+
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -15,10 +16,11 @@ use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
+use Illuminate\Support\Facades\DB;
 
 class CatalogController extends Controller
 {
-    public function products(int $sortOrder = 1, int $available = 1, string $subcategory = "all", string $name = "")
+    public function products(string $subcategory = "all", int $sortOrder = 1, int $available = 1, string $name = "")
     {
         $inputs = [
             new SearchFormInput('name', 'Название товара', 'name', false)
@@ -32,28 +34,30 @@ class CatalogController extends Controller
             new SearchFormHiddenInput('subcategory', 'subcategory', $subcategory),
         ];
         $queryInputs = new SearchFormQueryInput('/catalog/products/search', '/catalog/products', 'images');
-        $products = ProductService::getProductsFilterQuery(
-            $sortOrder, ['images'], 
+        $products = ProductService::getFilteredProducts(
             [
-                'id', 
-                'name', 
-                'available', 
-                'priceRub', 
+                'id',
+                'name',
+                'available',
+                'priceRub',
                 'productAmount'
-            ], 
-            $subcategory, $name, $available
+            ],
+            $subcategory,
+            $name,
+            $available,
+            $sortOrder
         );
-        if(session('products_currency') == 'dol')
+        if (session('products_currency') == 'dol')
         {
             ProductCart::convertCurrency($products);
         }
         return view('catalog.products', [
             'products' => $products,
-            'sortOrder' => $sortOrder, 
-            'subcategories' => Subcategory::all(), 
-            'subcategory' => $subcategory, 
+            'sortOrder' => $sortOrder,
+            'subcategories' => Subcategory::all(),
+            'subcategory' => $subcategory,
             'product' => $name,
-            'categories' => Category::all(), 
+            'categories' => Category::all(),
             'available' => $available,
             'inputs' => $inputs,
             'checkboxInputs' => $checkboxInputs,
@@ -64,14 +68,58 @@ class CatalogController extends Controller
     public function filterProducts(Request $request)
     {
         session(['loadWith' => $request->loadWith]);
-        return redirect()->route('allproducts', ['sortOrder' => $request->sortOrder, 
-        'available' => $request->available, 'subcategory' => $request->subcategory, 
-        'product' => $request->name])->with(['loadWith' => $request->loadWith]);
+        return redirect()->route('allproducts', [
+            'sortOrder' => $request->sortOrder,
+            'available' => $request->available,
+            'subcategory' => $request->subcategory,
+            'product' => $request->name
+        ])->with(['loadWith' => $request->loadWith]);
     }
     public function product(int $productId)
     {
-        $product = Product::where('id', $productId)->with(['productSpecifications', 'images', 'reviews'])->get()->first(); 
-        $reviews = $product->reviews()->with('user')->paginate(5);
+        $product = DB::table('products')
+            ->selectRaw('products.*,
+            GROUP_CONCAT(ps.name SEPARATOR \', \') AS specs_names, 
+            GROUP_CONCAT(ps.specification SEPARATOR \', \') AS specs,
+            GROUP_CONCAT(product_images.imagePath SEPARATOR \', \') as images')
+            ->where('products.id', $productId)
+            ->joinSub(
+                DB::table('products_specifications')
+                    ->select('product_id', 'product_specifications.name', 'product_specifications.specification')
+                    ->where('product_id', $productId)
+                    ->rightJoin('product_specifications', 'products_specifications.specification_id', '=', 'product_specifications.id'),
+                'ps',
+                'products.id',
+                '=',
+                'ps.product_id',
+                'left'
+            )
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+            ->groupBy(
+                'products.ulid',
+                'products.id',
+                'products.name',
+                'products.description',
+                'products.priceRub',
+                'products.productAmount',
+                'products.available',
+                'products.subcategory_id',
+                'products.seller_id',
+                'products.timesPurchased'
+            )
+            ->get()->first();
+        $product->images = $product->images != null ? explode(', ', $product->images) : null;
+        $product->specs_names = $product->specs_names ? explode(', ', $product->specs_names) : null;
+        $product->specs = $product->specs ? explode(', ', $product->specs) : null;
+        if (isset($product->specs))
+        {
+            for ($i = 0; $i < count($product->specs); $i++)
+            {
+                $tmp[$i] = ['name' => $product->specs_names[$i], 'spec' => $product->specs[$i]];
+            }
+            $product->specs = $tmp;
+        }
+        $reviews = DB::table('reviews')->where('product_id', $productId)->join('users', 'reviews.user_id', '=', 'users.id')->paginate(5);
         return view('catalog.product', ['product' => $product, 'reviews' => $reviews]);
     }
     public function rubCurrency()

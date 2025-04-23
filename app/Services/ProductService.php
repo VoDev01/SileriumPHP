@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Actions\OrderItemsAction;
+use App\Enum\SortOrder;
 use App\Models\Product;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -33,54 +34,38 @@ class ProductService
         $product = DB::table('products')->select($select)->where('id', $productId)->get()->first();
         return $product;
     }
-    public static function getProductsFilterQuery(
-        int $sortOrder,
-        array $relationships = null,
+    public static function getFilteredProducts(
         array|string $select = "name",
         string $subcategory = "all",
         string $name = "",
         int $available = 1,
+        int $sortOrder = 2,
         int $items = 15
     )
     {
-        if ($relationships != null)
+        if ($subcategory == "all" && $name == "")
         {
-            $products = Product::select($select)
-                ->with($relationships)
+            $products = Product::with('images')
+                ->where('available', $available)
+                ->orderByRaw(DB::raw(OrderItemsAction::orderItem($sortOrder)))->paginate($items, $select);
+        }
+        else if ($subcategory == "all")
+        {
+            $products = Product::with('images')
+                ->where('name', 'like', '%' . $name . '%')
+                ->where('available', $available)
                 ->orderByRaw(DB::raw(OrderItemsAction::orderItem($sortOrder)))
                 ->paginate($items, $select);
         }
         else
         {
-            if ($subcategory == "all" && $name == "")
-            {
-                $products = DB::table('products')
-                    ->where('available', $available)
-                    ->orderByRaw(DB::raw(OrderItemsAction::orderItem($sortOrder)))->paginate($items, $select);
-            }
-            else if ($subcategory == "all")
-            {
-                $products = DB::table('products')
-                    ->where('name', 'like', '%' . $name . '%')
-                    ->where('available', $available)
-                    ->orderByRaw(DB::raw(OrderItemsAction::orderItem($sortOrder)))
-                    ->paginate($items, $select);
-            }
-            else
-            {
-                $products = DB::table('products')
-                    ->where('name', 'like', '%' . $name . '%')
-                    ->where('subcategory_id', $subcategory)
-                    ->where('available', $available)
-                    ->orderByRaw(DB::raw(OrderItemsAction::orderItem($sortOrder)))
-                    ->paginate($items, $select);
-            }
+            $products = Product::with('images')
+                ->where('name', 'like', '%' . $name . '%')
+                ->where('subcategory_id', $subcategory)
+                ->where('available', $available)
+                ->orderByRaw(DB::raw(OrderItemsAction::orderItem($sortOrder)))
+                ->paginate($items, $select);
         }
-        return $products;
-    }
-    public static function getFilterProducts(array $relationships = null, string $subcategory = "all", string $product = "", int $available = 1)
-    {
-        $products = getProductsFilterQuery($relationships, $subcategory, $product, $available)->get();
         return $products;
     }
 }

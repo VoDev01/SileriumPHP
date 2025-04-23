@@ -10,24 +10,24 @@ class OrderItemsAction
         switch($sortOrder)
         {
             case SortOrder::NAME_ASC->value:
-                $items = 'ORDER BY name ASC';
+                $orderingType = 'name ASC';
                 break;
             case SortOrder::NAME_DESC->value:
-                $items = 'ORDER BY name desc';
+                $orderingType = 'name desc';
                 break;
             case SortOrder::POP_ASC->value:
-                $items = 'ORDER BY timesPurchased asc';
+                $orderingType = 'timesPurchased asc';
                 break;
             case SortOrder::POP_DESC->value:
-                $items = 'ORDER BY timesPurchased desc';
+                $orderingType = 'timesPurchased desc';
                 break;
             case SortOrder::PRICE_ASC->value:
-                $items = 'ORDER BY priceRub asc';
+                $orderingType = 'priceRub asc';
                 break;
             case SortOrder::PRICE_DESC->value:
-                $items = 'ORDER BY priceRub desc';
+                $orderingType = 'priceRub desc';
                 break;
         }
-        return $items;
+        return $orderingType;
     }
 }

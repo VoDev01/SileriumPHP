@@ -4,7 +4,7 @@ namespace App\Http\Requests\API\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class APIProductsSearchRequest extends FormRequest
+class APIAmountExpirySearchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class APIProductsSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'productName' => ['min:5', 'max:100', 'string'],
+            'productName' => ['min:5','max:100', 'string'],
             'sellerName' => ['max:50', 'nullable', 'string'],
-            'reviewsCount' => ['boolean', 'nullable'],
-            'redirect' => ['max:100', 'string', 'nullable'],
-            'loadWith' => ['max:100', 'string', 'nullable']
+            'lowerDate' => ['required', 'date'],
+            'upperDate' => ['required', 'date']
         ];
     }
 }
