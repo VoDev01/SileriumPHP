@@ -17,6 +17,7 @@ use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class CatalogController extends Controller
 {
@@ -119,8 +120,30 @@ class CatalogController extends Controller
             }
             $product->specs = $tmp;
         }
+        $ratingCountResponse = Http::asJson()
+            ->withHeaders(['API-Secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET')])
+            ->post(env('APP_URL'). '/api/v1/reviews/rating_count', ['productName' => $product->name]);
+        if($ratingCountResponse->ok())
+        {
+            $ratingCount = $ratingCountResponse->json(['ratingCount']);
+        }
+        else
+        {
+            $ratingCount = null;
+        }
+        $avgRatingResponse = Http::asJson()
+            ->withHeaders(['API-Secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET')])
+            ->post(env('APP_URL'). '/api/v1/reviews/average_rating', ['productName' => $product->name]);
+        if($avgRatingResponse->ok())
+        {
+            $avgRating = $avgRatingResponse->json(['avgRating']);
+        }
+        else
+        {
+            $avgRating = null;
+        }
         $reviews = DB::table('reviews')->where('product_id', $productId)->join('users', 'reviews.user_id', '=', 'users.id')->paginate(5);
-        return view('catalog.product', ['product' => $product, 'reviews' => $reviews]);
+        return view('catalog.product', ['product' => $product, 'reviews' => $reviews, 'ratingCount' => $ratingCount, 'avgRating' => $avgRating]);
     }
     public function rubCurrency()
     {
