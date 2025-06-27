@@ -118,7 +118,7 @@ class APIProductsController extends Controller
     {
         $validated = $request->validated();
         $products = DB::table('products')
-            ->selectRaw('products.ulid, products.id, SUM(op.productsPrice) as profit')
+            ->selectRaw('products.ulid, products.id, products.name, SUM(op.productsPrice) as profit')
             ->leftJoinSub(
                 DB::table('orders_products')->whereIn('order_id', function($query) use ($validated){
                     $query->select('ulid')->from('orders')
@@ -127,7 +127,7 @@ class APIProductsController extends Controller
                 ,'op', 'products.id', '=', 'op.product_id'
             )
             ->where('name', 'like', '%'.$validated['productName'].'%')
-            ->groupBy('products.ulid', 'products.id')
+            ->groupBy('products.ulid', 'products.id', 'products.name')
             ->get();
         if($products != null)
             return response()->json(['products' => $products->toArray()], 200);
@@ -137,13 +137,14 @@ class APIProductsController extends Controller
     public function consumptionBetweenDate(APIConsumptionSearchRequest $request)
     {
         $validated = $request->validated();
-        $consumption = DB::select('SELECT cons.product_id, SUM(cons.consumption) as consumption, cons.consumptionDate FROM (
-            SELECT orders_products.product_id as product_id, SUM(orders_products.productAmount) as consumption, orders.orderDate as consumptionDate FROM orders_products
+        $consumption = DB::select('SELECT cons.product_id, cons.prodName, SUM(cons.consumption) as consumption, cons.consumptionDate FROM (
+            SELECT orders_products.product_id as product_id, SUM(orders_products.productAmount) as consumption, orders.orderDate as consumptionDate, products.name as prodName FROM orders_products
             INNER JOIN orders ON orders_products.order_id = orders.ulid
+            INNER JOIN products ON orders_products.product_id = products.id
             WHERE orders.orderDate BETWEEN :lowerDate AND :upperDate
-            GROUP BY product_id, consumptionDate
+            GROUP BY product_id, consumptionDate, prodName
         ) as cons
-        GROUP BY cons.product_id, cons.consumptionDate
+        GROUP BY cons.product_id, cons.consumptionDate, cons.prodName
         ORDER BY cons.consumptionDate DESC LIMIT 1', ['lowerDate' => $validated['lowerDate'], 'upperDate' => $validated['upperDate']]);
         if($consumption != null)
             return response()->json(['consumption' => $consumption], 200);
@@ -153,12 +154,13 @@ class APIProductsController extends Controller
     public function amountExpiry(APIAmountExpirySearchRequest $request)
     {
         $validated = $request->validated();
-        $expiresAt = DB::select('SELECT exp.product_id, exp.est_expiry_time FROM ( 
-            SELECT orders_products.product_id AS product_id, (products.productAmount / AVG(orders_products.productAmount)) AS est_expiry_time FROM orders_products
+        $expiresAt = DB::select('SELECT exp.product_id, exp.prodName, exp.est_expiry_time FROM ( 
+            SELECT orders_products.product_id AS product_id, (products.productAmount / AVG(orders_products.productAmount)) AS est_expiry_time, 
+            products.name AS prodName FROM orders_products
             INNER JOIN orders ON orders_products.order_id = orders.ulid
             INNER JOIN products ON orders_products.product_id = products.id 
             WHERE orders.orderDate BETWEEN :lowerDate AND :upperDate
-            GROUP BY product_id, products.productAmount
+            GROUP BY product_id, products.productAmount, prodName
         ) as exp', ['lowerDate' => $validated['lowerDate'], 'upperDate' => $validated['upperDate']]);
         if($expiresAt != null)
             return response()->json(['expiresAt' => $expiresAt], 200);

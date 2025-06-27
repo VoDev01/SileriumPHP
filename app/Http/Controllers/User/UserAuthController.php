@@ -18,6 +18,7 @@ use App\Services\VerifyPhoneService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Password as PasswordUtil;
+use Laravel\Socialite\Facades\Socialite;
 
 class UserAuthController extends Controller
 {
@@ -25,6 +26,11 @@ class UserAuthController extends Controller
     {
         return view('user.auth.login', ['api' => $request->api]);
     }
+    public function signInWithGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+    
     public function postLogin(UserLoginRequest $request)
     {
         $validated = $request->validated();

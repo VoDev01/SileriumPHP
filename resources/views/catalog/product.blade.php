@@ -80,6 +80,23 @@
             @endguest
         </div>
         <h4>Отзывы</h4>
+        @if ($ratingCount != null && $avgRating != null)
+            <div class="row">
+                <div class="col-8">
+                    <p>Средняя оценка - {{ $avgRating['averageRating'] }}</p>
+                </div>
+                <div class="col-4">
+                    <p>Оценки:</p>
+                    <ul>
+                        <li>5: {{ $ratingCount->rating5 }}</li>
+                        <li>4: {{ $ratingCount->rating4 }}</li>
+                        <li>3: {{ $ratingCount->rating3 }}</li>
+                        <li>2: {{ $ratingCount->rating2 }}</li>
+                        <li>1: {{ $ratingCount->rating1 }}</li>
+                    </ul>
+                </div>
+            </div>
+        @endif
         @auth
             <a class="btn btn-outline-primary mt-3 mb-5" href="/user/review/product/{{ $product->id }}">Написать отзыв</a>
         @endauth
