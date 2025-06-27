@@ -13,8 +13,8 @@
                 type: 'POST',
                 url: '/user/login',
                 dataType: 'json',
-                headers : {
-                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: $("#login_form").serialize(),
                 success: function(data) {
@@ -49,7 +49,7 @@
     <div class="container" style="width: 500px;">
         <form id="login_form" action="/user/login" method="POST">
             @csrf
-            <input hidden name="api" value="{{$api}}" />
+            <input hidden name="api" value="{{ $api }}" />
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>
                 <input class="form-control" type="email" id="email" name="email" value="{{ old('email') }}" />
@@ -78,6 +78,10 @@
                 </a>
                 <div class="col-2"></div>
                 <button class="btn btn-outline-primary col-5" id="login_button" type="submit">Войти</button>
+            </div>
+            <div class="mb-3 align-content-center justify-content-center"><p class="text-secondary text-center">Или</p></div>
+            <div class="row mb-3 justify-content-center" style="margin: 0px auto;">
+                <a style="width: 12.5%;" href="/user/sign_in_google"><img src="{{asset("images/logo/web_light_rd_na@1x.png")}}"></img></a>
             </div>
         </form>
     </div>
