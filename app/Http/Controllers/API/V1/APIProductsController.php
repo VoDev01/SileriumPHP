@@ -82,32 +82,33 @@ class APIProductsController extends Controller
         }
         if (isset($sellers))
         {
-            if (session('seller_id') != null)
-                $sellers = $sellers->where('id', session('seller_id'));
-            else
-                $sellers = $sellers->where('nickname', 'like', '%' . $validated['sellerName'] . '%');
+            $sellers = $sellers->where('nickname', 'like', '%' . $validated['sellerName'] . '%')->orWhere('id', $request->sellerId);
         }
         else
         {
-            if (session('seller_id') != null)
-                $sellers = Seller::where('id', session('seller_id'));
-            else
-                $sellers = Seller::where('nickname', 'like', '%' . $validated['sellerName'] . '%');
+            $sellers = Seller::where('nickname', 'like', '%' . $validated['sellerName'] . '%')->orWhere('id', $request->sellerId);
         }
 
-        $sellers = $sellers->get();
+        $sellers = $sellers->get() ?? null;
 
-        $products = new Collection();
-        foreach ($sellers as $seller)
+        if ($sellers !== null)
         {
-            foreach ($seller->products as $product)
+            $products = new Collection();
+            foreach ($sellers as $seller)
             {
-                $result = stripos($product->name, $validated['productName']) !== false;
-                if ($result != false)
+                foreach ($seller->products as $product)
                 {
-                    $products->add($product);
+                    $result = stripos($product->name, $validated['productName']) !== false;
+                    if ($result != false)
+                    {
+                        $products->add($product);
+                    }
                 }
             }
+        }
+        else
+        {
+            $products = Product::where('name', 'like', "%{$validated['productName']}%")->get();
         }
         if ($products != null)
             return response()->json(['products' => $products->toArray()], 200);
@@ -117,20 +118,24 @@ class APIProductsController extends Controller
     public function profitBetweenDate(APIProfitSearchRequest $request)
     {
         $validated = $request->validated();
-        $products = DB::table('products')
+        $profits = DB::table('products')
             ->selectRaw('products.ulid, products.id, products.name, SUM(op.productsPrice) as profit')
             ->leftJoinSub(
-                DB::table('orders_products')->whereIn('order_id', function($query) use ($validated){
+                DB::table('orders_products')->whereIn('order_id', function ($query) use ($validated)
+                {
                     $query->select('ulid')->from('orders')
-                    ->whereBetween('orderDate', [$validated['lowerDate'], $validated['upperDate']])->get();
-                })
-                ,'op', 'products.id', '=', 'op.product_id'
+                        ->whereBetween('orderDate', [$validated['lowerDate'], $validated['upperDate']])->get();
+                }),
+                'op',
+                'products.id',
+                '=',
+                'op.product_id'
             )
-            ->where('name', 'like', '%'.$validated['productName'].'%')
+            ->where('name', 'like', '%' . $validated['productName'] . '%')
             ->groupBy('products.ulid', 'products.id', 'products.name')
             ->get();
-        if($products != null)
-            return response()->json(['products' => $products->toArray()], 200);
+        if ($profits != null)
+            return response()->json(['profits' => $profits->toArray()], 200);
         else
             return response()->json(['message' => 'За данный период не найдено доходов.']);
     }
@@ -146,7 +151,7 @@ class APIProductsController extends Controller
         ) as cons
         GROUP BY cons.product_id, cons.consumptionDate, cons.prodName
         ORDER BY cons.consumptionDate DESC LIMIT 1', ['lowerDate' => $validated['lowerDate'], 'upperDate' => $validated['upperDate']]);
-        if($consumption != null)
+        if ($consumption != null)
             return response()->json(['consumption' => $consumption], 200);
         else
             return response()->json(['message' => 'Количество продаж товара за указанный период не найдено.'], 404);
@@ -162,7 +167,7 @@ class APIProductsController extends Controller
             WHERE orders.orderDate BETWEEN :lowerDate AND :upperDate
             GROUP BY product_id, products.productAmount, prodName
         ) as exp', ['lowerDate' => $validated['lowerDate'], 'upperDate' => $validated['upperDate']]);
-        if($expiresAt != null)
+        if ($expiresAt != null)
             return response()->json(['expiresAt' => $expiresAt], 200);
         else
             return response()->json(['message' => 'За данный период не найдено товаров.'], 404);

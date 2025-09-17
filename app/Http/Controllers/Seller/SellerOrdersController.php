@@ -54,6 +54,6 @@ class SellerOrdersController extends Controller
         if (!array_key_exists('sellerName', $validated))
             $validated['sellerName'] = Seller::where('id', session('seller_id'))->get()->first()->nickname;
 
-        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
+        return SearchFormProductsSearchMethod::search($request, $validated);
     }
 }

@@ -11,7 +11,7 @@
             </a>
         </p>
         <div class="collapse" id="foundUsers">
-            <table class="table table-bordered">
+            <table class="table table-bordered mx-5">
                 <thead>
                     <tr>
                         <td>Id</td>
@@ -38,7 +38,7 @@
             </a>
         </p>
         <div class="collapse" id="roles" style="width: 300px;">
-            <table class="table table-bordered">
+            <table class="table table-bordered mx-5">
                 <thead>
                     <tr>
                         <td>Id</td>

@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class AuthorizeAdminPanelMiddleware
@@ -18,8 +17,8 @@ class AuthorizeAdminPanelMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $response = Gate::inspect('access-admin-moderator');
-        if ($response->allowed())
+        $response = Gate::allows('accessAdminModerator', $request->user());
+        if ($response)
         {
             return $next($request);
         }

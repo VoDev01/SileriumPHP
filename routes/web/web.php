@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BannedController;
 use App\Http\Controllers\FallbackController;
-use App\Http\Controllers\Product\CatalogController;
-use App\Http\Controllers\Product\CategoriesController;
+use App\Http\Controllers\Formatting\PdfFormatterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +17,13 @@ use App\Http\Controllers\Product\CategoriesController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->middleware(['banned'])->name('home');
 
-Route::get('/banned', [BannedController::class, 'banned'])->name('banned')->middleware('banned');
+Route::get('/banned', [BannedController::class, 'banned'])->name('banned');//->middleware('banned');
+
+Route::controller(PdfFormatterController::class)->prefix('format')->middleware(['auth', 'banned'])->group(function ()
+{
+    Route::post('pdf', 'formatPDF');
+});
 
 Route::fallback(FallbackController::class);

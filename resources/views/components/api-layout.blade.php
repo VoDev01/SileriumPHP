@@ -36,11 +36,11 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid g-0">
-        <main role="main" class="pb-3">
-            {{ $slot }}
-        </main>
-    </div>
+
+    <main role="main" class="container pb-3">
+        {{ $slot }}
+    </main>
+
 
     <footer class="border-top footer">
         <div class="container">
@@ -60,4 +60,5 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
 </body>
+
 </html>

@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -18,8 +17,8 @@ class AuthorizeSellerAdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $response = Gate::inspect('access-seller-admin');
-        if ($response->allowed())
+        $response = Gate::allows('accessSellerAdmin', $request->user());
+        if ($response)
         {
             return $next($request);
         }

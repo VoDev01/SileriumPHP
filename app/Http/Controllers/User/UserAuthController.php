@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Actions\HandleUserLoginAction;
 use App\Models\User;
+use App\Actions\UserAction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Actions\UserAction;
 use App\Http\Controllers\Controller;
+use App\Services\VerifyPhoneService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\User\UserLoginRequest;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\Password;
-use App\Http\Requests\User\UserRegisterRequest;
-use App\Services\VerifyPhoneService;
+use App\Services\HandleUserLoginService;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Validation\Rules\Password;
+use App\Http\Requests\User\UserLoginRequest;
+use App\Http\Requests\User\UserRegisterRequest;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Password as PasswordUtil;
-use Laravel\Socialite\Facades\Socialite;
 
 class UserAuthController extends Controller
 {
@@ -26,16 +26,22 @@ class UserAuthController extends Controller
     {
         return view('user.auth.login', ['api' => $request->api]);
     }
+
     public function signInWithGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
-    
+
+    public function signInWithYandex(Request $request)
+    {
+        return HandleUserLoginService::loginOauth($request);
+    }
+
     public function postLogin(UserLoginRequest $request)
     {
         $validated = $request->validated();
         $user = User::where('email', $validated['email'])->get()->first();
-        return HandleUserLoginAction::handle($user, $request, $validated);
+        return HandleUserLoginService::login($user, $request, $validated);
     }
     public function forgotPassword()
     {

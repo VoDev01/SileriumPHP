@@ -1,7 +1,7 @@
 import './bootstrap';
-import jQuery from 'jquery';
+import 'jquery-ui-dist/jquery-ui';
 import toastr from 'toastr';
 import StarRating from 'star-rating.js';
-window.$ = window.jQuery = jQuery;
+
 window.toastr = toastr;
 window.StarRating = StarRating;

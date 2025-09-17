@@ -13,8 +13,7 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <?php $category = \App\Models\Category::where('name', 'Смартфоны')->first(); ?>
-                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
+                <a class="d-block" href="/categories/{{$categories['smartphones']->id}}/subcategories">
                     <img class="d-block w-100" src="{{asset("images/main/9425704_801.jpg")}}" alt="Смартфоны">
                 </a>
                 <div class="carousel-caption d-none d-lg-block text-white">
@@ -22,8 +21,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <?php $category = \App\Models\Category::where('name', 'Комплектующие ПК')->first(); ?>
-                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
+                <a class="d-block" href="/categories/{{$categories['hardware']->id}}/subcategories">
                     <img class="d-block w-100" src="{{asset("images/main/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg")}}" alt="Комплектующие ПК">
                 </a>
                 <div class="carousel-caption d-none d-lg-block text-white">
@@ -31,8 +29,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <?php $category = \App\Models\Category::where('name', 'Мониторы и телевизоры')->first(); ?>
-                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
+                <a class="d-block" href="/categories/{{$categories['monitors']->id}}/subcategories">
                     <img class="d-block w-100" src="{{asset("images/main/27inchmonitors-2048px-9791.jpg")}}" alt="Мониторы и телевизоры">
                 </a>
                 <div class="carousel-caption d-none d-lg-block text-black">
@@ -40,8 +37,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <?php $category = \App\Models\Category::where('name', 'Ноутбуки')->first(); ?>
-                <a class="d-block" href="/categories/{{$category->id}}/subcategories">
+                <a class="d-block" href="/categories/{{$categories['laptops']->id}}/subcategories">
                     <img class="d-block w-100" src="{{asset("images/main/erick-cerritos-i5UV2HpITYA-unsplash.jpg")}}" alt="Ноутбуки">
                 </a>
                 <div class="carousel-caption d-none d-lg-block text-black">

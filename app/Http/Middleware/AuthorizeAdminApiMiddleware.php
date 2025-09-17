@@ -23,8 +23,8 @@ class AuthorizeAdminApiMiddleware
         $auth = $request->header('php-auth-pw');
         if(!$auth === $user->password)
             abort(404, 'Wrong password.');
-        $response = Gate::forUser($user)->inspect('access-admin');
-        if ($response->allowed())
+        $response = Gate::allows('accessAdmin', $user);
+        if ($response)
         {
             return $next($request);
         }

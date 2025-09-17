@@ -1,0 +1,49 @@
+@font-face {
+    font-family: 'Dejavu Serif';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerif.ttf')
+}
+
+
+@page {
+    size: A4 portrait;
+    margin: 2cm;
+}
+
+.page {
+    break-after: always;
+}
+.page:last-child {
+    break-after: unset;
+}
+
+tr {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+td {
+    border: 1px solid black;
+    padding: 5px;
+    word-wrap: break-word;
+    min-width: 20px;
+    max-width: 225px;
+}
+
+th {
+    border: 1px solid black;
+    padding: 5px;
+    width: 100%;
+}
+
+tbody {
+    width: 100%;
+}
+
+table {
+    border: 2px solid black;
+    margin-bottom: 15px;
+    border-collapse: collapse;
+    max-width: 1000px;
+}

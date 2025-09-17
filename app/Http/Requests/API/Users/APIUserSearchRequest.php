@@ -24,6 +24,7 @@ class APIUserSearchRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => ['min:10', 'max:26', 'string'],
             'email' => ['min:2', 'email', 'max:100'],
             'name' => ['max:100', 'nullable', 'string'],
             'surname' => ['max:100', 'nullable', 'string'],
