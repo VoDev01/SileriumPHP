@@ -15,7 +15,7 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        // \App\Http\Middleware\TrustHosts::class,
+        //\App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedUserMiddleware::class,
-       //     \App\Http\Middleware\TimezoneBasedOnIP::class
+            //\App\Http\Middleware\TimezoneBasedOnIP::class
         ],
 
         'api' => [
@@ -47,7 +47,7 @@ class Kernel extends HttpKernel
             TrustProxies::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\VerifyApiSecret::class,
+            \App\Http\Middleware\AuthorizeApiMiddleware::class,
             //\App\Http\Middleware\CheckBannedUser::class,
             //\App\Http\Middleware\TimezoneBasedOnIP::class
         ],
@@ -71,10 +71,8 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'authorize.api.loggedin' => \App\Http\Middleware\AuthorizeApiLoggedInMiddleware::class,
-        'authorize.api.key' => \App\Http\Middleware\AuthorizeApiKeyMiddleware::class,
+        'authorize.api' => \App\Http\Middleware\AuthorizeApiMiddleware::class,
         'authorize.admin' => \App\Http\Middleware\AuthorizeAdminPanelMiddleware::class,
-        //'authorize.admin' => \App\Http\Middleware\AuthorizeAdminApiMiddleware::class,
         'authorize.seller' => \App\Http\Middleware\AuthorizeSellerMiddleware::class,
         'authorize.seller.admin' => \App\Http\Middleware\AuthorizeSellerAdminMiddleware::class,
         'authorize.user.routes' => \App\Http\Middleware\AuthorizeUserRouteMiddleware::class,

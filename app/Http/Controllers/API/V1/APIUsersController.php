@@ -15,12 +15,12 @@ class APIUsersController extends Controller
         $validated = $request->validated();
         if(!array_key_exists('loadWith', $validated))
         {
-            $users = User::where("email", 'like', '%'.$validated['email'].'%')->get();
+            $users = User::where("email", 'like', '%'.$validated['email'].'%')->orWhere('ulid', $validated['id'])->get();
             return response()->json(['users' => $users->toArray()], 200);
         }
         else if(array_key_exists('loadWith', $validated) && !isset($validated['loadWith']))
         {   
-            $users = User::where("email", 'like', '%'.$validated['email'].'%')->get();
+            $users = User::where("email", 'like', '%'.$validated['email'].'%')->orWhere('ulid', $validated['id'])->get();
             return response()->json(['users' => $users->toArray()], 200);
         }
         else
@@ -28,7 +28,7 @@ class APIUsersController extends Controller
             $loadWithArr = explode(', ', $validated['loadWith']);
             $usersQuery = User::with($loadWithArr);
         }
-        $users = $usersQuery->where("email", 'like', '%'.$validated['email'].'%')->get();
+        $users = $usersQuery->where("email", 'like', '%'.$validated['email'].'%')->orWhere('ulid', $validated['id'])->get();
         if($users != null)
             return response()->json(['users' => $users->toArray()], 200);
         else

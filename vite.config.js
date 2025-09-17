@@ -7,7 +7,9 @@ export default defineConfig(
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.js'
+                'resources/js/app.js',
+                'resources/js/prepare-page-for-pdf-formatting.js',
+                'resources/js/hide-datepicker.js'
             ],
             refresh: true,
         }),

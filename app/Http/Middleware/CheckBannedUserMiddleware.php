@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Hash;
-use Illuminate\Support\Str;
 
 class CheckBannedUserMiddleware
 {
@@ -21,10 +19,10 @@ class CheckBannedUserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (null !== Auth::user())
+        if (Auth::check())
         {
-            $response = Gate::inspect('banned');
-            if ($response->allowed())
+            $response = Gate::allows('banned', Auth::user());
+            if (!$response)
                 return $next($request);
             else
                 return redirect()->route('banned');

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Seller;
 
-use Str;
 use App\Models\User;
 use App\Models\Seller;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +28,7 @@ class SellerAuthController extends Controller
         if($response['success'])
         {
             $request->session()->regenerate();
-            session(['seller_id' => $seller_id]);
+            $request->session()->put('seller_id', $seller_id);
             Auth::login($user);
             return response()->json(['redirect' => '/seller/account']);
         }

@@ -27,7 +27,7 @@
                         error_text.id = key + '-error';
                         error_text.classList.add('error');
                         error_text.classList.add('text-danger');
-                        error_text.innerHTML = value[0];
+                        error_text.innerHTML = value;
                         let field_id = '#' + key;
                         $(field_id).after(error_text);
                     });
@@ -79,9 +79,18 @@
                 <div class="col-2"></div>
                 <button class="btn btn-outline-primary col-5" id="login_button" type="submit">Войти</button>
             </div>
-            <div class="mb-3 align-content-center justify-content-center"><p class="text-secondary text-center">Или</p></div>
-            <div class="row mb-3 justify-content-center" style="margin: 0px auto;">
-                <a style="width: 12.5%;" href="/user/sign_in_google"><img src="{{asset("images/logo/web_light_rd_na@1x.png")}}"></img></a>
+            <div class="mb-3 align-content-center justify-content-center">
+                <p class="text-secondary text-center">Или</p>
+            </div>
+
+            <div class="row mb-3">
+                <a class="col" href="/user/sign_in_google">
+                    <img class="d-block mx-auto" src="{{ asset('images/logo/web_light_rd_na@1x.png') }}">
+                </a>
+
+                <a class="col" href="/user/sign_in_yandex">
+                    <img class="d-block mx-auto" style="border-radius: 50px;" src="{{asset('/images/logo/image-1.svg')}}">
+                </a>
             </div>
         </form>
     </div>

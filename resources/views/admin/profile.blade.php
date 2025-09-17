@@ -53,9 +53,9 @@
         </div>
         <div class="row">
             <div class="col-3">
-                <a class="btn btn-outline-secondary text-decoration-none" href="/user/edit_profile">Редактировать профиль</a>
+                <a class="btn btn-outline-secondary text-decoration-none" href="/admin/edit_profile">Редактировать профиль</a>
             </div>
-            <form class="form-inline col-2" action="/user/logout" method="POST">
+            <form class="form-inline col-2" action="/admin/logout" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-outline-danger text-decoration-none" id="logout">Выйти из профиля</button>
             </form>

@@ -19,6 +19,8 @@
     },
     "dependencies": {
         "jquery": "^3.7.1",
+        "jquery-ui": "^1.14.1",
+        "jquery-ui-dist": "^1.13.3",
         "star-rating.js": "^4.3.0",
         "toastr": "^2.1.4"
     }

@@ -9,11 +9,16 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/site.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://www.cbr-xml-daily.ru/money.js"></script>
+    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script type="module">
-        let stars = new StarRating('.star-rating', {tooltip: false});
+        let stars = new StarRating('.star-rating', {
+            tooltip: false
+        });
     </script>
+
     <title>{{ $title }}</title>
 </head>
 
@@ -77,18 +82,17 @@
                         @endauth
                         <a class="nav-item nav-link text-black text-decoration-none" href="/user/profile">
                             Профиль
-                            <i class="bi bi-box-arrow-in-right"></i>  
+                            <i class="bi bi-box-arrow-in-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container-fluid g-0">
-        <main role="main" class="pb-3">
-            {{ $slot }}
-        </main>
-    </div>
+    
+    <main role="main" class="container-fluid g-0 pb-3">
+        {{ $slot }}
+    </main>
 
     <footer class="border-top footer">
         <div class="container">
@@ -108,4 +112,5 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
 </body>
+
 </html>

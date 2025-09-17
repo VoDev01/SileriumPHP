@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         Auth::logout();
         $request->session()->invalidate();
-        $request->session()->regenerate();
+        $request->session()->regenerateToken();
         return redirect()->route('home');
     }
     public function profile()
@@ -31,9 +31,7 @@ class UserController extends Controller
                 ]);
             }
             else
-            {
-                return redirect()->back()->withErrors(['email' => 'Пользователь с таким email адресом уже зарегестрирован']);
-            }
+                $user = $googleUser;
         }
         else
         {

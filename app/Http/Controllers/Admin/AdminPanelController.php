@@ -18,4 +18,11 @@ class AdminPanelController extends Controller
         $user = User::find(Auth::id());
         return view("admin.profile", ['user' => $user]);
     }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
 }

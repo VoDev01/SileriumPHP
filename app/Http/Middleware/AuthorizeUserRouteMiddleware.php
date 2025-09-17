@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AuthorizeUserRouteMiddleware
 {
@@ -17,9 +17,9 @@ class AuthorizeUserRouteMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Gate::allows('access-user'))
+        if(Gate::allows('accessUser', $request->user()))
             return $next($request);
         else
-            return route('login');
+            abort(403);
     }
 }

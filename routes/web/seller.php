@@ -2,11 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FallbackController;
-use App\Http\Controllers\Seller\SellerAccountingReport;
-use App\Http\Controllers\Seller\SellerAccountingReportPDF;
-use App\Http\Controllers\Seller\SellerAccountingReports;
 use App\Http\Controllers\Seller\SellerAccountingReportsController;
-use App\Http\Controllers\Seller\SellerAccountingReportsFormatterController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerAuthController;
 use App\Http\Controllers\Seller\SellerOrdersController;
@@ -17,7 +13,9 @@ Route::middleware('banned')->group(function ()
     Route::controller(SellerController::class)->group(function ()
     {
         Route::get('/', 'index')->name("seller.index");
-        Route::get('/account', 'account')->name("seller.account")->middleware('auth');
+        Route::get('/account', 'account')->name("seller.account")->middleware(['auth', 'authorize.seller']);
+        Route::get('/account/edit', 'editAccount')->middleware(['auth', 'authorize.seller']);
+        Route::post('/account/edit', 'postEditAccount');
     });
     Route::controller(SellerAuthController::class)->group(function ()
     {
@@ -27,9 +25,8 @@ Route::middleware('banned')->group(function ()
         Route::post('login', 'postLogin');
         Route::post('logout', 'logout');
     });
-    Route::controller(SellerProductsController::class)->prefix('products')->middleware('auth')->group(function ()
+    Route::controller(SellerProductsController::class)->prefix('products')->middleware(['authorize.seller'])->group(function ()
     {
-        Route::get('index', 'index')->name('seller.products.index');
         Route::get('list', 'list')->name('seller.products.list');
         Route::get('create', 'create');
         Route::post('create', 'postProduct');
@@ -42,25 +39,21 @@ Route::middleware('banned')->group(function ()
         Route::post('receive_product_reviews', 'receiveProductReviews');
         Route::post('search', 'searchProducts');
     });
-    Route::controller(SellerOrdersController::class)->prefix('orders')->middleware('auth')->group(function ()
+    Route::controller(SellerOrdersController::class)->prefix('orders')->middleware(['auth', 'authorize.seller'])->group(function ()
     {
         Route::get('list', 'orders')->name('seller.orders.list');
         Route::post('searchOrders', 'searchProductsOrders');
     });
-    Route::controller(SellerAccountingReportsController::class)->prefix('accounting_reports')->middleware('auth')->group(function ()
+    Route::controller(SellerAccountingReportsController::class)->prefix('accounting_reports')->middleware(['auth', 'authorize.seller'])->group(function ()
     {
-        Route::get('index', 'index');
         Route::get('generic', 'genericReport');
         Route::get('payments', 'paymentsReport');
         Route::get('refunds', 'refundsReport');
         Route::get('products', 'productsReports')->name('seller.accounting_reports.products');
-        Route::get('product/{ulid}', 'productReport');
+        Route::get('product/{product}', 'productReport')->name('seller.account_reports.product');
+        Route::post('product', 'formProductReport');
         Route::get('tax', 'taxReport');
         Route::post('products/search', 'searchProducts');
-    });
-    Route::controller(SellerAccountingReportsFormatterController::class)->prefix('accounting_reports/format')->middleware('auth')->group(function ()
-    {
-        Route::post('pdf', 'formatPDF');
     });
 });
 

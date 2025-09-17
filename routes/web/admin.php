@@ -8,9 +8,12 @@ use App\Http\Controllers\Admin\ProductsAdminPanelController;
 
 Route::middleware(['authorize.admin', 'banned'])->group(function ()
 {
-
-    Route::get('index', [AdminPanelController::class, 'index'])->name('admin.index');
-    Route::get('profile', [AdminPanelController::class, 'profile']);
+    Route::controller(AdminPanelController::class)->group(function ()
+    {
+        Route::get('index', 'index')->name('admin.index');
+        Route::get('profile', 'profile');
+        Route::post('logout', 'logout');
+    });
 
     Route::controller(ProductsAdminPanelController::class)->prefix('products')->group(function ()
     {
@@ -35,7 +38,7 @@ Route::middleware(['authorize.admin', 'banned'])->group(function ()
         Route::get('ban', 'ban')->name("admin.users.ban");
         Route::post('ban', 'postBan');
         Route::get('payments', 'payments');
-        Route::post('searchPayments')->name('admin.payments.search');
+        Route::post('payments/search', 'searchPayments')->name('admin.payments.search');
         Route::post('search', 'searchUsers')->name('admin.users.search');
     });
 });

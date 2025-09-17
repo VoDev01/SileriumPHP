@@ -2,9 +2,11 @@
     <x-slot name="title">
         Платежи | Silerium
     </x-slot>
-    <div class="container">
+    <div class="d-flex flex-column justify-content-center align-items-center h-100">
         <x-search-form header="Поиск платежей" submit_id="search_payments" :$inputs :$queryInputs />
-        <h3>Платежи</h3>
+        <div>
+            <h3>Платежи</h3>
+        </div>
         @foreach ($payments as $payment)
             <div class="row">
                 <div class="col-4">

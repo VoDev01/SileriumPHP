@@ -127,6 +127,6 @@ class ProductsAdminPanelController extends Controller
         if (!array_key_exists('reviewsCount', $validated))
             $validated['reviewsCount'] = false;
 
-        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
+        return SearchFormProductsSearchMethod::search($request, $validated);
     }
 }

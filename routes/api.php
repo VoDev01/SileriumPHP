@@ -37,40 +37,37 @@ Route::withoutMiddleware(['api'])->middleware(['web'])->group(function ()
     });
 });
 
-Route::middleware(['auth:api', 'auth'])->group(function ()
+Route::controller(APIProductsController::class)->prefix('products')->group(function ()
 {
-    Route::controller(APIProductsController::class)->prefix('products')->group(function ()
-    {
-        Route::get('index/{itemsPerPage?}', 'index');
-        Route::get('show/{product}', 'show');
-        Route::post('create', 'create')->middleware('authorize.seller');
-        Route::patch('update', 'update')->middleware('authorize.seller.admin');
-        Route::delete('delete', 'delete')->middleware('authorize.seller.admin');
-        Route::post('by_name_seller', 'productsByNameSeller');
-        Route::post('profit_between_date', 'profitBetweenDate');
-        Route::post('consumption_between_date', 'consumptionBetweenDate');
-        Route::post('est_amount_expiry', 'amountExpiry');
-    });
-    Route::controller(APISubcategoriesController::class)->prefix('subcategories')->group(function ()
-    {
-        Route::get('index/{itemsPerPage?}', 'index');
-        Route::get('show/{subcategory}', 'show');
-        Route::post('create', 'create')->middleware('authorize.admin');
-        Route::patch('update', 'update')->middleware('authorize.admin');
-        Route::delete('delete', 'delete')->middleware('authorize.admin');
-    });
-    Route::controller(APIReviewsController::class)->prefix('reviews')->group(function ()
-    {
-        Route::get('index', 'index')->middleware('web');
-        Route::patch('update', 'update');
-        Route::delete('delete', 'delete');
-        Route::post('search_user_reviews', 'searchUserReviews')->middleware('authorize.seller.admin');
-        Route::post('search_product_reviews', 'searchProductReviews')->middleware('authorize.seller.admin');
-        Route::post('average_rating', 'averageRating');
-        Route::post('rating_count', 'ratingCount');
-    });
-    Route::controller(APIUsersController::class)->prefix('user')->group(function ()
-    {
-        Route::post('search', 'search')->middleware('authorize.admin');
-    });
+    Route::get('index/{itemsPerPage?}', 'index');
+    Route::get('show/{product}', 'show');
+    Route::post('create', 'create')->middleware('authorize.seller');
+    Route::patch('update', 'update')->middleware('authorize.seller.admin');
+    Route::delete('delete', 'delete')->middleware('authorize.seller.admin');
+    Route::post('by_name_seller', 'productsByNameSeller');
+    Route::post('profit_between_date', 'profitBetweenDate');
+    Route::post('consumption_between_date', 'consumptionBetweenDate');
+    Route::post('est_amount_expiry', 'amountExpiry');
+});
+Route::controller(APISubcategoriesController::class)->prefix('subcategories')->group(function ()
+{
+    Route::get('index/{itemsPerPage?}', 'index');
+    Route::get('show/{subcategory}', 'show');
+    Route::post('create', 'create')->middleware('authorize.admin');
+    Route::patch('update', 'update')->middleware('authorize.admin');
+    Route::delete('delete', 'delete')->middleware('authorize.admin');
+});
+Route::controller(APIReviewsController::class)->prefix('reviews')->group(function ()
+{
+    Route::get('index', 'index')->middleware('web');
+    Route::patch('update', 'update');
+    Route::delete('delete', 'delete');
+    Route::post('search_user_reviews', 'searchUserReviews')->middleware('authorize.seller.admin');
+    Route::post('search_product_reviews', 'searchProductReviews')->middleware('authorize.seller.admin');
+    Route::post('average_rating', 'averageRating');
+    Route::post('rating_count', 'ratingCount');
+});
+Route::controller(APIUsersController::class)->prefix('user')->group(function ()
+{
+    Route::post('search', 'search')->middleware('authorize.admin');
 });

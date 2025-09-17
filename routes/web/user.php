@@ -24,6 +24,7 @@ Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
         Route::post('login', 'postLogin');
 
         Route::get('sign_in_google', 'signInWithGoogle');
+        Route::get('sign_in_yandex', 'signInWithYandex');
 
         Route::get('register', 'register');
         Route::post('register', 'postRegister');

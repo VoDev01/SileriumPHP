@@ -2,18 +2,18 @@
 
 namespace App\View\Components\ComponentsMethods\SearchForm;
 
-use App;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\View\Components\ComponentsMethods\SearchForm\SearchFormInterface;
 
-class SearchFormUsersSearchMethod
+class SearchFormUsersSearchMethod implements SearchFormInterface
 {
-    public static function searchUsers(Request $request, array $validated)
+    public static function search(Request $request, array $validated)
     {
-        $user = User::with('apiKey')->where('ulid', Auth::user()->ulid)->get()->first();
-        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->withHeaders(['API-Key' => $user->apiKey->api_key])->post(env('APP_URL') . '/api/v1/user/search', [
+        $response = Http::asJson()->withHeaders(['API-Key' => $request->api_key, 'API-Secret' => $request->api_secret])->post(env('APP_URL') . '/api/v1/user/search', [
             'email' => $validated["email"],
             'loadWith' => $validated["loadWith"],
             'name' => $validated["name"],
@@ -44,7 +44,13 @@ class SearchFormUsersSearchMethod
             else
             {
                 if (key_exists('redirect', $validated))
-                    return redirect()->route($validated['redirect'])->with('users', $response->json('users'));
+                {
+
+                    if ($request->session()->get('users') !== null)
+                        $request->session()->forget('users');
+                    $request->session()->put('users', $response->json('users'));
+                    return redirect()->route($validated['redirect']);
+                }
                 else
                     return response()->json($response->json('users'));
             }

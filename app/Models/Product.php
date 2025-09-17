@@ -69,6 +69,7 @@ class Product extends Model
         'subcategory_id',
         'seller_id'
     ];
+
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);

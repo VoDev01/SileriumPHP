@@ -21,10 +21,6 @@ use Illuminate\Support\Str;
 
 class SellerProductsController extends Controller
 {
-    public function index()
-    {
-        return view('seller.products.index');
-    }
     public function list(Request $request)
     {
         $this->authorize('viewAny', Product::class);
@@ -139,6 +135,6 @@ class SellerProductsController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
+        return SearchFormProductsSearchMethod::search($request, $validated);
     }
 }

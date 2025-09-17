@@ -24,11 +24,12 @@ class APIProductsSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'productName' => ['min:5', 'max:100', 'string'],
+            'productName' => ['min:1', 'max:100', 'string'],
             'sellerName' => ['max:50', 'nullable', 'string'],
             'reviewsCount' => ['boolean', 'nullable'],
             'redirect' => ['max:100', 'string', 'nullable'],
-            'loadWith' => ['max:100', 'string', 'nullable']
+            'loadWith' => ['max:100', 'string', 'nullable'],
+            'sellerId' => ['integer', 'nullable']
         ];
     }
 }

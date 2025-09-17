@@ -157,14 +157,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if(gettype($roles) == "string")
         {
-            foreach($this->roles()->get() as $role)
+            foreach($this->roles as $role)
                 if($role->role == $roles)
                     return true;
             return false;
         }
         else if(gettype($roles) == "array")
         {
-            foreach($this->roles()->get() as $role)
+            foreach($this->roles as $role)
             {
                 if(in_array($role->role, $roles))
                     return true;

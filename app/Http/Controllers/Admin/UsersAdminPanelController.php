@@ -125,7 +125,8 @@ class UsersAdminPanelController extends Controller
         $payments = SearchFormPaginateResponseService::paginate($request, 'payments', 15) ?? Payment::with(['order', 'order.user'])->paginate(15);
         $inputs = [
             new SearchFormInput('name', 'Имя заказчика', 'name', true),
-            new SearchFormInput('surname', 'Фамилия заказчика', 'surname', true)
+            new SearchFormInput('surname', 'Фамилия заказчика', 'surname', true),
+            new SearchFormInput('ulid', 'Id заказчика', 'ulid', false)
         ];
         $queryInputs = new SearchFormQueryInput('/admin/users/payments/search', 'admin.users.payments', 'order, order.user');
         return view('admin.users.payments', ['payments' => $payments, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
@@ -195,20 +196,11 @@ class UsersAdminPanelController extends Controller
     public function searchUsers(APIUserSearchRequest $request)
     {
         $validated = $request->validated();
-        if (!array_key_exists('id', $validated))
-            $validated['id'] = null;
-        if (!array_key_exists('email', $validated))
-            $validated['email'] = null;
-        if (!array_key_exists('name', $validated))
-            $validated['name'] = null;
-        if (!array_key_exists('surname', $validated))
-            $validated['surname'] = null;
-        if (!array_key_exists('phone', $validated))
-            $validated['phone'] = null;
-        if (!array_key_exists('redirect', $validated))
-            $validated['redirect'] = null;
-        if (!array_key_exists('loadWith', $validated))
-            $validated['loadWith'] = null;
-        return SearchFormUsersSearchMethod::searchUsers($request, $validated);
+        return SearchFormUsersSearchMethod::search($request, $validated);
+    }
+    public function searchPayments(APIUserSearchRequest $request)
+    {
+        $validated = $request->validated();
+        return SearchFormUsersSearchMethod::search($request, $validated);
     }
 }

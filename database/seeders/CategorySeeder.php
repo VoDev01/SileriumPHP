@@ -33,7 +33,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'name' => 'Ноутбуки',
-                'pageName' => 'paptops',
+                'pageName' => 'laptops',
                 'image' => 'images\categories\category_3.jpg'
             ]
             ];
