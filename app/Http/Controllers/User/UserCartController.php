@@ -46,7 +46,7 @@ class UserCartController extends Controller
     }
     public function filterCart(Request $request)
     {
-        $orders = Order::all()->where('orderStatus', $request->orderStatus);
+        $orders = Order::all()->where('status', $request->status);
         return redirect()->route('/user/cart', ['orders' => $orders]);
     }
     public function removeFromCart(Request $request)

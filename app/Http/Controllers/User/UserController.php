@@ -20,7 +20,11 @@ class UserController extends Controller
     public function profile()
     {
         $user = null;
-        if (Socialite::driver('google')->user() !== null)
+        if(Auth::user() !== null)
+        {
+            $user = User::find(Auth::id());
+        }
+        else
         {
             $googleUser = Socialite::driver('google')->user();
             if (User::whereEmail($googleUser->getEmail())->get()->first !== null)
@@ -32,10 +36,6 @@ class UserController extends Controller
             }
             else
                 $user = $googleUser;
-        }
-        else
-        {
-            $user = User::find(Auth::id());
         }
         return view('user.profile', ['user' => $user]);
     }

@@ -23,17 +23,17 @@
                     @endforeach
                 </div>
                 <p>Цена итого: {{ $order->totalPrice }} &#8381;</p>
-                <p>Оформлен: {{ $order->orderDate }}</p>
+                <p>Оформлен: {{ $order->created_at }}</p>
                 @php
-                    $orderStatusDB = $order->orderStatus;
-                    $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);
+                    $statusDB = $order->status;
+                    $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
                 @endphp
-                <p style="color: {{ $orderStatusStr[App\Enum\color] }};">Статус заказа:
-                    {{ $orderStatusStr[App\Enum\ru] }}</p>
-                @if ($orderStatusStr[App\Enum\ru] == ' Обрабатывается')
+                <p style="color: {{ $statusStr[App\Enum\color] }};">Статус заказа:
+                    {{ $statusStr[App\Enum\ru] }}</p>
+                @if ($statusStr[App\Enum\ru] == ' Обрабатывается')
                     <a class="btn btn-danger text-decoration-none"
                         href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Отменить заказ</a>
-                @elseif($orderStatusStr[App\Enum\ru] == ' Получен' && \Carbon\Carbon::now()->diffInDays($order->orderDate) >= 7)
+                @elseif($statusStr[App\Enum\ru] == ' Получен' && \Carbon\Carbon::now()->diffInDays($order->created_at) >= 7)
                     <a class="btn btn-danger text-decoration-none"
                         href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Вернуть средства</a>
                 @else

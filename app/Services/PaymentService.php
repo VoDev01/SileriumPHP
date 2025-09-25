@@ -52,7 +52,7 @@ class PaymentService
         $validated = $request->validated();
         if (isset($validated['paymentId']))
         {
-            Payment::where('payment_id', $request->paymentId)->update(['status' => 'cancelled']);
+            Payment::where('payment_id', $request->paymentId)->update(['status' => 'CANCELLED']);
             Payment::destroy($request->paymentId);
         }
         $order = Order::find($request->orderId);

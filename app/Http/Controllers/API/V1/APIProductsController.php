@@ -124,7 +124,7 @@ class APIProductsController extends Controller
                 DB::table('orders_products')->whereIn('order_id', function ($query) use ($validated)
                 {
                     $query->select('ulid')->from('orders')
-                        ->whereBetween('orderDate', [$validated['lowerDate'], $validated['upperDate']])->get();
+                        ->whereBetween('created_at', [$validated['lowerDate'], $validated['upperDate']])->get();
                 }),
                 'op',
                 'products.id',
@@ -143,10 +143,10 @@ class APIProductsController extends Controller
     {
         $validated = $request->validated();
         $consumption = DB::select('SELECT cons.product_id, cons.prodName, SUM(cons.consumption) as consumption, cons.consumptionDate FROM (
-            SELECT orders_products.product_id as product_id, SUM(orders_products.productAmount) as consumption, orders.orderDate as consumptionDate, products.name as prodName FROM orders_products
+            SELECT orders_products.product_id as product_id, SUM(orders_products.productAmount) as consumption, orders.created_at as consumptionDate, products.name as prodName FROM orders_products
             INNER JOIN orders ON orders_products.order_id = orders.ulid
             INNER JOIN products ON orders_products.product_id = products.id
-            WHERE orders.orderDate BETWEEN :lowerDate AND :upperDate
+            WHERE orders.created_at BETWEEN :lowerDate AND :upperDate
             GROUP BY product_id, consumptionDate, prodName
         ) as cons
         GROUP BY cons.product_id, cons.consumptionDate, cons.prodName
@@ -164,7 +164,7 @@ class APIProductsController extends Controller
             products.name AS prodName FROM orders_products
             INNER JOIN orders ON orders_products.order_id = orders.ulid
             INNER JOIN products ON orders_products.product_id = products.id 
-            WHERE orders.orderDate BETWEEN :lowerDate AND :upperDate
+            WHERE orders.created_at BETWEEN :lowerDate AND :upperDate
             GROUP BY product_id, products.productAmount, prodName
         ) as exp', ['lowerDate' => $validated['lowerDate'], 'upperDate' => $validated['upperDate']]);
         if ($expiresAt != null)

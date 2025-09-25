@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-8"></div>
             </div>
-            <input hidden id="basePrice" value="{{$order->product->priceRub}}" />
+            <input hidden id="basePrice" name="basePrice" value="{{$order->product->priceRub}}" />
             <input hidden name="orderId" value="{{$order->id}}" />
             <h3>Цена итого: <span id="price">{{$order->product->priceRub}}</span> &#8381</h3>
             <button type="submit" class="btn btn-success text-white">Изменить</button>

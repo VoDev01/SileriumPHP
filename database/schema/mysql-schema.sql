@@ -46,9 +46,9 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `ulid` char(26) COLLATE utf8mb4_unicode_ci NOT NULL,
   `totalPrice` double(10,1) NOT NULL,
-  `orderDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `orderAdress` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `orderStatus` enum('ISSUING','PENDING','CLOSED','DELIVERY','RECEIVED') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `address` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('ISSUING','PENDING','CLOSED','DELIVERY','RECEIVED') COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `user_id` bigint(20) unsigned NOT NULL,

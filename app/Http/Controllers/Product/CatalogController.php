@@ -164,6 +164,6 @@ class CatalogController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::searchProducts($request, $validated);
+        return SearchFormProductsSearchMethod::search($request, $validated);
     }
 }

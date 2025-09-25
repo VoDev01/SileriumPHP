@@ -49,12 +49,12 @@
                             </button>
                         </form>
                         {{-- @php
-                                $orderStatusDB = $orderStatus;
-                                $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);
+                                $statusDB = $status;
+                                $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
                             @endphp
-                            <p style="color: {{ $orderStatusStr[App\Enum\color] }};">Статус заказа:
-                                {{ $orderStatusStr[App\Enum\ru] }}</p>
-                            @if ($orderStatus == 'DELIVERY')
+                            <p style="color: {{ $statusStr[App\Enum\color] }};">Статус заказа:
+                                {{ $statusStr[App\Enum\ru] }}</p>
+                            @if ($status == 'DELIVERY')
                                 <form action="/user/closeorder" method="POST">
                                     @csrf
                                     <input hidden name="order_id" value="{{ $id }}">
@@ -94,14 +94,14 @@
                         @csrf
                         <select class="form-select mb-3" name="order_status" style="width: 250px;">
                             @php
-                                $orderStatusDB = $orderStatus;
-                                $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);
+                                $statusDB = $status;
+                                $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
                             @endphp
-                            @foreach (App\Enum\OrderStatus::cases() as $status)
-                                @if ($status === App\Enum\OrderStatus::CLOSED)
+                            @foreach (App\Enum\status::cases() as $status)
+                                @if ($status === App\Enum\status::CLOSED)
                                     @continue
                                 @endif
-                                <option value="{{ $status->value }}">{{ $orderStatusStr[App\Enum\ru] }}</option>
+                                <option value="{{ $status->value }}">{{ $statusStr[App\Enum\ru] }}</option>
                             @endforeach
                         </select>
                         <button type="submit" class="btn btn-outline-success">Фильтровать</button>
@@ -117,14 +117,14 @@
                         @csrf
                         <select class="form-select mb-3" name="order_status" style="width: 250px;">
                             @php
-                                $orderStatusDB = $orderStatus;
-                                $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);
+                                $statusDB = $status;
+                                $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
                             @endphp
-                            @foreach (App\Enum\OrderStatus::cases() as $status)
-                                @if ($status === App\Enum\OrderStatus::CLOSED)
+                            @foreach (App\Enum\status::cases() as $status)
+                                @if ($status === App\Enum\status::CLOSED)
                                     @continue
                                 @endif
-                                <option value="{{ $status->value }}">{{ $orderStatusStr[App\Enum\ru] }}</option>
+                                <option value="{{ $status->value }}">{{ $statusStr[App\Enum\ru] }}</option>
                             @endforeach
                         </select>
                         <button type="submit" class="btn btn-outline-success">Фильтровать</button>

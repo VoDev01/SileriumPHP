@@ -1,4 +1,4 @@
-@if ($error->has())
+@if ($errors->any())
     <div style="display: flex; flex-direction: column;">
         @foreach ($errors->all() as $error)
             <span class="text-danger"> {{ $error }} </span>

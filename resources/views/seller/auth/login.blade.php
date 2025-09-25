@@ -2,35 +2,10 @@
     <x-slot:title>
         Логин | Silerium Partner
     </x-slot>
-    <script type="module">
-        $("#login_button").on("click", function(e){
-            e.preventDefault();
-            $.ajax({
-                method: "POST",
-                url: "/seller/login",
-                accepts: "json",
-                headers: { 
-                    "X-CSRF-TOKEN" : $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $("#login_form").serialize(),
-                success: function(data){
-                    window.location.href = data.redirect;
-                },
-                error: function(data){
-                    let all_errors = data.responseJSON.errors;
-                    $.each(all_errors, function(key, value) {
-                        let error_text = document.createElement('span');
-                        error_text.id = key + '-error';
-                        error_text.classList.add('error');
-                        error_text.classList.add('text-danger');
-                        error_text.innerHTML = value[0];
-                        let field_id = '#' + key;
-                        $(field_id).after(error_text);
-                    });
-                }
-            });
-        });
-    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script type="module" src="{{asset('js/login.js')}}"></script>
+
     <div class="container" style="width: 500px;">
         <h1>Вход в личный кабинет</h1>
         <form id="login_form" method="POST" enctype="multipart/form-data" action="/seller/login">

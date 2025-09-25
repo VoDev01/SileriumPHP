@@ -19,13 +19,13 @@
             @endforeach
         </div>
         <p>Цена итого: {{ $order->totalPrice }} &#8381;</p>
-        <p>Оформлен: {{ $order->orderDate }}</p>
+        <p>Оформлен: {{ $order->created_at }}</p>
         @php
-            $orderStatusDB = $order->orderStatus;
-            $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);
+            $statusDB = $order->status;
+            $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
         @endphp
-        <p style="color: {{ $orderStatusStr[App\Enum\color] }};">Статус заказа:
-            {{ $orderStatusStr[App\Enum\ru] }}</p>
+        <p style="color: {{ $statusStr[App\Enum\color] }};">Статус заказа:
+            {{ $statusStr[App\Enum\ru] }}</p>
         <a class="btn btn-primary text-decoration-none" href="/categories/all">К категориям</a>
     </div>
 </x-layout>

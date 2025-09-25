@@ -19,17 +19,17 @@ class UserPolicy
         {
             $diff = false;
             if ($banned->timeType == "seconds")
-                $diff = $banned->bannedAt->diffInSeconds(Carbon::now()) <= $banned->duration;
+                $diff = $banned->bannedAt->diffInSeconds(Carbon::now()) >= $banned->duration;
             if ($banned->timeType == "minutes")
-                $diff = $banned->bannedAt->diffInMinutes(Carbon::now()) <= $banned->duration;
+                $diff = $banned->bannedAt->diffInMinutes(Carbon::now()) >= $banned->duration;
             else if ($banned->timeType == "hours")
-                $diff = $banned->bannedAt->diffInHours(Carbon::now()) <= $banned->duration;
+                $diff = $banned->bannedAt->diffInHours(Carbon::now()) >= $banned->duration;
             else if ($banned->timeType == "days")
-                $diff = $banned->bannedAt->diffInDays(Carbon::now()) <= $banned->duration;
+                $diff = $banned->bannedAt->diffInDays(Carbon::now()) >= $banned->duration;
             else if ($banned->timeType == "years")
-                $diff = $banned->bannedAt->diffInYears(Carbon::now()) <= $banned->duration;
+                $diff = $banned->bannedAt->diffInYears(Carbon::now()) >= $banned->duration;
 
-            return $diff;
+            return !$diff;
         }
         return false;
     }

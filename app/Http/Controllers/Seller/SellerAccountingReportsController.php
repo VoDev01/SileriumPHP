@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\Payment\SearchPaymentsRequest;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Http\Requests\Formatting\PdfFormattingRequest;
 use App\Models\Seller;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
@@ -18,6 +19,7 @@ use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMet
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class SellerAccountingReportsController extends Controller
 {
@@ -51,16 +53,18 @@ class SellerAccountingReportsController extends Controller
     }
     public function productReport(Request $request, Product $product)
     {
-        if(isset($request->data))
-            return view('seller.accounting_reports.product', [ 'data' => $request->data ]); 
+        if($request->session()->get('data') !== null)
+        {
+            return view('seller.accounting_reports.product', [ 'data' => $request->session()->get('data'), 'product' => $product ]); 
+        }
         return view('seller.accounting_reports.product', [ 'product' => $product ]);
     }
     public function formProductReport(Request $request)
     {
         $product = Product::where('ulid', $request->ulid)->get(['id', 'ulid', 'name', 'productAmount'])->first();
 
-        $lowerDate = (new Carbon($request->lowerDate))->setYear($request->year)->format('d-m-Y H:i:s');
-        $upperDate = (new Carbon($request->upperDate))->setYear($request->year)->format('d-m-Y H:i:s');
+        $lowerDate = (new Carbon)->createFromFormat('d-m', $request->lowerDate)->setYear($request->year)->format('d-m-Y');
+        $upperDate = (new Carbon)->createFromFormat('d-m', $request->upperDate)->setYear($request->year)->format('d-m-Y');
 
         $sellAmount = Http::acceptJson()
             ->withoutVerifying()
@@ -70,6 +74,8 @@ class SellerAccountingReportsController extends Controller
                 'upperDate' => $upperDate
             ])
             ->json('consumption');
+        $sellAmount = $sellAmount[0]['consumption'] ?? null;
+
         $income = Http::acceptJson()
             ->withoutVerifying()
             ->post(env('APP_URL') . '/api/v1/products/profit_between_date', [
@@ -78,6 +84,8 @@ class SellerAccountingReportsController extends Controller
                 'upperDate' => $upperDate
             ])
             ->json('profits');
+        $income = $income[0]['profit'] ?? null;
+
         $expiry = Http::acceptJson()
             ->withoutVerifying()
             ->post(env('APP_URL') . '/api/v1/products/profit_between_date', [
@@ -86,9 +94,9 @@ class SellerAccountingReportsController extends Controller
                 'upperDate' => $upperDate
             ])
             ->json('expiresAt');
+        $expiry = $expiry[0]['est_expires_at'] ?? null;
 
         $data = (object) [
-            'product' => $product,
             'sellAmount' => $sellAmount,
             'income' => $income,
             'expiry' => $expiry,
@@ -97,7 +105,7 @@ class SellerAccountingReportsController extends Controller
             'year' => $request->year
         ];
 
-        return redirect()->route('seller.accounting_reports.product', ['data' => $data]);
+        return redirect()->route('seller.accounting_reports.product', [ 'product' => $product])->with('data', $data);
     }
     public function taxReport()
     {
@@ -119,5 +127,10 @@ class SellerAccountingReportsController extends Controller
         $validated = $request->validated();
 
         return SearchFormPaymentsSearchMethod::search($request, $validated);
+    }
+    public function formatPdfProductReport(PdfFormattingRequest $request)
+    {
+        $validated = $request->validated();
+        return redirect()->route('format.pdf', [...$validated]);
     }
 }

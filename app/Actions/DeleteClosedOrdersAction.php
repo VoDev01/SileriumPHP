@@ -10,7 +10,7 @@ class DeleteClosedOrdersAction
     {
         foreach($orders as $order)
         {
-            if(Carbon::now()->diffInDays($order->deleted_at) >= 7 && $order->orderStatus == "CLOSED")
+            if(Carbon::now()->diffInDays($order->deleted_at) >= 7 && $order->status == "CLOSED")
                 $order->forceDelete();
         }
     }

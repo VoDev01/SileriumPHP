@@ -11,14 +11,14 @@
         <form action="/seller/accounting_reports/product" method="POST">
             @csrf
             <div>
-                <label for="startDate">С</label>
-                <input type="date" name="startDate" id="startDate" class="daypicker" />
+                <label for="lowerDate">С</label>
+                <input type="text" min="4" max="5" name="lowerDate" id="lowerDate" class="daypicker" />
 
-                <label for="startDate">По</label>
-                <input type="date" name="endDate" id="endDate" class="daypicker" />
+                <label for="upperDate">По</label>
+                <input type="text" min="4" max="5" name="upperDate" id="upperDate" class="daypicker" />
 
-                <label for="startDate">Года</label>
-                <input type="date" name="year" id="year" class="yearpicker" />
+                <label for="year">Года</label>
+                <input type="text" min="3" max="5" name="year" id="year" class="yearpicker" />
             </div>
 
             <input hidden name="ulid" value="{{ $product->ulid }}" />
@@ -27,48 +27,52 @@
             </div>
         </form>
     @else
-        <h1>Отчет о розничных продажах товара {{ $data->product->ulid }}</h1>
-        <h4>С {{ $data->lowerDate }} по {{ $data->upperDate }} число {{ $data->year }} года</h4>
-        <div id="seller-products">
-            <table>
-                <thead>
-                    <th>№</th>
-                    <th>Id</th>
-                    <th>Название</th>
-                    <th>Кол-во</th>
-                    <th>Кол-во продаж</th>
-                    <th>Ед.</th>
-                    <th>Цена</th>
-                    <th>Доходы</th>
-                    <th>Валюта</th>
-                    <th>Израсход. через</th>
-                </thead>
-                <tbody>
-                    <td>{{ $data->product->id }}</td>
-                    <td>{{ $data->product->ulid }}</td>
-                    <td>{{ $data->product->name }}</td>
-                    <td>{{ $data->product->productAmount }}</td>
-                    <td>{{ $data->sellAmount }}</td>
-                    <td>Шт.</td>
-                    <td>{{ $data->product->priceRub }}</td>
-                    <td>{{ $data->income }}</td>
-                    <td>Руб.</td>
-                    <td>{{ $data->expiry }}</td>
-                </tbody>
-            </table>
-        </div>
-        <form action="/seller/accounting_reports/format/pdf" method="POST" id="submitForm">
-            @csrf
-            <input hidden type="text" name="pageHtml" id="pageHtml" />
-            <input hidden type="text" name="tableHtml" id="tableHtml" />
-            <input hidden type="text" name="tableRowHtml" id="tableRowHtml" />
-            <input hidden type="text" name="insertAfterElement" id="insertAfterElement" />
-            <input hidden name="data[]" id="data" />
-            <button type="submit" id="formatButton" class="btn btn-primary">
-                Форматировать
-            </button>
-            <x-all-errors />
-        </form>
+        @if ($product === null)
+            <h3>Нет данных за указанный промежуток</h3>
+        @else
+            <h3>Отчет о розничных продажах товара {{ $product->ulid }}</h3>
+            <h4>С {{ $data->lowerDate }} по {{ $data->upperDate }} число {{ $data->year }} года</h4>
+            <div id="seller-products">
+                <table>
+                    <thead>
+                        <th>№</th>
+                        <th>Id</th>
+                        <th>Название</th>
+                        <th>Кол-во</th>
+                        <th>Кол-во продаж</th>
+                        <th>Ед.</th>
+                        <th>Цена</th>
+                        <th>Доходы</th>
+                        <th>Валюта</th>
+                        <th>Израсход. через</th>
+                    </thead>
+                    <tbody>
+                        <td>{{ $product->id }}</td>
+                        <td>{{ $product->ulid }}</td>
+                        <td>{{ $product->name }}</td>
+                        <td>{{ $product->productAmount }}</td>
+                        <td>{{ $data->sellAmount ?? 0 }}</td>
+                        <td>Шт.</td>
+                        <td>{{ $product->priceRub }}</td>
+                        <td>{{ $data->income ?? 0 }}</td>
+                        <td>Руб.</td>
+                        <td>{{ $data->expiry ?? "никогда" }}</td>
+                    </tbody>
+                </table>
+            </div>
+            <form action="/seller/accounting_reports/format/pdf" method="POST" id="submitForm">
+                @csrf
+                <input hidden type="text" name="pageHtml" id="pageHtml" />
+                <input hidden type="text" name="tableHtml" id="tableHtml" />
+                <input hidden type="text" name="tableRowHtml" id="tableRowHtml" />
+                <input hidden type="text" name="insertAfterElement" id="insertAfterElement" />
+                <input hidden name="data[]" id="data" />
+                <button type="submit" id="formatButton" class="btn btn-primary">
+                    Форматировать
+                </button>
+                <x-all-errors />
+            </form>
+        @endif
     @endif
     @vite(['resources/js/prepare-page-for-pdf-formatting.js', 'resources/js/hide-datepicker.js'])
 </x-seller-layout>

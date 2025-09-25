@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderAction 
 {
-    public static function make(string $orderAdress, string $orderStatus, int $user_id)
+    public static function make(string $address, string $status, int $user_id)
     {
         $cartContent = Cart::session($user_id)->getContent();
-        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact('orderAdress', 'orderStatus', 'user_id'));
+        $insert = array_merge(['ulid' => Str::ulid()->toBase32()], compact('address', 'status', 'user_id'));
         $orderId = Order::create(array_merge($insert, ['totalPrice' => 0.0]))->ulid;
         $totalOrderPrice = null;
         foreach($cartContent as $product) { 

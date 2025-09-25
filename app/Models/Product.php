@@ -80,7 +80,7 @@ class Product extends Model
     }
     public function orders()
     {
-        return $this->belongsToMany(Order::class, 'orders_products', 'product_id', 'order_id');
+        return $this->belongsToMany(Order::class, 'orders_products', 'product_id', 'order_id')->withPivot(['productAmount', 'productsPrice']);
     }
     public function productSpecifications()
     {

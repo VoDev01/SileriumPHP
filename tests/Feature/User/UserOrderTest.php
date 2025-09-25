@@ -32,7 +32,7 @@ class UserOrderTest extends TestCase
 
         $this->assertSoftDeleted('orders', ['ulid' => $order->ulid]);
 
-        $this->assertEquals('CLOSED', $order->orderStatus);
+        $this->assertEquals('CANCELLED', $order->status);
     }
     public function testOrdersHistory()
     {
@@ -52,7 +52,7 @@ class UserOrderTest extends TestCase
 
         $this->assertSoftDeleted('orders', ['ulid' => $order->ulid]);
 
-        $this->assertEquals('CLOSED', $order->orderStatus);
+        $this->assertEquals('CLOSED', $order->status);
 
         Carbon::setTestNow(Carbon::now()->addDays(8)); 
 

@@ -24,10 +24,10 @@ class APIUserSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['min:10', 'max:26', 'string'],
+            'id' => ['min:10', 'max:26', 'string', 'nullable'],
             'email' => ['min:2', 'email', 'max:100'],
-            'name' => ['max:100', 'nullable', 'string'],
-            'surname' => ['max:100', 'nullable', 'string'],
+            'name' => ['max:100', 'nullable', 'string', 'nullable'],
+            'surname' => ['max:100', 'nullable', 'string', 'nullable'],
             'phone' => ['numeric', 'min_digits:8', 'max_digits:15', 'nullable'],
             'redirect' => ['max:100', 'nullable', 'string'],
             'loadWith' => ['max:100', 'nullable', 'string']

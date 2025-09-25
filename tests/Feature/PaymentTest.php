@@ -44,6 +44,5 @@ class PaymentTest extends TestCase
 
         $response = $response->assertRedirect('/payment/credentials');
 
-
     }
 }

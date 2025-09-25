@@ -23,13 +23,16 @@ class AuthorizeApiMiddleware
     {
         if (!empty($request->header('API-Key')))
         {
-            $apiUser = APIUser::where('api_key', Crypt::encrypt($request->header('API-Key')))->get()->first();
-
-            if ($apiUser === null)
-                abort(403, 'API Key is invalid.');
+            if ($request->header('API-Key') === null)
+                abort(403, 'API Key is missing.');
 
             if ($request->header('API-Secret') === null)
                 abort(403, 'API Secret is missing.');
+
+            $apiUser = APIUser::where('api_key', $request->header('API-Key'))->get()->first();
+
+            if ($apiUser === null)
+                abort(403, 'API Key is invalid.');
 
             if (Hash::check($request->header('API-Secret'), $apiUser->secret))
                 return $next($request);

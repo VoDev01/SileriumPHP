@@ -22,7 +22,7 @@ class CheckBannedUserMiddleware
         if (Auth::check())
         {
             $response = Gate::allows('banned', Auth::user());
-            if (!$response)
+            if ($response === false)
                 return $next($request);
             else
                 return redirect()->route('banned');

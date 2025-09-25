@@ -50,7 +50,7 @@ Route::middleware('banned')->group(function ()
         Route::get('payments', 'paymentsReport');
         Route::get('refunds', 'refundsReport');
         Route::get('products', 'productsReports')->name('seller.accounting_reports.products');
-        Route::get('product/{product}', 'productReport')->name('seller.account_reports.product');
+        Route::get('product/{product}', 'productReport')->name('seller.accounting_reports.product');
         Route::post('product', 'formProductReport');
         Route::get('tax', 'taxReport');
         Route::post('products/search', 'searchProducts');

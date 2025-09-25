@@ -13,6 +13,10 @@ class APIUsersController extends Controller
     public function search(APIUserSearchRequest $request)
     {
         $validated = $request->validated();
+        if(!array_key_exists('id', $validated))
+        {
+            $validated['id'] = null;
+        }
         if(!array_key_exists('loadWith', $validated))
         {
             $users = User::where("email", 'like', '%'.$validated['email'].'%')->orWhere('ulid', $validated['id'])->get();

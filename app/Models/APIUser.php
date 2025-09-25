@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\APIUserFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,4 +33,9 @@ class APIUser extends Model
             set: fn($value) => Hash::make($value, ['rounds' => 10])
         );
     } 
+
+    protected static function newFactory()
+    {
+        return APIUserFactory::new();
+    }
 }

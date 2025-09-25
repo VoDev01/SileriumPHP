@@ -73,9 +73,9 @@
                         <tbody>
                             <td>{{ $order->id }}</td>
                             <td>{{ $order->totalPrice }}</td>
-                            <td>{{ $order->orderDate }}</td>
-                            <td>{{ $order->orderAdress }}</td>
-                            <td>{{ $order->orderStatus }}</td>
+                            <td>{{ $order->created_at }}</td>
+                            <td>{{ $order->address }}</td>
+                            <td>{{ $order->status }}</td>
                             <td>{{ $order->deleted_at }}</td>
                             <td>{{ $order->productsNames }}</td>
                         </tbody>

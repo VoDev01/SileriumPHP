@@ -53,7 +53,7 @@ class UserReviewTest extends TestCase
 
         for($i = 0; $i < 3; $i++)
         {
-            Storage::disk('reviews')->fileExists($reviewImages[$i]->hashName());
+            Storage::disk('reviews')->exists($reviewImages[$i]->hashName());
         }
         $response->assertValid();
 

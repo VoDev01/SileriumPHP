@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enum\status;
+use App\Events\Order\OrderStatusEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -13,9 +15,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @mixin IdeHelperOrder
  * @property string $ulid
  * @property float $totalPrice
- * @property string $orderDate
- * @property string $orderAdress
- * @property string $orderStatus
+ * @property string $created_at
+ * @property string $address
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $user_id
@@ -28,9 +30,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|Order onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderAdress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereaddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherecreated_at($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherestatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUlid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
@@ -48,9 +50,9 @@ class Order extends Model
     protected $fillable = [
         'ulid',
         'user_id',
-        'orderDate',
-        'orderAdress',
-        'orderStatus',
+        'created_at',
+        'address',
+        'status',
         'deleted_at',
         'updated_at',
         'totalPrice'
@@ -82,9 +84,15 @@ class Order extends Model
     public static function boot()
     {
         parent::boot();
+
         static::softDeleted(function($order) {
-            $order->orderStatus = 'CLOSED';
+            $order->status = 'CLOSED';
             $order->save();
+        });
+
+        static::updated(function($order) {
+            if(in_array($order->status, ['ISSUING', 'DELIVERY', 'ASSEMBLY']))
+                OrderStatusEvent::dispatch($order);
         });
     }
 }

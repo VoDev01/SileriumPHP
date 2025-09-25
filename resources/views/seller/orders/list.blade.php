@@ -28,13 +28,13 @@
                         <td>{{ $productsNames }}</td>
                         <td>{{ $productsAmounts }}</td>
                         <td>{{ $order->totalPrice }}</td>
-                        <td>{{ $order->orderDate }}</td>
-                        <td>{{ $order->orderAdress }}</td>
+                        <td>{{ $order->created_at }}</td>
+                        <td>{{ $order->address }}</td>
                         @php
-                            $orderStatusDB = $order->orderStatus;
-                            $orderStatusStr = explode(',', App\Enum\OrderStatus::fromName($orderStatusDB)->value);
+                            $statusDB = $order->status;
+                            $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
                         @endphp
-                        <td>{{ $orderStatusStr[\App\Enum\ru] }}</td>
+                        <td>{{ $statusStr[\App\Enum\ru] }}</td>
                         <td>{{ $order->user->phone . ' ' . $order->user->name }}</td>
                     </tr>
                 @endforeach

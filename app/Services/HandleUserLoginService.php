@@ -21,20 +21,20 @@ class HandleUserLoginService
     {
         if (Gate::allows('accessAdminModerator', $user))
         {
-            return redirect()->route('admin.index');
+            return response()->json(['redirect' => '/admin/index']);
         }
         else if (Gate::allows('accessSeller', $user))
         {
             $request->session()->put('seller_id', Seller::where('user_id', Auth::id())->get()->first()->id);
-            return redirect()->route('seller.account');
+            return response()->json(['redirect' => '/seller/account']);
         }
         else if (isset($validated['api']))
         {
-            return redirect()->intended('/api/v1/profile');
+            return response()->json(['redirect' => '/api/v1/profile']);
         }
         else
         {
-            return redirect()->intended('/user/profile');
+            return response()->json(['redirect' => '/user/profile']);
         }
     }
     public static function login(User $user, Request $request, array $validated)
@@ -44,7 +44,7 @@ class HandleUserLoginService
             if (Auth::attempt(['email' => $validated['email'], 'password' => $user->password], $validated['remember_me']))
             {
                 $request->session()->regenerate();
-                self::redirectToRoleProfile($request, $validated, Auth::user());
+                return self::redirectToRoleProfile($request, $validated, Auth::user());
             }
         }
         else
@@ -54,10 +54,10 @@ class HandleUserLoginService
             {
                 $request->session()->regenerate();
                 Auth::login($user);
-                self::redirectToRoleProfile($request, $validated, $user);
+                return self::redirectToRoleProfile($request, $validated, $user);
             }
             else
-                return response()->json($response, 422);
+                return response()->json($response, 403);
         }
     }
 

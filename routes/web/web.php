@@ -23,7 +23,7 @@ Route::get('/banned', [BannedController::class, 'banned'])->name('banned');//->m
 
 Route::controller(PdfFormatterController::class)->prefix('format')->middleware(['auth', 'banned'])->group(function ()
 {
-    Route::post('pdf', 'formatPDF');
+    Route::post('pdf', 'formatPDF')->name('format.pdf');
 });
 
 Route::fallback(FallbackController::class);

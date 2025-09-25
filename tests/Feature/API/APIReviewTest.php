@@ -8,14 +8,13 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Seller;
+use App\Models\APIUser;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\UserApiKey;
 use App\Models\Subcategory;
-use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\DB;
-use Laravel\Passport\ClientRepository;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
+use App\Enum\TestAPIRouteMethods;
+use App\Actions\TestAPIRouteForAuth;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -31,36 +30,27 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
-        Passport::actingAs(
-            $user,
-            ['index']
-        );
-
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            $user->id, 'Test Personal Access Client', 'http://localhost'
-        );
-
-        DB::table('oauth_personal_access_clients')->insert([
-            'client_id' => $client->id,
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
-        ]);
-
-        $user->createToken($user->email . ' token');
-        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->withHeader('Api-Secret', $secret)->getJson('/api/v1/reviews/index');
+        $response = TestAPIRouteForAuth::test(
+            '/api/v1/reviews/index',
+            TestAPIRouteMethods::GET,
+            null,
+            $this
+        );
 
         $response->assertOk()
-            ->assertJson(fn (AssertableJson $json) => 
-                $json->has('reviews.data', 15, fn($json) => 
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'reviews.data',
+                    15,
+                    fn($json) =>
                     $json->where('ulid', $review->ulid)
                         ->etc()
                 )
-                ->etc()
-        );
+                    ->etc()
+            );
     }
 
     public function testUpdate()
@@ -71,40 +61,28 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
-        Passport::actingAs(
-            $user,
-            ['update']
-        );
-
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            $user->id, 'Test Personal Access Client', 'http://localhost'
-        );
-
-        DB::table('oauth_personal_access_clients')->insert([
-            'client_id' => $client->id,
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
-        ]);
-
-        $user->createToken($user->email . ' token');
-        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->withHeader('Api-Secret', $secret)->patchJson('/api/v1/reviews/update', [
-            'id' => $review->ulid,
-            'title' => $review->title,
-            'pros' => null,
-            'cons' => null,
-            'comment' => null,
-            'rating' => null
-        ]);
+        $response = TestAPIRouteForAuth::test(
+            '/api/v1/reviews/update',
+            TestAPIRouteMethods::PATCH,
+            [
+                'id' => $review->ulid,
+                'title' => $review->title,
+                'pros' => null,
+                'cons' => null,
+                'comment' => null,
+                'rating' => null
+            ],
+            $this
+        );
 
         $response->assertOk()
-            ->assertJson( fn(AssertableJson $json) =>
+            ->assertJson(
+                fn(AssertableJson $json) =>
                 $json->where('title', $review->title)
                     ->etc()
-        );
+            );
     }
 
     public function testDelete()
@@ -113,33 +91,19 @@ class APIReviewTest extends TestCase
         Subcategory::factory()->create();
 
         $seller = Seller::factory()->has(Product::factory())->create();
-        $product = $seller->products->first();$user = User::factory()->has(Role::factory())->create();
+        $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
-        Passport::actingAs(
-            $user,
-            ['delete']
-        );
-
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            $user->id, 'Test Personal Access Client', 'http://localhost'
-        );
-
-        DB::table('oauth_personal_access_clients')->insert([
-            'client_id' => $client->id,
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
-        ]);
-
-        $user->createToken($user->email . ' token');
-        $secret = $user->tokens->first()->id;
+        $user = User::factory()->has(Role::factory())->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->withHeader('Api-Secret', $secret)->deleteJson('/api/v1/reviews/delete', ['id' => $review->ulid]);
+        TestAPIRouteForAuth::test(
+            '/api/v1/reviews/delete',
+            TestAPIRouteMethods::DELETE,
+            ['id' => $review->ulid],
+            $this
+        );
 
-        $response->assertOk();
-
-        $this->assertDatabaseMissing('reviews', ['ulid' => $review->ulid ]);
+        $this->assertDatabaseMissing('reviews', ['ulid' => $review->ulid]);
     }
 
     public function testSearchUserReviews()
@@ -151,41 +115,32 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs(
-            $user,
-            ['delete']
-        );
-
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            $user->id, 'Test Personal Access Client', 'http://localhost'
-        );
-
-        DB::table('oauth_personal_access_clients')->insert([
-            'client_id' => $client->id,
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
-        ]);
-
-        $user->createToken($user->email . ' token');
-        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/search_user_reviews', [
-            'userEmail' => $user->email,
-            'userId' => $user->ulid
-        ]);
+        $response = TestAPIRouteForAuth::test(
+            '/api/v1/reviews/search_user_reviews',
+            TestAPIRouteMethods::POST,
+            [
+                'userEmail' => $user->email,
+                'userId' => $user->ulid
+            ],
+            $this
+        );
 
         $response->assertSessionHasNoErrors();
 
         $response->assertOk()
-            ->assertJson( fn(AssertableJson $json) => 
-                    $json->has( 'reviews', 30, fn($json) =>
-                        $json->where('id', $review->id)
-                            ->etc()
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'reviews',
+                    30,
+                    fn($json) =>
+                    $json->where('id', $review->id)
+                        ->etc()
                 )
-                ->etc()
-        );
+                    ->etc()
+            );
     }
 
     public function testSearchProductReviews()
@@ -197,40 +152,31 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs(
-            $user,
-            ['delete']
-        );
-
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            $user->id, 'Test Personal Access Client', 'http://localhost'
-        );
-
-        DB::table('oauth_personal_access_clients')->insert([
-            'client_id' => $client->id,
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
-        ]);
-
-        $user->createToken($user->email . ' token');
-        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/search_product_reviews', [
-            'sellerName' => $seller->nickname,
-            'productName' => $product->name
-        ]);
+        $response = TestAPIRouteForAuth::test(
+            '/api/v1/reviews/search_product_reviews',
+            TestAPIRouteMethods::POST,
+            [
+                'sellerName' => $seller->nickname,
+                'productName' => $product->name
+            ],
+            $this
+        );
 
         $response->assertOk()
-            ->assertJson( fn(AssertableJson $json) => 
-                $json->has('reviews', 30, fn($json) =>
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'reviews',
+                    30,
+                    fn($json) =>
                     $json->where('id', $review->id)
                         ->etc()
                 )
-                ->etc()
-        );
-        
+                    ->etc()
+            );
+
         $response->assertSessionHasNoErrors();
     }
 
@@ -244,38 +190,29 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs(
-            $user,
-            ['delete']
-        );
-
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            $user->id, 'Test Personal Access Client', 'http://localhost'
-        );
-
-        DB::table('oauth_personal_access_clients')->insert([
-            'client_id' => $client->id,
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
-        ]);
-
-        $user->createToken($user->email . ' token');
-        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/average_rating', [
-            'productName' => $product->name
-        ]);
+        $response = TestAPIRouteForAuth::test(
+            '/api/v1/reviews/average_rating',
+            TestAPIRouteMethods::POST,
+            [
+                'productName' => $product->name
+            ],
+            $this
+        );
 
         $response->assertOk()
-            ->assertJson( fn(AssertableJson $json) => 
-                $json->has('avgRating', 1, fn($json) =>
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'avgRating',
+                    1,
+                    fn($json) =>
                     $json->where('product_id', $product->id)
                         ->etc()
                 )
-                ->etc()
-        );
+                    ->etc()
+            );
     }
     public function testProductRatingCount()
     {
@@ -287,37 +224,28 @@ class APIReviewTest extends TestCase
         $product = $seller->products->first();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
-        Passport::actingAs(
-            $user,
-            ['delete']
-        );
-
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            $user->id, 'Test Personal Access Client', 'http://localhost'
-        );
-
-        DB::table('oauth_personal_access_clients')->insert([
-            'client_id' => $client->id,
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
-        ]);
-
-        $user->createToken($user->email . ' token');
-        $secret = $user->tokens->first()->id;
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = $this->withHeader('Api-Secret', $secret)->postJson('/api/v1/reviews/rating_count', [
-            'productName' => $product->name
-        ]);
+        $response = TestAPIRouteForAuth::test(
+            '/api/v1/reviews/rating_count',
+            TestAPIRouteMethods::POST,
+            [
+                'productName' => $product->name
+            ],
+            $this
+        );
 
         $response->assertOk()
-            ->assertJson( fn(AssertableJson $json) => 
-                $json->has('ratingCount', 1, fn($json) =>
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'ratingCount',
+                    1,
+                    fn($json) =>
                     $json->where('product_id', $product->id)
                         ->etc()
                 )
-                ->etc()
-        );
+                    ->etc()
+            );
     }
 }
