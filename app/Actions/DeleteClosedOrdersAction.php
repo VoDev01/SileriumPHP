@@ -4,8 +4,17 @@ namespace App\Actions;
 
 use Carbon\Carbon;
 
+/**
+ * Deletes orders in database that are older than 7 days before accessing history
+ */
 class DeleteClosedOrdersAction
 {
+    /**
+     * Delete old orders
+     *
+     * @param mixed $orders
+     * @return void
+     */
     public static function delete($orders)
     {
         foreach($orders as $order)

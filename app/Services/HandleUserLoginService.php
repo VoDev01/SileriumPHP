@@ -11,12 +11,17 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use App\Actions\ValidatePasswordHashAction;
 use Illuminate\Support\Facades\Cache;
-use Symfony\Component\Mime\Encoder\Base64Encoder;
-
-use const App\Enum\en;
 
 class HandleUserLoginService
 {
+    /**
+     * Redicter user to his profile page based on his role
+     *
+     * @param Request $request
+     * @param array $validated If input has api redirect to api profile
+     * @param User $user
+     * @return void
+     */
     private static function redirectToRoleProfile(Request $request, array $validated, User $user)
     {
         if (Gate::allows('accessAdminModerator', $user))
@@ -61,6 +66,12 @@ class HandleUserLoginService
         }
     }
 
+    /**
+     * Login user using foreign oAuth api. Yandex is used right now
+     *
+     * @param Request $request
+     * @return void
+     */
     public static function loginOauth(Request $request)
     {
         if (!$request->hasAny(['code', 'state']))

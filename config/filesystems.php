@@ -72,12 +72,6 @@ return [
             'throw' => false,
         ],
 
-        'docs' => [
-            'driver' => 'local',
-            'root' => storage_path('docs'),
-            'url' => env('APP_URL') . '/storage'
-        ]
-
     ],
 
     /*

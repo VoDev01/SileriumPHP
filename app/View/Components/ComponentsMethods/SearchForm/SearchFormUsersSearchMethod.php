@@ -13,7 +13,11 @@ class SearchFormUsersSearchMethod implements SearchFormInterface
 {
     public static function search(Request $request, array $validated)
     {
-        $response = Http::asJson()->withHeaders(['API-Key' => $request->api_key, 'API-Secret' => $request->api_secret])->post(env('APP_URL') . '/api/v1/user/search', [
+        $response = Http::asJson()->withHeaders([
+            'API-Key' => $request->api_key,
+            'API-Secret' => $request->api_secret
+            ])
+            ->post(env('APP_URL') . '/api/v1/user/search', [
             'email' => $validated["email"],
             'loadWith' => $validated["loadWith"],
             'name' => $validated["name"],

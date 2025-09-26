@@ -6,6 +6,7 @@ use App\Models\Category;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,12 +31,5 @@ class HomeController extends Controller
                 'laptops' => Category::where('pageName', 'laptops')->get()->first(),
             ]]);
         }
-    }
-
-    public function documentation(string $url = null)
-    {
-        $url = $url !== null ? 'documentation/' . $url : $url;
-        return response(Storage::disk('docs')->get($url ?? 'index.html'))
-        ->withHeaders(['Content-Type' => MimeType::fromFilename($url ?? 'index.html')]);
     }
 }

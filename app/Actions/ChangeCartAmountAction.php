@@ -5,11 +5,20 @@ use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class ChangeCartAmountAction
 {
-    public static function changeAmount(int $amount, string $amountChange, int $productId, int $userId)
+    /**
+     * Changes product amount in cart by 1 in either direction (increases or decreases)
+     *
+     * @param integer $amount Initial amount
+     * @param string $amountDir Direction to change amount (up for increase or down for decrease)
+     * @param integer $productId
+     * @param integer $userId
+     * @return void
+     */
+    public static function changeAmount(int $amount, string $amountDir, int $productId, int $userId)
     {
-        if ($amountChange == "up") {
+        if ($amountDir === "up") {
             $amount++;
-        } else {
+        } else  if ($amountDir === "down") { 
             $amount--;
         }
         $cartAmount = Cart::session($userId)->get($productId)->quantity;

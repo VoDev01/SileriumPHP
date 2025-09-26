@@ -1,9 +1,13 @@
 <?php
 namespace App\Actions;
+
+/**
+ * Converts a specified currency of a product to another using cbr api.
+ */
 class ConvertCurrencyAction
 {
     /**
-     * Converts a specified currency of a product to another. Converts rub to dol.
+     * Converts rub to dol.
      * @param float $price
      */
     public static function convertToDol(float $price)

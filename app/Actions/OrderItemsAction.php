@@ -3,6 +3,9 @@ namespace App\Actions;
 
 use App\Enum\SortOrder;
 
+/**
+ * Filter products by some column
+ */
 class OrderItemsAction 
 {
     public static function orderItem(int $sortOrder)

@@ -6,6 +6,9 @@ use App\Models\Review;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Makes new review from the input
+ */
 class MakeReviewAction 
 {
     public static function make(array $validated_input, int $user_id, int $product_id, array $images = null)

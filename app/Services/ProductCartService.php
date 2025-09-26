@@ -17,6 +17,15 @@ class ProductCartService
             $product->priceRub = round(ConvertCurrency::convertToDol($product->priceRub), 1);
         }
     }
+
+    /**
+     * Add as many products to user cart as $amount is inputed
+     *
+     * @param User $user
+     * @param integer $productId
+     * @param integer $amount
+     * @return void
+     */
     public function addProductToCart(User $user, int $productId, int $amount)
     {
         $product = Product::where('id', $productId)->get()->first();

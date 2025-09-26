@@ -8,32 +8,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Actions\\ChangeCartAmountAction\u003A\u003AchangeAmount\u0028\u0029",
             "name": "changeAmount",
-            "summary": "",
+            "summary": "Changes\u0020product\u0020amount\u0020in\u0020cart\u0020by\u00201\u0020in\u0020either\u0020direction\u0020\u0028increases\u0020or\u0020decreases\u0029",
             "url": "classes/App-Actions-ChangeCartAmountAction.html#method_changeAmount"
         },                {
             "fqsen": "\\App\\Actions\\ConvertCurrencyAction",
             "name": "ConvertCurrencyAction",
-            "summary": "",
+            "summary": "Converts\u0020a\u0020specified\u0020currency\u0020of\u0020a\u0020product\u0020to\u0020another\u0020using\u0020cbr\u0020api.",
             "url": "classes/App-Actions-ConvertCurrencyAction.html"
         },                {
             "fqsen": "\\App\\Actions\\ConvertCurrencyAction\u003A\u003AconvertToDol\u0028\u0029",
             "name": "convertToDol",
-            "summary": "Converts\u0020a\u0020specified\u0020currency\u0020of\u0020a\u0020product\u0020to\u0020another.\u0020Converts\u0020rub\u0020to\u0020dol.",
+            "summary": "Converts\u0020rub\u0020to\u0020dol.",
             "url": "classes/App-Actions-ConvertCurrencyAction.html#method_convertToDol"
         },                {
             "fqsen": "\\App\\Actions\\DeleteClosedOrdersAction",
             "name": "DeleteClosedOrdersAction",
-            "summary": "",
+            "summary": "Deletes\u0020orders\u0020in\u0020database\u0020that\u0020are\u0020older\u0020than\u00207\u0020days\u0020before\u0020accessing\u0020history",
             "url": "classes/App-Actions-DeleteClosedOrdersAction.html"
         },                {
             "fqsen": "\\App\\Actions\\DeleteClosedOrdersAction\u003A\u003Adelete\u0028\u0029",
             "name": "delete",
-            "summary": "",
+            "summary": "Delete\u0020old\u0020orders",
             "url": "classes/App-Actions-DeleteClosedOrdersAction.html#method_delete"
         },                {
             "fqsen": "\\App\\Actions\\DisplayPaymentCancellationMessage",
             "name": "DisplayPaymentCancellationMessage",
-            "summary": "",
+            "summary": "Displays\u0020yookassa\u0020cancellation\u0020code\u0020to\u0020readable\u0020message",
             "url": "classes/App-Actions-DisplayPaymentCancellationMessage.html"
         },                {
             "fqsen": "\\App\\Actions\\DisplayPaymentCancellationMessage\u003A\u003Adisplay\u0028\u0029",
@@ -41,24 +41,9 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Actions-DisplayPaymentCancellationMessage.html#method_display"
         },                {
-            "fqsen": "\\App\\Actions\\FormatHtmlToPdf",
-            "name": "FormatHtmlToPdf",
-            "summary": "",
-            "url": "classes/App-Actions-FormatHtmlToPdf.html"
-        },                {
-            "fqsen": "\\App\\Actions\\FormatHtmlToPdf\u003A\u003Aformat\u0028\u0029",
-            "name": "format",
-            "summary": "",
-            "url": "classes/App-Actions-FormatHtmlToPdf.html#method_format"
-        },                {
-            "fqsen": "\\App\\Actions\\FormatHtmlToPdf\u003A\u003AhydrateTableRow\u0028\u0029",
-            "name": "hydrateTableRow",
-            "summary": "",
-            "url": "classes/App-Actions-FormatHtmlToPdf.html#method_hydrateTableRow"
-        },                {
             "fqsen": "\\App\\Actions\\MakeReviewAction",
             "name": "MakeReviewAction",
-            "summary": "",
+            "summary": "Makes\u0020new\u0020review\u0020from\u0020the\u0020input",
             "url": "classes/App-Actions-MakeReviewAction.html"
         },                {
             "fqsen": "\\App\\Actions\\MakeReviewAction\u003A\u003Amake\u0028\u0029",
@@ -68,7 +53,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Actions\\ManualPaginatorAction",
             "name": "ManualPaginatorAction",
-            "summary": "",
+            "summary": "Paginator\u0020that\u0020simplifies\u0020array\u0020pagination",
             "url": "classes/App-Actions-ManualPaginatorAction.html"
         },                {
             "fqsen": "\\App\\Actions\\ManualPaginatorAction\u003A\u003Apaginate\u0028\u0029",
@@ -78,7 +63,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Actions\\OrderAction",
             "name": "OrderAction",
-            "summary": "",
+            "summary": "Makes\u0020order.\u0020Products\u0020retrieved\u0020from\u0020cart\u0020of\u0020the\u0020current\u0020user",
             "url": "classes/App-Actions-OrderAction.html"
         },                {
             "fqsen": "\\App\\Actions\\OrderAction\u003A\u003Amake\u0028\u0029",
@@ -88,7 +73,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Actions\\OrderItemsAction",
             "name": "OrderItemsAction",
-            "summary": "",
+            "summary": "Filter\u0020products\u0020by\u0020some\u0020column",
             "url": "classes/App-Actions-OrderItemsAction.html"
         },                {
             "fqsen": "\\App\\Actions\\OrderItemsAction\u003A\u003AorderItem\u0028\u0029",
@@ -96,9 +81,19 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Actions-OrderItemsAction.html#method_orderItem"
         },                {
+            "fqsen": "\\App\\Actions\\TestAPIRouteForAuth",
+            "name": "TestAPIRouteForAuth",
+            "summary": "",
+            "url": "classes/App-Actions-TestAPIRouteForAuth.html"
+        },                {
+            "fqsen": "\\App\\Actions\\TestAPIRouteForAuth\u003A\u003Atest\u0028\u0029",
+            "name": "test",
+            "summary": "",
+            "url": "classes/App-Actions-TestAPIRouteForAuth.html#method_test"
+        },                {
             "fqsen": "\\App\\Actions\\UserAction",
             "name": "UserAction",
-            "summary": "",
+            "summary": "Makes\u0020user\u0020from\u0020input",
             "url": "classes/App-Actions-UserAction.html"
         },                {
             "fqsen": "\\App\\Actions\\UserAction\u003A\u003Amake\u0028\u0029",
@@ -108,7 +103,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Actions\\ValidatePasswordHashAction",
             "name": "ValidatePasswordHashAction",
-            "summary": "",
+            "summary": "Validates\u0020input\u0020password\u0020with\u0020user\u0020password\u0020hash\u0020in\u0020database",
             "url": "classes/App-Actions-ValidatePasswordHashAction.html"
         },                {
             "fqsen": "\\App\\Actions\\ValidatePasswordHashAction\u003A\u003Avalidate\u0028\u0029",
@@ -186,55 +181,55 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/app-enum.html#constant_color"
         },                {
-            "fqsen": "\\App\\Enum\\status",
-            "name": "status",
+            "fqsen": "\\App\\Enum\\OrderStatus",
+            "name": "OrderStatus",
             "summary": "",
-            "url": "classes/App-Enum-status.html"
+            "url": "classes/App-Enum-OrderStatus.html"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003AfromName\u0028\u0029",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003AfromName\u0028\u0029",
             "name": "fromName",
             "summary": "",
-            "url": "classes/App-Enum-status.html#method_fromName"
+            "url": "classes/App-Enum-OrderStatus.html#method_fromName"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003AISSUING",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003AISSUING",
             "name": "ISSUING",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_ISSUING"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_ISSUING"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003APENDING",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003APENDING",
             "name": "PENDING",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_PENDING"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_PENDING"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003ACACNCELLED",
-            "name": "CACNCELLED",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003ACANCELLED",
+            "name": "CANCELLED",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_CACNCELLED"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_CANCELLED"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003AASSEMBLING",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003AASSEMBLING",
             "name": "ASSEMBLING",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_ASSEMBLING"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_ASSEMBLING"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003ADELIVERY",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003ADELIVERY",
             "name": "DELIVERY",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_DELIVERY"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_DELIVERY"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003AREFUND",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003AREFUND",
             "name": "REFUND",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_REFUND"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_REFUND"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003APARTIAL_REFUND",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003APARTIAL_REFUND",
             "name": "PARTIAL_REFUND",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_PARTIAL_REFUND"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_PARTIAL_REFUND"
         },                {
-            "fqsen": "\\App\\Enum\\status\u003A\u003ARECEIVED",
+            "fqsen": "\\App\\Enum\\OrderStatus\u003A\u003ARECEIVED",
             "name": "RECEIVED",
             "summary": "",
-            "url": "classes/App-Enum-status.html#enumcase_RECEIVED"
+            "url": "classes/App-Enum-OrderStatus.html#enumcase_RECEIVED"
         },                {
             "fqsen": "\\App\\Enum\\OrganizationType",
             "name": "OrganizationType",
@@ -311,25 +306,55 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Enum-TaxSystem.html#enumcase_ESHN"
         },                {
-            "fqsen": "\\App\\Events\\Order\\statusEvent",
-            "name": "statusEvent",
+            "fqsen": "\\App\\Enum\\TestAPIRouteMethods",
+            "name": "TestAPIRouteMethods",
             "summary": "",
-            "url": "classes/App-Events-Order-statusEvent.html"
+            "url": "classes/App-Enum-TestAPIRouteMethods.html"
         },                {
-            "fqsen": "\\App\\Events\\Order\\statusEvent\u003A\u003A__construct\u0028\u0029",
+            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003AGET",
+            "name": "GET",
+            "summary": "",
+            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_GET"
+        },                {
+            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003APOST",
+            "name": "POST",
+            "summary": "",
+            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_POST"
+        },                {
+            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003APUT",
+            "name": "PUT",
+            "summary": "",
+            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_PUT"
+        },                {
+            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003APATCH",
+            "name": "PATCH",
+            "summary": "",
+            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_PATCH"
+        },                {
+            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003ADELETE",
+            "name": "DELETE",
+            "summary": "",
+            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_DELETE"
+        },                {
+            "fqsen": "\\App\\Events\\Order\\OrderStatusEvent",
+            "name": "OrderStatusEvent",
+            "summary": "",
+            "url": "classes/App-Events-Order-OrderStatusEvent.html"
+        },                {
+            "fqsen": "\\App\\Events\\Order\\OrderStatusEvent\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "Create\u0020a\u0020new\u0020event\u0020instance.",
-            "url": "classes/App-Events-Order-statusEvent.html#method___construct"
+            "url": "classes/App-Events-Order-OrderStatusEvent.html#method___construct"
         },                {
-            "fqsen": "\\App\\Events\\Order\\statusEvent\u003A\u003AbroadcastOn\u0028\u0029",
+            "fqsen": "\\App\\Events\\Order\\OrderStatusEvent\u003A\u003AbroadcastOn\u0028\u0029",
             "name": "broadcastOn",
             "summary": "Get\u0020the\u0020channels\u0020the\u0020event\u0020should\u0020broadcast\u0020on.",
-            "url": "classes/App-Events-Order-statusEvent.html#method_broadcastOn"
+            "url": "classes/App-Events-Order-OrderStatusEvent.html#method_broadcastOn"
         },                {
-            "fqsen": "\\App\\Events\\Order\\statusEvent\u003A\u003A\u0024order",
+            "fqsen": "\\App\\Events\\Order\\OrderStatusEvent\u003A\u003A\u0024order",
             "name": "order",
             "summary": "",
-            "url": "classes/App-Events-Order-statusEvent.html#property_order"
+            "url": "classes/App-Events-Order-OrderStatusEvent.html#property_order"
         },                {
             "fqsen": "\\App\\Events\\Product\\ProductBoughtEvent",
             "name": "ProductBoughtEvent",
@@ -470,6 +495,11 @@ Search.appendIndex(
             "name": "logout",
             "summary": "",
             "url": "classes/App-Http-Controllers-Admin-AdminPanelController.html#method_logout"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\Admin\\AdminPanelController\u003A\u003Adocumentation\u0028\u0029",
+            "name": "documentation",
+            "summary": "",
+            "url": "classes/App-Http-Controllers-Admin-AdminPanelController.html#method_documentation"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\Admin\\ProductsAdminPanelController",
             "name": "ProductsAdminPanelController",
@@ -820,11 +850,6 @@ Search.appendIndex(
             "name": "index",
             "summary": "",
             "url": "classes/App-Http-Controllers-HomeController.html#method_index"
-        },                {
-            "fqsen": "\\App\\Http\\Controllers\\HomeController\u003A\u003Adocumentation\u0028\u0029",
-            "name": "documentation",
-            "summary": "",
-            "url": "classes/App-Http-Controllers-HomeController.html#method_documentation"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\Payment\\PaymentController",
             "name": "PaymentController",
@@ -1776,6 +1801,36 @@ Search.appendIndex(
             "summary": "Get\u0020the\u0020validation\u0020rules\u0020that\u0020apply\u0020to\u0020the\u0020request.",
             "url": "classes/App-Http-Requests-API-Users-APIUserSearchRequest.html#method_rules"
         },                {
+            "fqsen": "\\App\\Http\\Requests\\Cart\\AddProductToCartRequest",
+            "name": "AddProductToCartRequest",
+            "summary": "",
+            "url": "classes/App-Http-Requests-Cart-AddProductToCartRequest.html"
+        },                {
+            "fqsen": "\\App\\Http\\Requests\\Cart\\AddProductToCartRequest\u003A\u003Aauthorize\u0028\u0029",
+            "name": "authorize",
+            "summary": "Determine\u0020if\u0020the\u0020user\u0020is\u0020authorized\u0020to\u0020make\u0020this\u0020request.",
+            "url": "classes/App-Http-Requests-Cart-AddProductToCartRequest.html#method_authorize"
+        },                {
+            "fqsen": "\\App\\Http\\Requests\\Cart\\AddProductToCartRequest\u003A\u003Arules\u0028\u0029",
+            "name": "rules",
+            "summary": "Get\u0020the\u0020validation\u0020rules\u0020that\u0020apply\u0020to\u0020the\u0020request.",
+            "url": "classes/App-Http-Requests-Cart-AddProductToCartRequest.html#method_rules"
+        },                {
+            "fqsen": "\\App\\Http\\Requests\\Cart\\ChangeProductAmountRequest",
+            "name": "ChangeProductAmountRequest",
+            "summary": "",
+            "url": "classes/App-Http-Requests-Cart-ChangeProductAmountRequest.html"
+        },                {
+            "fqsen": "\\App\\Http\\Requests\\Cart\\ChangeProductAmountRequest\u003A\u003Aauthorize\u0028\u0029",
+            "name": "authorize",
+            "summary": "Determine\u0020if\u0020the\u0020user\u0020is\u0020authorized\u0020to\u0020make\u0020this\u0020request.",
+            "url": "classes/App-Http-Requests-Cart-ChangeProductAmountRequest.html#method_authorize"
+        },                {
+            "fqsen": "\\App\\Http\\Requests\\Cart\\ChangeProductAmountRequest\u003A\u003Arules\u0028\u0029",
+            "name": "rules",
+            "summary": "Get\u0020the\u0020validation\u0020rules\u0020that\u0020apply\u0020to\u0020the\u0020request.",
+            "url": "classes/App-Http-Requests-Cart-ChangeProductAmountRequest.html#method_rules"
+        },                {
             "fqsen": "\\App\\Http\\Requests\\Formatting\\PdfFormattingRequest",
             "name": "PdfFormattingRequest",
             "summary": "",
@@ -2016,10 +2071,10 @@ Search.appendIndex(
             "summary": "Create\u0020the\u0020event\u0020listener.",
             "url": "classes/App-Listeners-OrderSubcriber.html#method___construct"
         },                {
-            "fqsen": "\\App\\Listeners\\OrderSubcriber\u003A\u003AhandlestatusEvent\u0028\u0029",
-            "name": "handlestatusEvent",
+            "fqsen": "\\App\\Listeners\\OrderSubcriber\u003A\u003AhandleStatusEvent\u0028\u0029",
+            "name": "handleStatusEvent",
             "summary": "Handle\u0020the\u0020event.",
-            "url": "classes/App-Listeners-OrderSubcriber.html#method_handlestatusEvent"
+            "url": "classes/App-Listeners-OrderSubcriber.html#method_handleStatusEvent"
         },                {
             "fqsen": "\\App\\Listeners\\OrderSubcriber\u003A\u003Asubscribe\u0028\u0029",
             "name": "subscribe",
@@ -2931,6 +2986,21 @@ Search.appendIndex(
             "summary": "The\u0020path\u0020to\u0020the\u0020\u0022home\u0022\u0020route\u0020for\u0020your\u0020application.",
             "url": "classes/App-Providers-RouteServiceProvider.html#constant_HOME"
         },                {
+            "fqsen": "\\App\\Services\\FormatHtmlToPdf",
+            "name": "FormatHtmlToPdf",
+            "summary": "Fromats\u0020html\u0020to\u0020pdf",
+            "url": "classes/App-Services-FormatHtmlToPdf.html"
+        },                {
+            "fqsen": "\\App\\Services\\FormatHtmlToPdf\u003A\u003AformatTable\u0028\u0029",
+            "name": "formatTable",
+            "summary": "Formats\u0020only\u0020table\u0020of\u0020the\u0020original\u0020html\u0020page\u0020and\u0020paginates\u0020its\u0020contents\u0020across\u0020all\u0020pdf\u0020document\u0020pages",
+            "url": "classes/App-Services-FormatHtmlToPdf.html#method_formatTable"
+        },                {
+            "fqsen": "\\App\\Services\\FormatHtmlToPdf\u003A\u003AhydrateTableRow\u0028\u0029",
+            "name": "hydrateTableRow",
+            "summary": "Injects\u0020data\u0020in\u0020td\u0020elements\u0020of\u0020the\u0020table\u0020rows",
+            "url": "classes/App-Services-FormatHtmlToPdf.html#method_hydrateTableRow"
+        },                {
             "fqsen": "\\App\\Services\\HandleUserLoginService",
             "name": "HandleUserLoginService",
             "summary": "",
@@ -2938,7 +3008,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Services\\HandleUserLoginService\u003A\u003AredirectToRoleProfile\u0028\u0029",
             "name": "redirectToRoleProfile",
-            "summary": "",
+            "summary": "Redicter\u0020user\u0020to\u0020his\u0020profile\u0020page\u0020based\u0020on\u0020his\u0020role",
             "url": "classes/App-Services-HandleUserLoginService.html#method_redirectToRoleProfile"
         },                {
             "fqsen": "\\App\\Services\\HandleUserLoginService\u003A\u003Alogin\u0028\u0029",
@@ -2948,7 +3018,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Services\\HandleUserLoginService\u003A\u003AloginOauth\u0028\u0029",
             "name": "loginOauth",
-            "summary": "",
+            "summary": "Login\u0020user\u0020using\u0020foreign\u0020oAuth\u0020api.\u0020Yandex\u0020is\u0020used\u0020right\u0020now",
             "url": "classes/App-Services-HandleUserLoginService.html#method_loginOauth"
         },                {
             "fqsen": "\\App\\Services\\PaymentService",
@@ -2958,17 +3028,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Services\\PaymentService\u003A\u003Acreate\u0028\u0029",
             "name": "create",
-            "summary": "",
+            "summary": "Make\u0020a\u0020payment",
             "url": "classes/App-Services-PaymentService.html#method_create"
         },                {
             "fqsen": "\\App\\Services\\PaymentService\u003A\u003Acancel\u0028\u0029",
             "name": "cancel",
-            "summary": "",
+            "summary": "Cancel\u0020payment",
             "url": "classes/App-Services-PaymentService.html#method_cancel"
         },                {
             "fqsen": "\\App\\Services\\PaymentService\u003A\u003Arefund\u0028\u0029",
             "name": "refund",
-            "summary": "",
+            "summary": "Refund\u0020payment",
             "url": "classes/App-Services-PaymentService.html#method_refund"
         },                {
             "fqsen": "\\App\\Services\\ProductCartService",
@@ -2983,7 +3053,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Services\\ProductCartService\u003A\u003AaddProductToCart\u0028\u0029",
             "name": "addProductToCart",
-            "summary": "",
+            "summary": "Add\u0020as\u0020many\u0020products\u0020to\u0020user\u0020cart\u0020as\u0020\u0024amount\u0020is\u0020inputed",
             "url": "classes/App-Services-ProductCartService.html#method_addProductToCart"
         },                {
             "fqsen": "\\App\\Services\\ProductService",
@@ -2993,12 +3063,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Services\\ProductService\u003A\u003Amake\u0028\u0029",
             "name": "make",
-            "summary": "",
+            "summary": "Make\u0020product\u0020and\u0020select\u0020only\u0020needed",
             "url": "classes/App-Services-ProductService.html#method_make"
         },                {
             "fqsen": "\\App\\Services\\ProductService\u003A\u003AgetFilteredProducts\u0028\u0029",
             "name": "getFilteredProducts",
-            "summary": "",
+            "summary": "Filter\u0020products\u0020by\u0020some\u0020column\u0020or\u0020name",
             "url": "classes/App-Services-ProductService.html#method_getFilteredProducts"
         },                {
             "fqsen": "\\App\\Services\\ReviewService",
@@ -3008,27 +3078,27 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Services\\ReviewService\u003A\u003Amake\u0028\u0029",
             "name": "make",
-            "summary": "",
+            "summary": "Make\u0020review",
             "url": "classes/App-Services-ReviewService.html#method_make"
         },                {
             "fqsen": "\\App\\Services\\ReviewService\u003A\u003Aupdate\u0028\u0029",
             "name": "update",
-            "summary": "",
+            "summary": "Update\u0020review",
             "url": "classes/App-Services-ReviewService.html#method_update"
         },                {
             "fqsen": "\\App\\Services\\SearchFormPaginateResponseService",
             "name": "SearchFormPaginateResponseService",
-            "summary": "",
+            "summary": "Paginates\u0020SearchForm\u0020response",
             "url": "classes/App-Services-SearchFormPaginateResponseService.html"
         },                {
             "fqsen": "\\App\\Services\\SearchFormPaginateResponseService\u003A\u003Apaginate\u0028\u0029",
             "name": "paginate",
-            "summary": "",
+            "summary": "Paginate\u0020found\u0020models\u0020that\u0020is\u0020stored\u0020in\u0020session",
             "url": "classes/App-Services-SearchFormPaginateResponseService.html#method_paginate"
         },                {
             "fqsen": "\\App\\Services\\SearchFormPaginateResponseService\u003A\u003ApaginateRelations\u0028\u0029",
             "name": "paginateRelations",
-            "summary": "",
+            "summary": "Paginate\u0020relations\u0020of\u0020the\u0020found\u0020models",
             "url": "classes/App-Services-SearchFormPaginateResponseService.html#method_paginateRelations"
         },                {
             "fqsen": "\\App\\Services\\UpdateSessionValueJsonService",
@@ -3128,7 +3198,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormCheckboxInput",
             "name": "SearchFormCheckboxInput",
-            "summary": "",
+            "summary": "Checkbox\u0020input\u0020field\u0020of\u0020the\u0020SearchForm",
             "url": "classes/App-View-Components-ComponentsInputs-SearchForm-SearchFormCheckboxInput.html"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormCheckboxInput\u003A\u003A__construct\u0028\u0029",
@@ -3143,7 +3213,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormHiddenInput",
             "name": "SearchFormHiddenInput",
-            "summary": "",
+            "summary": "Hidden\u0020input\u0020field\u0020of\u0020the\u0020SearchForm",
             "url": "classes/App-View-Components-ComponentsInputs-SearchForm-SearchFormHiddenInput.html"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormHiddenInput\u003A\u003A__construct\u0028\u0029",
@@ -3168,7 +3238,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormInput",
             "name": "SearchFormInput",
-            "summary": "",
+            "summary": "Text\u0020input\u0020of\u0020the\u0020SearchForm",
             "url": "classes/App-View-Components-ComponentsInputs-SearchForm-SearchFormInput.html"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormInput\u003A\u003A__construct\u0028\u0029",
@@ -3208,7 +3278,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormQueryInput",
             "name": "SearchFormQueryInput",
-            "summary": "",
+            "summary": "Url\u0020query\u0020parameters\u0020of\u0020the\u0020SearchForm",
             "url": "classes/App-View-Components-ComponentsInputs-SearchForm-SearchFormQueryInput.html"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormQueryInput\u003A\u003A__construct\u0028\u0029",
@@ -3238,7 +3308,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormInterface\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormInterface.html#method_search"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormPaymentsSearchMethod",
@@ -3248,7 +3318,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormPaymentsSearchMethod\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormPaymentsSearchMethod.html#method_search"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormProductsSearchMethod",
@@ -3258,7 +3328,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormProductsSearchMethod\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormProductsSearchMethod.html#method_search"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormUsersSearchMethod",
@@ -3268,7 +3338,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormUsersSearchMethod\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormUsersSearchMethod.html#method_search"
         },                {
             "fqsen": "\\App\\View\\Components\\Error",
@@ -3585,6 +3655,11 @@ Search.appendIndex(
             "name": "Users",
             "summary": "",
             "url": "namespaces/app-http-requests-api-users.html"
+        },                {
+            "fqsen": "\\App\\Http\\Requests\\Cart",
+            "name": "Cart",
+            "summary": "",
+            "url": "namespaces/app-http-requests-cart.html"
         },                {
             "fqsen": "\\App\\Http\\Requests\\Formatting",
             "name": "Formatting",

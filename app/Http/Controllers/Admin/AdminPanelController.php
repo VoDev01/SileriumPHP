@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use GuzzleHttp\Psr7\MimeType;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class AdminPanelController extends Controller
 {
@@ -24,5 +26,12 @@ class AdminPanelController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
+    }
+
+    public function documentation(string $url = null)
+    {
+        $url = $url ?? 'index.html';
+        return response(File::get(storage_path('docs') . '/' . $url))
+        ->withHeaders(['Content-Type' => MimeType::fromFilename($url)]);
     }
 }

@@ -21,6 +21,7 @@ class TestAPIRouteForAuth
     {
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
+        //Choose assert function method
         $assert = match($httpMethod)
         {
             TestAPIRouteMethods::GET => function() {

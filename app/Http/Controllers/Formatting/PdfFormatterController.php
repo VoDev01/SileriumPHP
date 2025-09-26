@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Formatting;
 
-use App\Actions\FormatHtmlToPdf;
+use App\Services\FormatHtmlToPdf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Formatting\PdfFormattingRequest;
 
@@ -11,7 +11,7 @@ class PdfFormatterController extends Controller
     public function formatPDF(PdfFormattingRequest $request)
     {
         $validated = $request->validated();
-        return FormatHtmlToPdf::format(
+        return FormatHtmlToPdf::formatTable(
             $validated["pageHtml"],
             $validated["tableHtml"],
             $validated["tableRowHtml"],

@@ -8,6 +8,15 @@ use Illuminate\Support\Str;
 
 class ReviewService 
 {
+    /**
+     * Make review
+     *
+     * @param array $validatedInput
+     * @param integer $userId
+     * @param integer $productId
+     * @param array|null $images
+     * @return void
+     */
     public static function make(array $validatedInput, int $userId, int $productId, array $images = null)
     {
         $reviewId = Review::insertGetId([
@@ -31,6 +40,15 @@ class ReviewService
         $review = Review::find($reviewId);
         return $review;
     }
+    /**
+     * Update review
+     *
+     * @param integer $id
+     * @param array $validatedInput
+     * @param integer $productId
+     * @param integer $userId
+     * @return void
+     */
     public static function update(int $id, array $validatedInput, int $productId, int $userId)
     {
         Review::where('id', $id)->update([

@@ -28,14 +28,15 @@ class OrderSubcriber
      * @param  object  $event
      * @return void
      */
-    public function handlestatusEvent(OrderStatusEvent $event)
+
+    public function handleStatusEvent(OrderStatusEvent $event)
     {
         $event->order->user->notify(new statusChangedNotification($event->order));
     }
 
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(OrderStatusEvent::class, [OrderSubcriber::class, 'handlestatusEvent']);
+        $events->listen(OrderStatusEvent::class, [OrderSubcriber::class, 'handleStatusEvent']);
     }
     
 }

@@ -3,9 +3,22 @@
 
 namespace App\View\Components\ComponentsInputs\SearchForm;
 
+/**
+ * Checkbox input field of the SearchForm
+ */
 class SearchFormCheckboxInput extends SearchFormInput
 {
-    public bool $checked;
+    public bool $checked = false;
+
+    /**
+     * @param string $inputName Name attribute
+     * @param string $displayName Lable text
+     * @param string $errorField Error field name (same as name attribute)
+     * @param boolean $required Should the field be required
+     * @param boolean $checked Should the field be checked
+     * @param string|null $inputId Id attribute
+     * @param [type] $inputValue Value attribute
+     */
     public function __construct(
         string $inputName,
         string $displayName,

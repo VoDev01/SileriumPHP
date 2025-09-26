@@ -14,6 +14,12 @@ use App\Actions\DisplayPaymentCancellationMessage;
 
 class PaymentService
 {
+    /**
+     * Make a payment
+     *
+     * @param array $clientAuth Login and password
+     * @return void
+     */
     public static function create(array $clientAuth)
     {
         $user = Auth::user();
@@ -47,6 +53,12 @@ class PaymentService
         ]);
         return redirect($response->getConfirmation()->getConfirmationUrl());
     }
+    /**
+     * Cancel payment
+     *
+     * @param Request $request Payment and order ids
+     * @return void
+     */
     public static function cancel(Request $request)
     {
         $validated = $request->validated();
@@ -58,6 +70,14 @@ class PaymentService
         $order = Order::find($request->orderId);
         $order->delete();
     }
+
+    /**
+     * Refund payment
+     *
+     * @param Request $request Order id, reason and payment id
+     * @param array $clientAuth Login and password
+     * @return void
+     */
     public static function refund(Request $request, array $clientAuth)
     {
         $validated = $request->validated();

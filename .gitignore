@@ -1,7 +1,6 @@
 /node_modules
 /public/build
 /public/hot
-/public/storage
 /public/fonts
 /storage/*.key
 /vendor
@@ -23,7 +22,10 @@ yarn-error.log
 /_ide_helper.php
 /_ide_helper_models.php
 /tools
-/storage
+/storage/logs
+/storage/framework
+/storage/oauth-private.key
+/storage/oauth-public.key
 /.phive
 /.phpdoc
 phive.phar.asc

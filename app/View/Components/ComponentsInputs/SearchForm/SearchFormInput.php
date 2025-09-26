@@ -2,6 +2,9 @@
 
 namespace App\View\Components\ComponentsInputs\SearchForm;
 
+/**
+ * Text input of the SearchForm
+ */
 class SearchFormInput
 {
     public string $inputName;
@@ -11,6 +14,14 @@ class SearchFormInput
     public string $errorField;
     public bool $required;
 
+    /**
+     * @param string $inputName Name attribute
+     * @param string $displayName Lable text
+     * @param string $errorField Error field name (same as name attribute)
+     * @param boolean $required Should the field be required
+     * @param string|null $inputId Id attribute
+     * @param [type] $inputValue Value attribute
+     */
     public function __construct(
         string $inputName,
         string $displayName,

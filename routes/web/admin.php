@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\Admin\AdminPanelController;
 use App\Http\Controllers\Admin\UsersAdminPanelController;
@@ -9,13 +8,12 @@ use App\Http\Controllers\Admin\ProductsAdminPanelController;
 
 Route::middleware(['authorize.admin', 'banned'])->group(function ()
 {
-    Route::get('/documentation/{url?}', [HomeController::class, 'documentation'])->middleware(['authorize.admin', 'banned'])->where('url', '(.*)');
-    
     Route::controller(AdminPanelController::class)->group(function ()
     {
         Route::get('index', 'index')->name('admin.index');
         Route::get('profile', 'profile');
         Route::post('logout', 'logout');
+        Route::get('/documentation/{url?}', 'documentation')->where('url', '(.*)');
     });
 
     Route::controller(ProductsAdminPanelController::class)->prefix('products')->group(function ()

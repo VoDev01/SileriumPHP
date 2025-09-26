@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Makes order. Products retrieved from cart of the current user
+ */
 class OrderAction 
 {
     public static function make(string $address, string $status, int $user_id)

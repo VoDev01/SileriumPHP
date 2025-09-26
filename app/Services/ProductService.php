@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
+    /**
+     * Make product and select only needed
+     *
+     * @param array $validatedInput
+     * @param array|null $images
+     * @param array $select
+     * @return void
+     */
     public static function make(array $validatedInput, array $images = null, array $select)
     {
         $insert = [
@@ -34,12 +42,24 @@ class ProductService
         $product = DB::table('products')->select($select)->where('id', $productId)->get()->first();
         return $product;
     }
+
+    /**
+     * Filter products by some column or name
+     *
+     * @param string $select
+     * @param string $subcategory
+     * @param string $name
+     * @param integer $available
+     * @param integer $sortOrder
+     * @param integer $items
+     * @return void
+     */
     public static function getFilteredProducts(
         array|string $select = "name",
         string $subcategory = "all",
         string $name = "",
         int $available = 1,
-        int $sortOrder = 2,
+        int $sortOrder = SortOrder::NAME_DESC->value,
         int $items = 15
     )
     {

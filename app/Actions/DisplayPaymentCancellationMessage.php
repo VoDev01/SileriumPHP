@@ -2,6 +2,9 @@
 
 namespace App\Actions;
 
+/**
+ * Displays yookassa cancellation code to readable message
+ */
 class DisplayPaymentCancellationMessage
 {
     public static function display(string $cancellationParty, string $cancellationReason) : array
