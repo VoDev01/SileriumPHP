@@ -23,6 +23,7 @@ yarn-error.log
 /_ide_helper.php
 /_ide_helper_models.php
 /tools
-/storage/docs
+/storage
 /.phive
 /.phpdoc
+phive.phar.asc

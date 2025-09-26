@@ -29,7 +29,12 @@ class ProductSubcriber
      */
     public function handleProductBought(ProductBoughtEvent $event)
     {
-        Product::where('ulid', $event->product->ulid)->update(['productAmount' => $event->product->productAmount - $event->amount]);
+        $product = Product::where('ulid', $event->product->ulid)->get()->first();
+        $product->productAmount -= $event->amount;
+        $product->timesPurchased += $event->amount;
+        if ($product->productAmount <= 0)
+            $product->available = false;
+        $product->save();
     }
 
     public function handleProductReviewed(ProductReviewedEvent $event)
