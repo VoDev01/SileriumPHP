@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Payment;
 use App\Models\Subcategory;
 use App\Models\ProductImage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -40,7 +41,7 @@ class UserOrderTest extends TestCase
         Subcategory::factory()->create();
         $user = User::factory()->has(Role::factory())->create();
         $seller = Seller::factory()->has(Product::factory())->create();
-        $order = Order::factory()->for($user)->create();
+        $order = Order::factory()->for($user)->has(Payment::factory())->create();
 
         $this->actingAs($user)->get('/user/orders/history');
 
@@ -48,11 +49,11 @@ class UserOrderTest extends TestCase
 
         $this->actingAs($user)->delete('/user/orders/close_order', ['ulid' => $order->ulid]);
         
-        $order = Order::onlyTrashed()->where('ulid', $order->ulid)->first();
+        $order = Order::onlyTrashed()->where('ulid', $order->ulid)->get()->first();
 
         $this->assertSoftDeleted('orders', ['ulid' => $order->ulid]);
 
-        $this->assertEquals('CLOSED', $order->status);
+        $this->assertEquals('CANCELLED', $order->status);
 
         Carbon::setTestNow(Carbon::now()->addDays(8)); 
 

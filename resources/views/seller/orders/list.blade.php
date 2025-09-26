@@ -32,7 +32,7 @@
                         <td>{{ $order->address }}</td>
                         @php
                             $statusDB = $order->status;
-                            $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
+                            $statusStr = explode(',', App\Enum\OrderStatus::fromName($statusDB)->value);
                         @endphp
                         <td>{{ $statusStr[\App\Enum\ru] }}</td>
                         <td>{{ $order->user->phone . ' ' . $order->user->name }}</td>

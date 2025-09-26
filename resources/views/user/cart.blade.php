@@ -50,7 +50,7 @@
                         </form>
                         {{-- @php
                                 $statusDB = $status;
-                                $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
+                                $statusStr = explode(',', App\Enum\OrderStatus::fromName($statusDB)->value);
                             @endphp
                             <p style="color: {{ $statusStr[App\Enum\color] }};">Статус заказа:
                                 {{ $statusStr[App\Enum\ru] }}</p>
@@ -95,10 +95,10 @@
                         <select class="form-select mb-3" name="order_status" style="width: 250px;">
                             @php
                                 $statusDB = $status;
-                                $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
+                                $statusStr = explode(',', App\Enum\OrderStatus::fromName($statusDB)->value);
                             @endphp
-                            @foreach (App\Enum\status::cases() as $status)
-                                @if ($status === App\Enum\status::CLOSED)
+                            @foreach (App\Enum\OrderStatus::cases() as $status)
+                                @if ($status === App\Enum\OrderStatus::CLOSED)
                                     @continue
                                 @endif
                                 <option value="{{ $status->value }}">{{ $statusStr[App\Enum\ru] }}</option>
@@ -118,10 +118,10 @@
                         <select class="form-select mb-3" name="order_status" style="width: 250px;">
                             @php
                                 $statusDB = $status;
-                                $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
+                                $statusStr = explode(',', App\Enum\OrderStatus::fromName($statusDB)->value);
                             @endphp
-                            @foreach (App\Enum\status::cases() as $status)
-                                @if ($status === App\Enum\status::CLOSED)
+                            @foreach (App\Enum\OrderStatus::cases() as $status)
+                                @if ($status === App\Enum\OrderStatus::CLOSED)
                                     @continue
                                 @endif
                                 <option value="{{ $status->value }}">{{ $statusStr[App\Enum\ru] }}</option>

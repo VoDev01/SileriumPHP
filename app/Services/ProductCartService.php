@@ -17,17 +17,18 @@ class ProductCartService
             $product->priceRub = round(ConvertCurrency::convertToDol($product->priceRub), 1);
         }
     }
-    public function addProductToCart(User $user, Request $request, int $amount)
+    public function addProductToCart(User $user, int $productId, int $amount)
     {
-        $product = Product::where('id', $request->productId)->get()->first();
-        $product->productAmount -= $amount;
-        $product->timesPurchased += $amount;
-        if ($product->productAmount <= 0)
-            $product->available = false;
+        $product = Product::where('id', $productId)->get()->first();
+        // $product->productAmount -= $amount;
+        // $product->timesPurchased += $amount;
+        // if ($product->productAmount <= 0)
+        //     $product->available = false;
         Cart::session($user->id)->add(array(
             'id' => $product->id,
             'name' => $product->name,
-            'price' => session('products_currency') == "dol" ? round(ConvertCurrency::convertToDol($product->priceRub), 1) : $product->priceRub,
+            'price' => session('products_currency') === "dol" ? round(ConvertCurrency::convertToDol($product->priceRub), 1) : $product->priceRub,
+            'attributes' => array(),
             'quantity' => $amount,
             'associatedModel' => $product
         ));

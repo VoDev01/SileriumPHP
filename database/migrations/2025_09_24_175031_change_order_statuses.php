@@ -21,7 +21,7 @@ return new class extends Migration
         });
         Schema::table('orders', function (Blueprint $table)
         {
-            $table->enum('status', ['ISSUING', 'PENDING', 'CACNCELLED', 'DELIVERY', 'RECEIVED', 'ASSEMBLING', 'REFUND', 'PARTIAL_REFUND'])->after('address');
+            $table->enum('status', ['ISSUING', 'PENDING', 'CANCELLED', 'DELIVERY', 'RECEIVED', 'ASSEMBLING', 'REFUND', 'PARTIAL_REFUND'])->after('address');
         });
     }
 

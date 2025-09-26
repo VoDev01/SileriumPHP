@@ -3,11 +3,11 @@ namespace App\Enum;
 const en = 0;
 const ru = 1;
 const color = 2;
-enum status: string
+enum OrderStatus: string
 {
     case ISSUING = "Issuing, Ожидает оформления, #7a7a7a";
     case PENDING = "Pending, Обрабатывается, #d1cd00";
-    case CACNCELLED = "Cancelled, Отклонен, #e83225";
+    case CANCELLED = "Cancelled, Отклонен, #e83225";
     case ASSEMBLING = "Assembling, Собирается, #2bf4ff";
     case DELIVERY = "Delivery, Отправлен, #0b78a1";
     case REFUND = "Refund, Подлежит возврату, #ff4118";

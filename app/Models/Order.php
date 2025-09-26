@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enum\status;
+use App\Enum\OrderStatus;
 use App\Events\Order\OrderStatusEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -86,7 +86,7 @@ class Order extends Model
         parent::boot();
 
         static::softDeleted(function($order) {
-            $order->status = 'CLOSED';
+            $order->status = 'CANCELLED';
             $order->save();
         });
 

@@ -23,7 +23,7 @@
         <p>Оформлен: {{ $order->created_at }}</p>
         @php
             $statusDB = $order->status;
-            $statusStr = explode(',', App\Enum\status::fromName($statusDB)->value);
+            $statusStr = explode(',', App\Enum\OrderStatus::fromName($statusDB)->value);
         @endphp
         <p style="color: {{ $statusStr[App\Enum\color] }};">Статус заказа:
             {{ $statusStr[App\Enum\ru] }}</p>

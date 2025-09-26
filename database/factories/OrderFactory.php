@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enum\status;
 use App\Models\Seller;
 use App\Models\User;
 use Carbon\Carbon;

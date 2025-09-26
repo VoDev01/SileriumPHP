@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Facades\ProductCartServiceFacade as ProductCart;
+use App\Http\Requests\Cart\AddProductToCartRequest;
+use App\Http\Requests\Cart\ChangeProductAmountRequest;
 
 class UserCartController extends Controller
 {
@@ -26,22 +28,21 @@ class UserCartController extends Controller
         $product = Product::find($productId);
         return view('catalog.addtocart', ['product' => $product]);
     }
-    public function postCart(Request $request)
+    public function postCart(AddProductToCartRequest $request)
     {
-        $validated = $request->validate([
-            'amount' => 'required'
-        ]);
+        $validated = $request->validated();
         $user = User::find(Auth::id());
         if($user->homeAdress === null || $user->city === null)
             return back()->withErrors([
                 'homeAdress' => 'Заполните данные местоположения перед оформлением заказов'
             ]);
-        ProductCart::addProductToCart($user, $request, (int)$validated['amount']);
+        ProductCart::addProductToCart($user, $validated['productId'], $validated['amount']);
         return redirect()->route('cart');
     }
-    public function changeAmount(Request $request)
+    public function changeAmount(ChangeProductAmountRequest $request)
     {
-        ChangeCartAmountAction::changeAmount($request->amount, $request->amountChange, $request->productId, Auth::id());
+        $validated = $request->validated();
+        ChangeCartAmountAction::changeAmount($validated['amount'], $validated['amountChange'], $validated['productId'], Auth::id());
         return redirect()->route('cart');
     }
     public function filterCart(Request $request)
