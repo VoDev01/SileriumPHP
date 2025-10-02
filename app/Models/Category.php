@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use App\Actions\EncodeImageBinaryToBase64Action;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Category
@@ -42,4 +45,12 @@ class Category extends Model
     {
         return $this->hasMany(Subcategory::class);
     }
+
+    // protected function image(): Attribute
+    // {
+    //     return Attribute::get(function ($value)
+    //     {
+    //         return Storage::url($value);
+    //     });
+    // }
 }

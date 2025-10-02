@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()->count(5)->create();
-        Seller::factory()->count(1)->create(['user_id' => User::max('id'), 'logo' => 'images/logo/default.png']);
+        Seller::factory()->count(1)->create(['user_id' => User::max('id'), 'logo' => '/images/logo/default.png']);
         $role = Role::where('role', 'admin')->get()->first();
         User::factory()->hasAttached($role)->create(['email' => 'vodev1405@gmail.com', 'password' => 'sileriumdev123']);
     }

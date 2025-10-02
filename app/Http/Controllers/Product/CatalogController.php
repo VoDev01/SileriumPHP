@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Product;
 
+use App\Actions\EncodeImageBinaryToBase64Action;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -52,6 +53,19 @@ class CatalogController extends Controller
         {
             ProductCart::convertCurrency($products);
         }
+        $images = [];
+
+        foreach ($products as $product)
+        {
+            if($product->images->first() === null)
+                continue;
+            $encoded = EncodeImageBinaryToBase64Action::encode($product->images->first()->imagePath);
+            array_push($images, [
+                'image' => $encoded['base64'],
+                'ext' => $encoded['ext']
+            ]);
+        }
+
         return view('catalog.products', [
             'products' => $products,
             'sortOrder' => $sortOrder,
@@ -63,7 +77,8 @@ class CatalogController extends Controller
             'inputs' => $inputs,
             'checkboxInputs' => $checkboxInputs,
             'hiddenInputs' => $hiddenInputs,
-            'queryInputs' => $queryInputs
+            'queryInputs' => $queryInputs,
+            'images' => $images
         ]);
     }
     public function filterProducts(Request $request)
@@ -110,8 +125,21 @@ class CatalogController extends Controller
             )
             ->get()->first();
         $product->images = $product->images != null ? explode(', ', $product->images) : null;
+        $ext = [];
+
+        if (isset($product->images))
+        {
+            foreach ($product->images as $image)
+            {
+                $encoded = EncodeImageBinaryToBase64Action::encode($image);
+                $image = $encoded['base64'];
+                array_push($ext, $encoded['ext']);
+            }
+        }
+
         $product->specs_names = $product->specs_names ? explode(', ', $product->specs_names) : null;
         $product->specs = $product->specs ? explode(', ', $product->specs) : null;
+
         if (isset($product->specs))
         {
             for ($i = 0; $i < count($product->specs); $i++)
@@ -122,8 +150,8 @@ class CatalogController extends Controller
         }
         $ratingCountResponse = Http::asJson()
             ->withHeaders(['API-Secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET')])
-            ->post(env('APP_URL'). '/api/v1/reviews/rating_count', ['productName' => $product->name]);
-        if($ratingCountResponse->ok())
+            ->post(env('APP_URL') . '/api/v1/reviews/rating_count', ['productName' => $product->name]);
+        if ($ratingCountResponse->ok())
         {
             $ratingCount = $ratingCountResponse->json(['ratingCount']);
         }
@@ -133,8 +161,8 @@ class CatalogController extends Controller
         }
         $avgRatingResponse = Http::asJson()
             ->withHeaders(['API-Secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET')])
-            ->post(env('APP_URL'). '/api/v1/reviews/average_rating', ['productName' => $product->name]);
-        if($avgRatingResponse->ok())
+            ->post(env('APP_URL') . '/api/v1/reviews/average_rating', ['productName' => $product->name]);
+        if ($avgRatingResponse->ok())
         {
             $avgRating = $avgRatingResponse->json(['avgRating']);
         }
@@ -143,7 +171,7 @@ class CatalogController extends Controller
             $avgRating = null;
         }
         $reviews = DB::table('reviews')->where('product_id', $productId)->join('users', 'reviews.user_id', '=', 'users.id')->paginate(5);
-        return view('catalog.product', ['product' => $product, 'reviews' => $reviews, 'ratingCount' => $ratingCount, 'avgRating' => $avgRating]);
+        return view('catalog.product', ['product' => $product, 'reviews' => $reviews, 'ratingCount' => $ratingCount, 'avgRating' => $avgRating, 'ext' => $ext]);
     }
     public function rubCurrency()
     {

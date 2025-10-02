@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use App\Actions\EncodeImageBinaryToBase64Action;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Subcategory
@@ -28,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subcategory extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
         'image',
@@ -45,4 +48,12 @@ class Subcategory extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    // protected function imagePath(): Attribute
+    // {
+    //     return Attribute::get(function ($value)
+    //     {
+    //         return Storage::url($value);
+    //     });
+    // }
 }

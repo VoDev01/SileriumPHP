@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Events\Product\ProductBoughtEvent;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
@@ -13,6 +14,7 @@ use App\Models\Subcategory;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 
 class PaymentTest extends TestCase
 {
@@ -23,10 +25,14 @@ class PaymentTest extends TestCase
      */
     public function testPayment()
     {
+        Event::fake();
+
         Category::factory()->create();
         Subcategory::factory()->create();
         $user = User::factory()->has(Role::factory())->create();
-        $seller = Seller::factory()->has(Product::factory())->create();
+        $seller = Seller::factory()->create();
+        $product = Product::factory()->for($seller)->create();
+        $order = Order::factory()->for($user)->hasAttached($product, ['productAmount' => 1, 'productsPrice' => $product->priceRub])->create();
 
         $response = $this->actingAs($user)->post('/user/cart/add_to_cart', ['amount' => 10, 'productId' => $seller->products->first()->id]);
 
@@ -35,6 +41,10 @@ class PaymentTest extends TestCase
         $response = $this->actingAs($user)->post('/user/orders/checkout_order');
 
         $response = $response->assertRedirect(route('payment.createPayment'));
+
+        $response = $this->actingAs($user)->get('/payment/finished/' . $order->ulid);
+
+        Event::assertDispatched(ProductBoughtEvent::class);
 
         // //$response = $response->assertRedirect(route('payment.receiveOrderId'));
 

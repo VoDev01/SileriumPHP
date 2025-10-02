@@ -18,7 +18,7 @@ class SubcategorySeeder extends Seeder
         DB::table('subcategories')->insert(
             [
                 'name' => 'Iphone',
-                'image' => '\images\subcategories\subcategory_0.jpg',
+                'image' => '/images/subcategories/subcategory_1.jpg',
                 'category_id' => '1'
             ]
         );

@@ -22,10 +22,7 @@ yarn-error.log
 /_ide_helper.php
 /_ide_helper_models.php
 /tools
-/storage/logs
-/storage/framework
-/storage/oauth-private.key
-/storage/oauth-public.key
-/.phive
-/.phpdoc
+/storage
+.phive
+.phpdoc/cache
 phive.phar.asc

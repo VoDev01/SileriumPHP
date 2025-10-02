@@ -36,6 +36,15 @@
                 aria-expanded="false" aria-controls="traffic">
                 Трафик
             </a>
+            <a class="btn" data-bs-toggle="collapse" data-bs-target="#storage" href="#storage" role="button"
+                aria-expanded="false" aria-controls="storage">
+                Хранилище
+            </a>
+            <nav class="collapse" id="storage">
+                <div class="d-flex flex-column align-items-center">
+                    <a class="text-decoration-none" href="/admin/control_auth_dropbox">Авторизация</a>
+                </div>
+            </nav>
         </div>
     </div>
 </x-admin-layout>

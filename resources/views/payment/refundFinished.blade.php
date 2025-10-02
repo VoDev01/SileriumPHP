@@ -9,7 +9,7 @@
         <div class="scroll-container">
             @foreach ($order->products as $product)
                 @if ($product->images->first() != null)
-                    <img width="128" height="128" src="{{ asset($product->images->first()->imagePath) }}"
+                    <img width="128" height="128" src="{{ $product->images->first()->imagePath }}"
                         alt="картинка товара {{ $product->name }}" />
                     <span class="text-dark">{{ $product->name }}</span>
                 @else

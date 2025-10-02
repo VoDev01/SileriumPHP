@@ -52,14 +52,14 @@ class ProductService
      * @param integer $available
      * @param integer $sortOrder
      * @param integer $items
-     * @return void
+     * @return mixed
      */
     public static function getFilteredProducts(
         array|string $select = "name",
         string $subcategory = "all",
         string $name = "",
         int $available = 1,
-        int $sortOrder = SortOrder::NAME_DESC->value,
+        int $sortOrder = SortOrder::NAME_DESC,
         int $items = 15
     )
     {

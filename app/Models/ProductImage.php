@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use App\Actions\EncodeImageBinaryToBase64Action;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\ProductImage
@@ -32,4 +35,11 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    // protected function imagePath() : Attribute
+    // {
+    //     return Attribute::get(function($value){
+    //         return Storage::url($value);
+    //     });
+    // }
 }

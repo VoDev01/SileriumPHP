@@ -10,11 +10,11 @@
                     let amount = $(this).val();
                     let basePrice = $("#basePrice").val();
                     let totalPrice = (basePrice * amount).toFixed(1);
-                    console.log(totalPrice);
+
                     let strPrice = new Intl.NumberFormat("ru", {
                         minimumFractionDigits: 1
                     }).format(totalPrice);
-                    console.log(strPrice)
+
                     $("#price").text(strPrice);
                 });
         </script>
@@ -22,7 +22,13 @@
 
     <div class="container" style="width: 650px;">
         <h1>{{ $product->name }}</h1>
-        <img alt="картинка товара" src="{{ asset($product->images->first()) }}" />
+
+        @empty($image)
+            <img alt="картинка товара" />
+        @else
+            <img alt="картинка товара" src="{{ $product->images->first()->imagePath }}" />
+        @endempty
+        
         <form action="/user/cart/add_to_cart" method="POST">
             @csrf
             <div class="row">

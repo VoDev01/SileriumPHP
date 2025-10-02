@@ -32,7 +32,7 @@ class SellerController extends Controller
         $validated = $request->validated();
         $path = null;
         if (isset($validated['logo']))
-            $path = Storage::put('logo', $validated['logo']);
+            $path = Storage::putFile('logo', $validated['logo']);
         DB::update('UPDATE TABLE sellers INNER JOIN users ON sellers.user_id = users.id SET (
             nickname = ?,
             organization_name = ?,

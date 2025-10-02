@@ -5,7 +5,7 @@
     <h1>Личный кабинет</h1>
     <div class="border-bottom border-dark">
         <div class="mx-5">
-            <img src="{{ asset($seller->logo) }}" alt="Лого продавца" width="128" height="128" />
+            <img src="{{ $seller->logo }}" alt="Лого продавца" width="128" height="128" />
             <h3>{{ $seller->nickname }}</h3>
             <p>{{ $seller->organization_name }}</p>
             <p>{{ $seller->organization_email }}</p>

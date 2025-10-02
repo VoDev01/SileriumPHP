@@ -52,7 +52,7 @@ class SellerAuthController extends Controller
         $validated = $request->validated();
         $userId = User::where("email", $validated["email"])->first()->id;
         if ($request->logo != null) {
-            $logoPath = Storage::putFile('logo', $validated->logo);
+            $logoPath = Storage::putFile('logo', $validated['logo']);
         } else {
             $logoPath = '\\images\\logo\\default_logo.png';
         }

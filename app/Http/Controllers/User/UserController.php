@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\EncodeImageBinaryToBase64Action;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
@@ -37,7 +39,9 @@ class UserController extends Controller
             else
                 $user = $googleUser;
         }
-        return view('user.profile', ['user' => $user]);
+        $converted = EncodeImageBinaryToBase64Action::encode($user->profilePicture);
+        $user->profilePicture = $converted['base64'];
+        return view('user.profile', ['user' => $user, 'ext' => $converted['ext']]);
     }
     public function editProfile()
     {

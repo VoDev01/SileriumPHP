@@ -19,22 +19,22 @@ class CategorySeeder extends Seeder
             [
                 'name' => 'Смартфоны', 
                 'pageName' => 'smartphones',
-                'image' => 'images\categories\category_0.jpg', 
+                'image' => '/images/categories/category_1.jpg', 
             ],
             [
                 'name' => 'Комплектующие ПК',
                 'pageName' => 'hardware',
-                'image' => 'images\categories\category_1.jpg'
+                'image' => '/images/categories/category_2.jpg'
             ],
             [
                 'name' => 'Мониторы и телевизоры',
                 'pageName' => 'monitors',
-                'image' => 'images\categories\category_2.jpg'
+                'image' => '/images/categories/category_3.jpg'
             ],
             [
                 'name' => 'Ноутбуки',
                 'pageName' => 'laptops',
-                'image' => 'images\categories\category_3.jpg'
+                'image' => '/images/categories/category_4.jpg'
             ]
             ];
         DB::table('categories')->insert($categories);

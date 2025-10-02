@@ -13,7 +13,10 @@ Route::middleware(['authorize.admin', 'banned'])->group(function ()
         Route::get('index', 'index')->name('admin.index');
         Route::get('profile', 'profile');
         Route::post('logout', 'logout');
-        Route::get('/documentation/{url?}', 'documentation')->where('url', '(.*)');
+        Route::get('documentation/{url?}', 'documentation')->where('url', '(.*)');
+        Route::get('control_auth_dropbox', 'controlAuthDropbox');
+        Route::post('revoke_dropbox_token', 'revokeDropboxToken');
+        Route::get('receive_dropbox_token', 'receiveDropboxToken');
     });
 
     Route::controller(ProductsAdminPanelController::class)->prefix('products')->group(function ()

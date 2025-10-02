@@ -19,7 +19,7 @@
     <div class="container">
         <div class="row mb-3">
             <div class="col-2">
-                <img alt="Картинка профиля" src="{{asset($user->profilePicture)}}" width="128" height="128" />
+                <img alt="Картинка профиля" src="{{$user->profilePicture}}" width="128" height="128" />
             </div>
             <div class="col-10">
                 <h3>{{$user->name}} {{$user->surname}}</h3>

@@ -17,7 +17,7 @@
     <div class="container mobile-margin" style="width: 500px;">
         <h1>{{ $order->product->name }}</h1>
         <p>Номер заказа - {{ $order->id }}</p>
-        <img alt="картинка товара" src="{{ asset($order->product->images->first()) }}" />
+        <img alt="картинка товара" src="{{ $order->product->images->first() }}" />
         <form action="/user/edit_order" method="POST">
             <div class="row">
                 <div class="col-2">

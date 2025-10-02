@@ -11,7 +11,7 @@
                 <div class="col col-sm-12 col-md-6 col-xl-4">
                     @if ($subcategory->image != null)
                         <a class="d-inline-block text-decoration-none text-center text-black" href="/catalog/products/{{$subcategory->id}}">
-                            <img class="subcategory-image" src="{{asset($subcategory->image)}}" alt="{{$subcategory->name}}">
+                            <img class="subcategory-image" src="{{$subcategory->image}}" alt="{{$subcategory->name}}">
                             <br>
                             {{$subcategory->name}}
                         </a>

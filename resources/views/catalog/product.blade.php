@@ -22,7 +22,7 @@
                 <div class="carousel-inner">
                     @for ($i = 0; $i < count($product->images); $i++)
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="{{ asset($product->images[$i]) }}"
+                            <img class="d-block w-100" src="{{$product->images[$i]->imagePath}}"
                                 alt="Картинка товара {{ $i + 1 }}" width="300" height="300">
                         </div>
                     @endfor
@@ -106,7 +106,7 @@
                 <div class="row col">
                     <div class="row col">
                         <div class="col-1">
-                            <img src="{{ asset($review->user->profilePicture) }}" width="100" height="100"
+                            <img src="{{ $review->user->profilePicture }}" width="100" height="100"
                                 alt="Картинка профиля">
                         </div>
                         <p class="col-2">{{ $review->user->name }} {{ $review->user->surname }}</p>

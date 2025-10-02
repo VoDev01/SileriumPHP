@@ -4,7 +4,7 @@
     </x-slot>
     <div class="container-fluid row flex-column mx-3">
         <h1 class="col">{{$product->name}}</h1>
-        <img class="col" src="{{asset($product->images->first()->imagePath)}}" alt="Картинка товара">
+        <img class="col" src="{{$product->images->first()->imagePath}}" alt="Картинка товара">
         <form class="col" action="/user/edit_review" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="rating" class="form-label">Оценка</label>

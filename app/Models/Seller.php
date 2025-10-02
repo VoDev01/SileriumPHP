@@ -6,6 +6,9 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use App\Actions\EncodeImageBinaryToBase64Action;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -60,7 +63,8 @@ class Seller extends Model
         'rating',
         'img',
         'email',
-        'email_verified'
+        'email_verified',
+        'logo'
     ];
 
     protected $guarded = [
@@ -77,4 +81,12 @@ class Seller extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // protected function logo(): Attribute
+    // {
+    //     return Attribute::get(function ($value)
+    //     {
+    //         return Storage::url($value);
+    //     });
+    // }
 }

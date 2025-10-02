@@ -26,7 +26,7 @@ class PaymentController extends Controller
         $order = Order::with('products')->where('ulid', $request->orderId)->get()->first();
         foreach ($order->products as $product)
         {
-            ProductBoughtEvent::dispatch($product, $order->product->pivot->productAmount);
+            ProductBoughtEvent::dispatch($product, $product->pivot->productAmount);
         }
         return view('payment.finished', ['order' => $order]);
     }

@@ -10,8 +10,10 @@ use App\Traits\PassportTokenPrint;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Actions\EncodeImageBinaryToBase64Action;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -227,6 +229,13 @@ class User extends Authenticatable implements MustVerifyEmail
             set: fn($value) => Crypt::encryptString($value)
         );   
     }
+
+    // protected function profilePicture() : Attribute
+    // {
+    //     return Attribute::get(function($value){
+    //         return Storage::url($value);
+    //     });
+    // }
 
     public function toArray()
     {

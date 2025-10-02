@@ -7,7 +7,7 @@
         @empty($product->images->first())
             <img class="col" src="" alt="Картинка товара">
         @else
-            <img class="col" src="{{ asset($product->images->first()->imagePath) }}" alt="Картинка товара">
+            <img class="col" src="{{ $product->images->first()->imagePath }}" alt="Картинка товара">
         @endempty
         <form class="col" action="/user/review" method="post" enctype="multipart/form-data">
             @csrf

@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class statusChangedNotification extends Notification
+class OrderStatusChangedNotification extends Notification
 {
     use Queueable;
 
@@ -42,6 +42,7 @@ class statusChangedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+            ->replyTo($this->order->user->email)
             ->subject('Order status changed to ' . strtolower($this->order->status))
             ->line("Your order {$this->order->ulid} status was changed to " . strtolower($this->order->status) . '.')
             ->action('Check in your account!', env('APP_URL'));

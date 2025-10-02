@@ -37,7 +37,7 @@
                         $productImage = $product->images == null ? '' : $product->images->first()->imagePath;
                     @endphp
                     <img class="col" alt="картинка товара" width="100" height="100"
-                        src="{{ asset($productImage) }}">
+                        src="{{ $productImage }}">
                     <div class="row col flex-column">
                         <p class="col">{{ $product->name }}</p>
                         <p class="col text-secondary">{{ $product->quantity }} шт.</p>

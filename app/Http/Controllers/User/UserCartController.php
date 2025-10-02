@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Actions\ChangeCartAmountAction;
+use App\Actions\EncodeImageBinaryToBase64Action;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
