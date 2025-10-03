@@ -17,9 +17,29 @@ use App\Http\Controllers\Formatting\PdfFormatterController;
 |
 */
 
+Route::get('/media/{file}', function (string $file)
+{
+    if(!is_file(env('APP_MEDIA_PATH') . $file))
+        abort(404);
+
+    foreach(explode(', ', env('APP_RESTRICTED_MEDIA_DIR')) as $dir)
+    {
+        if(strpos($file, $dir))
+            abort(404);
+    }
+
+    $fileName = basename($file);
+
+    return response(headers: [
+        'X-Sendfile' => env('APP_MEDIA_PATH') . $file,
+        'Content-Type' => 'application/octet-stream',
+        'Content-Disposition' => "attachment; filename=\"$fileName\"",
+    ]);
+})->where('file', '(.*)');
+
 Route::get('/', [HomeController::class, 'index'])->middleware(['banned'])->name('home');
 
-Route::get('/banned', [BannedController::class, 'banned'])->name('banned');//->middleware('banned');
+Route::get('/banned', [BannedController::class, 'banned'])->name('banned'); //->middleware('banned');
 
 Route::controller(PdfFormatterController::class)->prefix('format')->middleware(['auth', 'banned'])->group(function ()
 {
