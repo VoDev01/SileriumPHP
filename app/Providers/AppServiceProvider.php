@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Laravel\Passport\Passport;
 use App\Actions\SetConfigAction;
 use League\Flysystem\Filesystem;
@@ -13,6 +15,7 @@ use Illuminate\Support\ServiceProvider;
 use Spatie\Dropbox\Client as DropboxClient;
 use Spatie\FlysystemDropbox\DropboxAdapter;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
                     'client_secret' => env('DROPBOX_SECRET'),
                     'client_id' => env('DROPBOX_KEY')
                 ])->body(), true);
-                
+
                 $config['access_token'] = $response['access_token'];
 
                 SetConfigAction::set(
@@ -73,6 +76,11 @@ class AppServiceProvider extends ServiceProvider
                 $adapter,
                 $config
             );
+        });
+
+        Auth::viaRequest('custom-token', function (Request $request)
+        {
+            return User::where('token', (string) $request->header('Token'))->get()->first();
         });
     }
 }

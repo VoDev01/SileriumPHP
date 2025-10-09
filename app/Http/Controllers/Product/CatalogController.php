@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Product;
 
 use App\Actions\EncodeImageBinaryToBase64Action;
+use App\Actions\ManualPaginatorAction;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -12,17 +13,21 @@ use App\Http\Controllers\Controller;
 use App\Actions\OrderItemsAction;
 use App\Facades\ProductCartServiceFacade as ProductCart;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Models\Seller;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormCheckboxInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
 use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
 use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class CatalogController extends Controller
 {
-    public function products(string $subcategory = "all", int $sortOrder = 1, int $available = 1, string $name = "")
+    public function products(Request $request, string $subcategory = "all", int $sortOrder = 1, int $available = 1, string $name = "")
     {
         $inputs = [
             new SearchFormInput('name', 'Название товара', 'name', false)
@@ -36,34 +41,34 @@ class CatalogController extends Controller
             new SearchFormHiddenInput('subcategory', 'subcategory', $subcategory),
         ];
         $queryInputs = new SearchFormQueryInput('/catalog/products/search', '/catalog/products', 'images');
-        $products = ProductService::getFilteredProducts(
-            [
-                'id',
-                'name',
-                'available',
-                'priceRub',
-                'productAmount'
-            ],
+
+        $page = isset($request->page) ? $request->page : 1;
+
+        $products = Cache::remember("page_{$page}_products", 86400, function () use (
             $subcategory,
             $name,
             $available,
             $sortOrder
-        );
+        )
+        {
+            return ProductService::getFilteredProducts(
+                [
+                    'id',
+                    'name',
+                    'available',
+                    'priceRub',
+                    'productAmount'
+                ],
+                $subcategory,
+                $name,
+                $available,
+                $sortOrder
+            );
+        });
+
         if (session('products_currency') == 'dol')
         {
             ProductCart::convertCurrency($products);
-        }
-        $images = [];
-
-        foreach ($products as $product)
-        {
-            if($product->images->first() === null)
-                continue;
-            $encoded = EncodeImageBinaryToBase64Action::encode($product->images->first()->imagePath);
-            array_push($images, [
-                'image' => $encoded['base64'],
-                'ext' => $encoded['ext']
-            ]);
         }
 
         return view('catalog.products', [
@@ -77,8 +82,7 @@ class CatalogController extends Controller
             'inputs' => $inputs,
             'checkboxInputs' => $checkboxInputs,
             'hiddenInputs' => $hiddenInputs,
-            'queryInputs' => $queryInputs,
-            'images' => $images
+            'queryInputs' => $queryInputs
         ]);
     }
     public function filterProducts(Request $request)
@@ -91,52 +95,50 @@ class CatalogController extends Controller
             'product' => $request->name
         ])->with(['loadWith' => $request->loadWith]);
     }
-    public function product(int $productId)
+    public function product(Request $request, int $productId)
     {
-        $product = DB::table('products')
-            ->selectRaw('products.*,
-            GROUP_CONCAT(ps.name SEPARATOR \', \') AS specs_names, 
-            GROUP_CONCAT(ps.specification SEPARATOR \', \') AS specs,
-            GROUP_CONCAT(product_images.imagePath SEPARATOR \', \') as images')
-            ->where('products.id', $productId)
-            ->joinSub(
-                DB::table('products_specifications')
-                    ->select('product_id', 'product_specifications.name', 'product_specifications.specification')
-                    ->where('product_id', $productId)
-                    ->rightJoin('product_specifications', 'products_specifications.specification_id', '=', 'product_specifications.id'),
-                'ps',
-                'products.id',
-                '=',
-                'ps.product_id',
-                'left'
-            )
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-            ->groupBy(
-                'products.ulid',
-                'products.id',
-                'products.name',
-                'products.description',
-                'products.priceRub',
-                'products.productAmount',
-                'products.available',
-                'products.subcategory_id',
-                'products.seller_id',
-                'products.timesPurchased'
-            )
-            ->get()->first();
-        $product->images = $product->images != null ? explode(', ', $product->images) : null;
-        $ext = [];
+        start_measure('product_cache', 'product cache');
 
-        if (isset($product->images))
+        $page = isset($request->page) ? $request->page : 1;
+
+        $product = Cache::remember("product_$productId", 86400, function () use ($productId)
         {
-            foreach ($product->images as $image)
-            {
-                $encoded = EncodeImageBinaryToBase64Action::encode($image);
-                $image = $encoded['base64'];
-                array_push($ext, $encoded['ext']);
-            }
-        }
+            return DB::table('products')
+                ->selectRaw('products.*,
+            GROUP_CONCAT(ps.specification SEPARATOR \', \') AS specs,
+            GROUP_CONCAT(ps.name SEPARATOR \', \') AS specs_names,
+            GROUP_CONCAT(product_images.imagePath SEPARATOR \', \') as images')
+                ->where('products.id', $productId)
+                ->joinSub(
+                    DB::table('products_specifications')
+                        ->select('product_id', 'product_specifications.name', 'product_specifications.specification')
+                        ->where('product_id', $productId)
+                        ->rightJoin('product_specifications', 'products_specifications.specification_id', '=', 'product_specifications.id'),
+                    'ps',
+                    'products.id',
+                    '=',
+                    'ps.product_id',
+                    'left'
+                )
+                ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->groupBy(
+                    'products.ulid',
+                    'products.id',
+                    'products.name',
+                    'products.description',
+                    'products.priceRub',
+                    'products.productAmount',
+                    'products.available',
+                    'products.subcategory_id',
+                    'products.seller_id',
+                    'products.timesPurchased'
+                )
+                ->get()->first();
+        });
 
+        stop_measure('product_cache');
+
+        $product->images = $product->images != null ? explode(', ', $product->images) : null;
         $product->specs_names = $product->specs_names ? explode(', ', $product->specs_names) : null;
         $product->specs = $product->specs ? explode(', ', $product->specs) : null;
 
@@ -148,30 +150,53 @@ class CatalogController extends Controller
             }
             $product->specs = $tmp;
         }
-        $ratingCountResponse = Http::asJson()
-            ->withHeaders(['API-Secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET')])
-            ->post(env('APP_URL') . '/api/v1/reviews/rating_count', ['productName' => $product->name]);
-        if ($ratingCountResponse->ok())
+
+        start_measure('reviews_cache', 'Reviews cache');
+        $reviews = Cache::remember("product_{$productId}_reviews_$page", 86400, function () use ($product)
         {
-            $ratingCount = $ratingCountResponse->json(['ratingCount']);
-        }
-        else
+            return Http::withoutVerifying()
+                ->withHeaders(['Token' => Auth::user()->token])
+                ->post(env('APP_URL') . '/api/v1/reviews/search_product_reviews', [
+                    'productName' => $product->name,
+                    'productId' => $product->id,
+                    'sellerName' => Seller::where('id', $product->seller_id)->get()->first()->nickname
+                ])
+                ->json('reviews');
+        });
+        $reviews = ManualPaginatorAction::paginate(
+            $reviews,
+            5,
+            $request->page
+        );
+        stop_measure('reviews_cache');
+
+        $ratingCount = null;
+        $avgRating = null;
+
+        if (isset($reviews))
         {
-            $ratingCount = null;
+            start_measure('api_requests', 'Rating api requests');
+
+            $ratingCount = Cache::remember("product_{$productId}_rating_count_$page", 86400, function () use ($product)
+            {
+                return Http::withoutVerifying()
+                    ->withHeaders(['Token' => Auth::user()->token])
+                    ->post(env('APP_URL') . '/api/v1/reviews/rating_count', ['productName' => $product->name])
+                    ->json('ratingCount')[0];
+            });
+
+            $avgRating = Cache::remember("product_{$productId}_avg_rating_$page", 86400, function () use ($product)
+            {
+                return round(Http::withoutVerifying()
+                    ->withHeaders(['Token' => Auth::user()->token])
+                    ->post(env('APP_URL') . '/api/v1/reviews/average_rating', ['productName' => $product->name])
+                    ->json('avgRating')[0]['averageRating'], 1);
+            });
+
+            stop_measure('api_requests');
         }
-        $avgRatingResponse = Http::asJson()
-            ->withHeaders(['API-Secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET')])
-            ->post(env('APP_URL') . '/api/v1/reviews/average_rating', ['productName' => $product->name]);
-        if ($avgRatingResponse->ok())
-        {
-            $avgRating = $avgRatingResponse->json(['avgRating']);
-        }
-        else
-        {
-            $avgRating = null;
-        }
-        $reviews = DB::table('reviews')->where('product_id', $productId)->join('users', 'reviews.user_id', '=', 'users.id')->paginate(5);
-        return view('catalog.product', ['product' => $product, 'reviews' => $reviews, 'ratingCount' => $ratingCount, 'avgRating' => $avgRating, 'ext' => $ext]);
+
+        return view('catalog.product', ['product' => $product, 'reviews' => $reviews, 'ratingCount' => $ratingCount, 'avgRating' => $avgRating]);
     }
     public function rubCurrency()
     {

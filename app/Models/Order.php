@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\OrderStatus;
 use App\Events\Order\OrderStatusEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

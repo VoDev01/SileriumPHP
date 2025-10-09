@@ -36,6 +36,7 @@ class SellerAuthTest extends TestCase
 
         $response->assertValid();
     }
+    
     public function testRegister()
     {
         $user = User::factory()->create();

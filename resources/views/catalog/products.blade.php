@@ -34,17 +34,17 @@
                     @if ($products->isEmpty())
                         <p class="text-secondary">По вашему запросу товаров не было найдено.</p>
                     @else
-                        @foreach ($products as $i => $product)
+                        @foreach ($products as $product)
                             <a href="/catalog/product/{{ $product->id }}" class="row text-decoration-none text-black">
                                 <div class="col">
                                     <h3> {{ $product->name }}</h3>
 
-                                    @if ($images === null || empty($images))
-                                        <img src="#" class="col" alt="картинка товара" width="128"
+                                    @if ($product->images === null)
+                                        <img src="#" class="col" alt="картинка товара" width="256"
                                             height="256">
                                     @else
-                                        <img src="{{$images[$i]->imagePath}}" class="col" alt="картинка товара"
-                                            width="128" height="256">
+                                        <img src="{{$product->images->first()->imagePath}}" class="col" alt="картинка товара"
+                                            width="256" height="256">
                                     @endif
                                 </div>
 

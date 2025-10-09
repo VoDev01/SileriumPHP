@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Seller;
 use App\Models\User;
+use App\Models\Seller;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Seller>
@@ -28,7 +28,7 @@ class SellerFactory extends Factory
             'id' => self::$id,
             'nickname' => fake()->company(),
             'organization_name' => fake('ru_RU')->company(),
-            'logo' => "default.png",
+            'logo' => "/media/images/logo/default.png",
             'organization_email' => fake()->companyEmail(),
             'organization_type' => fake('ru_RU')->companyPrefix(),
             'tax_system' => "ОСНО",

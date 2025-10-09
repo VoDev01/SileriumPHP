@@ -12,7 +12,6 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Payment;
 use App\Models\Subcategory;
-use App\Models\ProductImage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserOrderTest extends TestCase

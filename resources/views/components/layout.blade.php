@@ -44,7 +44,7 @@
                                 Заказы
                                 <i class="bi bi-box"></i>
                                 @php
-                                    $user = App\Models\User::find(Auth::id());
+                                    $user = isset($user) ? $user : App\Models\User::find(Auth::id());
                                     $orderItemsCount = $user->orders->count();
                                     if ($orderItemsCount > 9) {
                                         $orderCountStr = '9+';

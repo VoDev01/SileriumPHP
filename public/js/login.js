@@ -18,13 +18,20 @@ $('#login_button').on('click', function (event) {
         error: function (data) {
             let all_errors = data.responseJSON.errors;
             $.each(all_errors, function (key, value) {
+
                 let error_text = document.createElement('span');
-                error_text.id = key + '-error';
+                error_text.id = 'error-' + key;
                 error_text.classList.add('error');
                 error_text.classList.add('text-danger');
                 error_text.innerHTML = value;
                 let field_id = '#' + key;
-                $(field_id).after(error_text);
+
+                if (document.getElementById(key) === null) {
+                    $(error_text.parentElement).after(error_text);
+                }
+                else {
+                    $(field_id).after(error_text);
+                }
             });
         }
     });

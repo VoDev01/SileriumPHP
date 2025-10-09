@@ -40,8 +40,10 @@ class SellerAccountingReportsController extends Controller
     public function productsReports(Request $request)
     {
         $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+
         $currnetPage = isset($products) ? $products->currentPage() : null;
         $totalPages = isset($products) ? $products->lastPage() : null;
+
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true)
         ];
@@ -49,15 +51,24 @@ class SellerAccountingReportsController extends Controller
             new SearchFormHiddenInput('sellerId', 'sellerId', Seller::where('user_id', Auth::id())->get(['id'])->first()->id)
         ];
         $queryInputs = new SearchFormQueryInput('/seller/accounting_reports/products/search', 'seller.accounting_reports.products');
-        return view('seller.accounting_reports.products', ['inputs' => $inputs, 'queryInputs' => $queryInputs, 'products' => $products, 'hiddenInputs' => $hiddenInputs, 'page' => $currnetPage, 'totalPages' => $totalPages, 'searchName' => $request->session()->get('searchName') ?? null]);
+
+        return view('seller.accounting_reports.products', [
+            'inputs' => $inputs,
+            'queryInputs' => $queryInputs,
+            'products' => $products,
+            'hiddenInputs' => $hiddenInputs,
+            'page' => $currnetPage,
+            'totalPages' => $totalPages,
+            'searchName' => $request->session()->get('searchName') ?? null
+        ]);
     }
     public function productReport(Request $request, Product $product)
     {
-        if($request->session()->get('data') !== null)
+        if ($request->session()->get('data') !== null)
         {
-            return view('seller.accounting_reports.product', [ 'data' => $request->session()->get('data'), 'product' => $product ]); 
+            return view('seller.accounting_reports.product', ['data' => $request->session()->get('data'), 'product' => $product]);
         }
-        return view('seller.accounting_reports.product', [ 'product' => $product ]);
+        return view('seller.accounting_reports.product', ['product' => $product]);
     }
     public function formProductReport(Request $request)
     {
@@ -105,7 +116,7 @@ class SellerAccountingReportsController extends Controller
             'year' => $request->year
         ];
 
-        return redirect()->route('seller.accounting_reports.product', [ 'product' => $product])->with('data', $data);
+        return redirect()->route('seller.accounting_reports.product', ['product' => $product])->with('data', $data);
     }
     public function taxReport()
     {
@@ -127,10 +138,5 @@ class SellerAccountingReportsController extends Controller
         $validated = $request->validated();
 
         return SearchFormPaymentsSearchMethod::search($request, $validated);
-    }
-    public function formatPdfProductReport(PdfFormattingRequest $request)
-    {
-        $validated = $request->validated();
-        return redirect()->route('format.pdf', [...$validated]);
     }
 }

@@ -13,7 +13,7 @@ class DeleteClosedOrdersAction
      * Delete old orders
      *
      * @param mixed $orders
-     * @return void
+     * @return array
      */
     public static function delete($orders)
     {
@@ -22,5 +22,6 @@ class DeleteClosedOrdersAction
             if(Carbon::now()->diffInDays($order->deleted_at) >= 7 && $order->status == "CANCELLED")
                 $order->forceDelete();
         }
+        return $orders->toArray();
     }
 }

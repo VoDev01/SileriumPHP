@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\DeleteClosedOrdersAction;
+use App\Actions\ManualPaginatorAction;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class UserOrderController extends Controller
 {
@@ -20,15 +23,18 @@ class UserOrderController extends Controller
     public function postEditOrder(Request $request)
     {
         $productsPrice = $request->amount * $request->basePrice;
+
         $productId = DB::select('SELECT p.id FROM orders 
         INNER JOIN orders_products AS op ON orders.ulid = op.order_id 
         INNER JOIN products AS p ON op.product_id = p.id 
         WHERE orders.ulid = ?', [$request->orderId]);
+
         DB::update('UPDATE orders_products SET productAmount = ?, productsPrice = ? WHERE product_id = ?', [
             $request->amount,
             $productsPrice,
             $productId
         ]);
+
         return redirect()->route('cart');
     }
     public function closeOrder(Request $request)
@@ -37,10 +43,22 @@ class UserOrderController extends Controller
         $order->delete();
         return redirect()->route('cart');
     }
-    public function ordersHistory()
+    public function ordersHistory(Request $request)
     {
-        $orders = Order::with('payment')->withTrashed()->where('user_id', Auth::id())->with(['products', 'products.images'])->get();
-        DeleteClosedOrdersAction::delete($orders);
+        $orders = Cache::remember("user_" . Auth::id() . "orders_{$request->page}", env('CACHE_TTL'), function ()
+        {
+            return DeleteClosedOrdersAction::delete(
+                Order::with('payment')
+                ->withTrashed()
+                ->where('user_id', Auth::id())
+                ->with([
+                    'products',
+                    'products.images'
+                ])
+                ->get());
+        });
+
+        $orders = ManualPaginatorAction::paginate($orders, 15, $request->page);
         return view('user.orders.ordershistory', ['orders' => $orders]);
     }
     public function checkoutOrder()

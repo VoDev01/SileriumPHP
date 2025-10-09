@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => fake()->sentence(2),
-            'image' => 'images/default.jpg',
+            'image' => '/media/images/default.jpg',
             'pageName' => 'default'
         ];
     }

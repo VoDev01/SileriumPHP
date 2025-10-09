@@ -2,31 +2,8 @@
     <x-slot name="title">
         Регистрация | Silerium
     </x-slot>
-    <!--<script type="module">
-        $('#register_form').on('submit', function(event) {
-            event.preventDefault();
 
-            $.ajax({
-                type: 'POST',
-                url: '/user/postregister',
-                dataType: 'json',
-                data: $(this).serialize(),
-                success: function()
-                {
-                    window.location.href = '/user/login';
-                    console.log('User validated');
-                },
-                error: function(data) {
-                    let response = data.responseJSON;
-                    let all_errors = response.errors;
-
-                    $.each(all_errors, function(key, value) {
-                        $('#error-'+key).text(value);
-                    });
-                }
-            });
-        });
-    </script>-->
+    <script type="module" src="{{asset('js/countdown_request_attempts.js')}}"></script>
 
     <h2 class="text-center">Регистрация</h2>
     <div class="container" style="width: 500px;">
@@ -86,6 +63,7 @@
                 <label class="form-label" for="pfp">Картинка профиля</label>
                 <input class="form-control" type="file" id="pfp" name="pfp" />
                 <x-error field="pfp" id="error-pfp" />
+                <x-error field="attempts_available_in" id="error-attempts_available_in" />
             </div>
             <button class="btn btn-outline-primary mb-3" type="submit">Зарегистрироваться</button>
         </form>

@@ -16,7 +16,7 @@ class ProductService
      * @param array $validatedInput
      * @param array|null $images
      * @param array $select
-     * @return void
+     * @return mixed|null
      */
     public static function make(array $validatedInput, array $images = null, array $select)
     {

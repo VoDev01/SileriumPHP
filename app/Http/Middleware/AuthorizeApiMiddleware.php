@@ -5,10 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\APIUser;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Crypt;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthorizeApiMiddleware
 {
@@ -21,30 +21,47 @@ class AuthorizeApiMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!empty($request->header('API-Key')))
+        try
         {
-            if ($request->header('API-Key') === null)
-                abort(403, 'API Key is missing.');
+            if (!empty($request->header('API-Key')))
+            {
+                if ($request->header('API-Key') === null)
+                {
+                    throw new AccessDeniedHttpException('API Key is invalid.');
+                }
 
-            if ($request->header('API-Secret') === null)
-                abort(403, 'API Secret is missing.');
+                if ($request->header('API-Secret') === null)
+                {
+                    throw new AccessDeniedHttpException('API Secret is missing.');
+                }
 
-            $apiUser = APIUser::where('api_key', $request->header('API-Key'))->get()->first();
+                $apiUser = APIUser::where('api_key', $request->header('API-Key'))->get()->first();
 
-            if ($apiUser === null)
-                abort(403, 'API Key is invalid.');
+                if ($apiUser === null)
+                {
+                    throw new AccessDeniedHttpException('API Key is invalid.');
+                }
 
-            if (Hash::check($request->header('API-Secret'), $apiUser->secret))
-                return $next($request);
+                if (Hash::check($request->header('API-Secret'), $apiUser->secret))
+                    return $next($request);
+                else
+                {
+                    throw new AccessDeniedHttpException('API Secret is invalid.');
+                }
+            }
             else
-                abort(403, 'API Secret is invalid.');
-        }
-        else
-        {
-            if ($request->user() !== null)
-                abort(404);
+            {
+                if ($request->user('api') === null)
+                {
+                    throw new NotFoundHttpException;
+                }
 
-            return $next($request);
+                return $next($request);
+            }
+        }
+        catch (HttpException $e)
+        {
+            abort($e->getStatusCode(), $e->getMessage());
         }
     }
 }

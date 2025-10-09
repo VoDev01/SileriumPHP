@@ -20,7 +20,11 @@ class DatabaseSeeder extends Seeder
             SubcategorySeeder::class,
             ProductSpecificationsSeeder::class,
             ProductSeeder::class,
-            RolesSeeder::class
+            RolesSeeder::class,
+            ReviewsSeeder::class,
+            UserCardPaymentCredentialsSeeder::class,
+            OrdersSeeder::class,
+            PaymentSeeder::class
         ]);
     }
 }

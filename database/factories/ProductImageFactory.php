@@ -18,7 +18,7 @@ class ProductImageFactory extends Factory
     public function definition()
     {
         return [
-            'imagePath' => 'images/products/product_10.jpg',
+            'imagePath' => '/media/images/products/product_10.jpg',
             'product_id' => Product::max('id')
         ];
     }

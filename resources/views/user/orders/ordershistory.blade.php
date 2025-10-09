@@ -8,12 +8,18 @@
             <h3>У вас нету истории заказов.</h3>
         @else
             @foreach ($orders as $order)
+                <?php
+                $order = (object) $order;
+                ?>
                 <p>Номер заказа - {{ $order->ulid }}</p>
                 <p>Товары</p>
                 <div class="scroll-container">
                     @foreach ($order->products as $product)
-                        @if ($product->images->first() != null)
-                            <img width="128" height="128" src="{{ $product->images->first()->imagePath }}"
+                        <?php
+                        $product = (object) $product;
+                        ?>
+                        @if (!empty($product->images))
+                            <img width="128" height="128" src="{{ $product->images[0]['imagePath'] }}"
                                 alt="картинка товара {{ $product->name }}" />
                             <span class="text-dark">{{ $product->name }}</span>
                         @else
@@ -32,16 +38,19 @@
                     {{ $statusStr[App\Enum\ru] }}</p>
                 @if ($statusStr[App\Enum\ru] == ' Обрабатывается')
                     <a class="btn btn-danger text-decoration-none"
-                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Отменить заказ</a>
+                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{ $order->payment['payment_id'] }}">Отменить
+                        заказ</a>
                 @elseif($statusStr[App\Enum\ru] == ' Получен' && \Carbon\Carbon::now()->diffInDays($order->created_at) >= 7)
                     <a class="btn btn-danger text-decoration-none"
-                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{$order->payment->payment_id}}">Вернуть средства</a>
+                        href="/user/orders/refund?orderId={{ $order->ulid }}&paymentId={{ $order->payment['payment_id'] }}">Вернуть
+                        средства</a>
                 @else
                     <a class="btn text-decoration-none disabled" href="#"
                         style="background-color: black; color: white;">Отменить заказ</a>
                 @endif
                 <hr>
             @endforeach
+            <x-pagination :model="$orders" />
         @endif
         <a class="btn btn-outline-success" href="/user/cart">К корзине</a>
     </div>

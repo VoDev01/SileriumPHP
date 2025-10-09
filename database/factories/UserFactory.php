@@ -31,15 +31,17 @@ class UserFactory extends Factory
             'surname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => '1122334455',
-            'created_at' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s'),
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'birthDate' => fake()->dateTime(),
             'country' => fake()->country(),
             'city' => fake()->city(),
             'homeAdress' => fake()->streetAddress(),
             'phone' => fake()->phoneNumber(),
-            'profilePicture' => 'images/pfp/default_user.png',
+            'profilePicture' => '/media/images/pfp/default_user.png',
             'remember_token' => Str::random(10),
+            'token' => Str::random(rand(16, 256)),
+            'expiresIn' => Carbon::now()->addMinutes(15)->format('Y-m-d H:i:s'),
             'email_verified_at' => null
         ];
     }

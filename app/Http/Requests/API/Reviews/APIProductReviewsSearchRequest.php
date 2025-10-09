@@ -25,7 +25,8 @@ class APIProductReviewsSearchRequest extends FormRequest
     {
         return [
             'sellerName' => ['min:2', 'max:50', 'required'],
-            'productName' => ['min:5', 'max:100', 'required']
+            'productName' => ['min:5', 'max:100', 'required'],
+            'productId' => ['integer']
         ];
     }
 }

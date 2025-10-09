@@ -1,10 +1,15 @@
 <?php
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\BannedController;
 use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\Formatting\PdfFormatterController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,33 +22,54 @@ use App\Http\Controllers\Formatting\PdfFormatterController;
 |
 */
 
-Route::get('/media/{file}', function (string $file)
+Route::withoutMiddleware('auth.refresh.token')->group(function ()
 {
-    if(!is_file(env('APP_MEDIA_PATH') . $file))
-        abort(404);
 
-    foreach(explode(', ', env('APP_RESTRICTED_MEDIA_DIR')) as $dir)
+    Route::get('/media/{file}', function (string $file, Request $request)
     {
-        if(strpos($file, $dir))
+        if (!is_file(env('APP_MEDIA_PATH') . $file))
             abort(404);
-    }
 
-    $fileName = basename($file);
+        foreach (explode(', ', env('APP_RESTRICTED_MEDIA_DIR')) as $dir)
+        {
+            if (strpos($file, $dir) && !Auth::check())
+                abort(404);
+        }
 
-    return response(headers: [
-        'X-Sendfile' => env('APP_MEDIA_PATH') . $file,
-        'Content-Type' => 'application/octet-stream',
-        'Content-Disposition' => "attachment; filename=\"$fileName\"",
-    ]);
-})->where('file', '(.*)');
+        $fileName = basename($file);
+        $lastModified = filemtime(env('APP_MEDIA_PATH') . $file);
+        $etag = md5_file(env('APP_MEDIA_PATH') . $file);
 
-Route::get('/', [HomeController::class, 'index'])->middleware(['banned'])->name('home');
+        if ($request->hasHeader('Is-Modified-Since') || $request->hasHeader('If-None-Match'))
+        {
+            if ($request->header('Is-Modified-Since') === $lastModified || trim($request->header('If-None-Match')) === $etag)
+            {
+                return response(status: 304, headers: [
+                    'Cache-Control' => 'public, no-cache, must-revalidate, max-age=1209600',
+                    'ETag' => $etag,
+                    'Last-Modified' => $lastModified
+                ]);
+            }
+        }
 
-Route::get('/banned', [BannedController::class, 'banned'])->name('banned'); //->middleware('banned');
+        return response(headers: [
+            'X-Sendfile' => env('APP_MEDIA_PATH') . $file,
+            'Cache-Control' => 'public, no-cache, must-revalidate, max-age=1209600',
+            'Last-Modified' => $lastModified,
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+            'ETag' => $etag
+        ]);
+    })->where('file', '(.*)')->middleware('cache.media.headers');
 
-Route::controller(PdfFormatterController::class)->prefix('format')->middleware(['auth', 'banned'])->group(function ()
-{
-    Route::post('pdf', 'formatPDF')->name('format.pdf');
+    Route::get('/', [HomeController::class, 'index'])->middleware(['banned'])->name('home');
+
+    Route::get('/banned', [BannedController::class, 'banned'])->name('banned');
+
+    Route::controller(PdfFormatterController::class)->prefix('format')->middleware(['auth', 'banned'])->group(function ()
+    {
+        Route::post('pdf', 'formatPDF')->name('format.pdf');
+    });
+
+    Route::fallback(FallbackController::class);
 });
-
-Route::fallback(FallbackController::class);

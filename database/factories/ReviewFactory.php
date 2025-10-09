@@ -35,8 +35,8 @@ class ReviewFactory extends Factory
             'rating' => rand(1, 5),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'product_id' => Product::max('id'),
-            'user_id' => User::max('id')
+            'product_id' => Product::min('id'),
+            'user_id' => User::min('id')
         ];
     }
 }

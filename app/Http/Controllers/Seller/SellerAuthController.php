@@ -51,11 +51,13 @@ class SellerAuthController extends Controller
     {
         $validated = $request->validated();
         $userId = User::where("email", $validated["email"])->first()->id;
+
         if ($request->logo != null) {
             $logoPath = Storage::putFile('logo', $validated['logo']);
         } else {
-            $logoPath = '\\images\\logo\\default_logo.png';
+            $logoPath = '/media/images/pfp/default_user.png';
         }
+
         Seller::insert([
             "ulid" => Str::ulid()->toBase32(),
             "nickname" => $validated["nickname"],
@@ -66,6 +68,7 @@ class SellerAuthController extends Controller
             "tax_system" => $validated["tax_system"],
             "user_id" => $userId
         ]);
+
         return redirect()->route("seller.profile");
     }
 }

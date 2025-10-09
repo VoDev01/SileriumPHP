@@ -173,16 +173,16 @@ return [
         'gate'            => true,  // Display Laravel Gate checks
         'session'         => true,  // Display session data
         'symfony_request' => true,  // Only one can be enabled..
-        'mail'            => true,  // Catch mail messages
+        'mail'            => false,  // Catch mail messages
         'laravel'         => false, // Laravel version and environment
         'events'          => true, // All events fired
-        'default_request' => false, // Regular or special Symfony request logger
-        'logs'            => false, // Add the latest log messages
+        'default_request' => true, // Regular or special Symfony request logger
+        'logs'            => true, // Add the latest log messages
         'files'           => false, // Show the included files
         'config'          => false, // Display config settings
-        'cache'           => false, // Display cache events
+        'cache'           => true, // Display cache events
         'models'          => true,  // Display models
-        'livewire'        => true,  // Display Livewire (when available)
+        'livewire'        => false,  // Display Livewire (when available)
         'jobs'            => false, // Display dispatched jobs
         'pennant'         => false, // Display Pennant feature flags
     ],
@@ -224,10 +224,10 @@ return [
             'explain' => [                 // Show EXPLAIN output on queries
                 'enabled' => true,
             ],
-            'hints'             => false,   // Show hints for common mistakes
+            'hints'             => true,   // Show hints for common mistakes
             'show_copy'         => true,    // Show copy button next to the query,
             'slow_threshold'    => false,   // Only track queries that last longer than this time in ms
-            'memory_usage'      => false,   // Show queries memory usage
+            'memory_usage'      => true,   // Show queries memory usage
             'soft_limit'       => 100,      // After the soft limit, no parameters/backtrace are captured
             'hard_limit'       => 500,      // After the hard limit, queries are ignored
         ],
@@ -237,7 +237,7 @@ return [
         ],
         'views' => [
             'timeline' => false,    // Add the views to the timeline (Experimental)
-            'data' => false,        // True for all data, 'keys' for only names, false for no parameters.
+            'data' => true,        // True for all data, 'keys' for only names, false for no parameters.
             'group' => 50,          // Group duplicate views. Pass value to auto-group, or true/false to force
             'exclude_paths' => [    // Add the paths which you don't want to appear in the views
                 'vendor/filament'   // Exclude Filament components by default

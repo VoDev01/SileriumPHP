@@ -59,7 +59,7 @@ Route::controller(APISubcategoriesController::class)->prefix('subcategories')->g
 });
 Route::controller(APIReviewsController::class)->prefix('reviews')->group(function ()
 {
-    Route::get('index', 'index')->middleware('web');
+    Route::get('index', 'index');
     Route::patch('update', 'update');
     Route::delete('delete', 'delete');
     Route::post('search_user_reviews', 'searchUserReviews');

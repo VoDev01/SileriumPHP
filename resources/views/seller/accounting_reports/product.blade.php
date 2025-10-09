@@ -60,7 +60,7 @@
                     </tbody>
                 </table>
             </div>
-            <form action="/seller/accounting_reports/format/pdf" method="POST" id="submitForm">
+            <form action="/format/pdf" method="POST" id="submitForm">
                 @csrf
                 <input hidden type="text" name="pageHtml" id="pageHtml" />
                 <input hidden type="text" name="tableHtml" id="tableHtml" />

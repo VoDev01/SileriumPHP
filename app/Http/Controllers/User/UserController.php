@@ -39,9 +39,7 @@ class UserController extends Controller
             else
                 $user = $googleUser;
         }
-        $converted = EncodeImageBinaryToBase64Action::encode($user->profilePicture);
-        $user->profilePicture = $converted['base64'];
-        return view('user.profile', ['user' => $user, 'ext' => $converted['ext']]);
+        return view('user.profile', ['user' => $user]);
     }
     public function editProfile()
     {
