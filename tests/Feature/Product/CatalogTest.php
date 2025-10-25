@@ -92,7 +92,7 @@ class CatalogTest extends TestCase
 
         $assertOrder = function ($products, int $sortOrder)
         {
-            $cache = Cache::get("products_$sortOrder")->items();
+            $cache = Cache::get("products_$sortOrder" . '_1')->items();
             foreach ($products as $key => $val)
             {
                 if (array_key_exists($key, $cache))

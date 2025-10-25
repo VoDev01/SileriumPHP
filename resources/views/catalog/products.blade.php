@@ -31,13 +31,13 @@
             </x-filter-form>
             <div class="row flex-column flex-lg-row">
                 <div class="col-12 col-lg-9">
-                    @if (empty($products) && isset($notFound))
-                        <p class="text-secondary">{{$notFound}}</p>
+                    @if (empty($products))
+                        <p class="text-secondary">По вашему запросу товаров не найдено</p>
                     @else
                         @foreach ($products as $product)
-                            <?php 
-                                $product = (object) $product;
-                                $image = $product->images->first() ?? null;
+                            <?php
+                            $product = (object) $product;
+                            $image = $product->images->first() ?? null;
                             ?>
                             <a href="/catalog/product/{{ $product->id }}" class="row text-decoration-none text-black">
                                 <div class="col">
@@ -47,7 +47,7 @@
                                         <img src="#" class="col" alt="картинка товара" width="256"
                                             height="256">
                                     @else
-                                        <img src="{{$image->imagePath}}" class="col" alt="картинка товара"
+                                        <img src="{{ $image->imagePath }}" class="col" alt="картинка товара"
                                             width="256" height="256">
                                     @endif
                                 </div>
@@ -77,6 +77,8 @@
                 </div>
             </div>
         </div>
-        <x-pagination :model="$products" />
+        @if (!empty($products))
+            <x-pagination :model="$products" />
+        @endif
     </div>
 </x-layout>

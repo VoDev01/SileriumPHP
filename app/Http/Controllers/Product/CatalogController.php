@@ -51,10 +51,8 @@ class CatalogController extends Controller
         try
         {
             $products = SearchFormPaginateResponseService::paginate("products_{$sortOrder}_$page", $page, 15);
-            $notFound = null;
             if ($products === null)
             {
-                $notFound = $request->session()->get("products_{$sortOrder}_$page") ?? 'По вашему запросу товаров не найдено';
                 $products = (new ProductService)->getFilteredProducts(
                     $subcategory,
                     $name,
@@ -98,8 +96,7 @@ class CatalogController extends Controller
             'inputs' => $inputs,
             'checkboxInputs' => $checkboxInputs,
             'hiddenInputs' => $hiddenInputs,
-            'queryInputs' => $queryInputs,
-            'notFound' => $notFound
+            'queryInputs' => $queryInputs
         ]);
     }
     public function filterProducts(Request $request)
