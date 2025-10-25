@@ -29,7 +29,8 @@ class APIProductsUpdateRequest extends FormRequest
             'description' => ['min:5', 'max:1000', 'string', 'nullable'],
             'priceRub' => ['numeric', 'nullable'],
             'available' => ['boolean'],
-            'productAmount' => ['numeric', 'nullable']
+            'productAmount' => ['numeric', 'nullable'],
+            'subcategory_id' => ['integer']
         ];
     }
 }

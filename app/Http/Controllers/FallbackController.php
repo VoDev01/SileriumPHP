@@ -8,6 +8,6 @@ class FallbackController extends Controller
 {
     public function __invoke()
     {
-        return view('errors.404');
+        return view('errors.general', ['message' => 'Страница не найдена', 'status' => 404]);
     }
 }

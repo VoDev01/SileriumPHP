@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
 class APICategoriesController extends Controller
@@ -15,8 +16,7 @@ class APICategoriesController extends Controller
      */
     public function index(int $itemsPerPage = 15)
     {
-        $categories = Category::paginate($itemsPerPage);
-        return response()->json($categories);
+        return response()->json((new CategoryRepository)->index($itemsPerPage));
     }
 
     /**
@@ -27,10 +27,7 @@ class APICategoriesController extends Controller
      */
     public function create(Request $request)
     {
-        $categories = Category::create([
-            'name' => $request->name,
-            'image' => $request->image
-        ]);
+        (new CategoryRepository)->create($request);
         return response()->json(null, 200);
     }
 
@@ -42,8 +39,7 @@ class APICategoriesController extends Controller
      */
     public function show(int $id)
     {
-        $category = Category::find($id);
-        return response()->json($category);
+        return response()->json((new CategoryRepository)->show($id));
     }
 
     /**
@@ -55,10 +51,7 @@ class APICategoriesController extends Controller
      */
     public function update(Request $request)
     {
-        $category = Category::find($request->id);
-        $category->name = $request->name;
-        $category->image = $request->image;
-        $category->save();
+        (new CategoryRepository)->update($request);
         return response()->json(null, 200);
     }
 
@@ -70,7 +63,7 @@ class APICategoriesController extends Controller
      */
     public function delete(int $id)
     {
-        Category::destroy($id);
+        (new CategoryRepository)->delete($id);
         return response()->json(null, 200);
     }
 }

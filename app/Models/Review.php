@@ -54,6 +54,7 @@ class Review extends Model
     ];
 
     protected $fillable = [
+        'ulid',
         'title',
         'pros',
         'cons',

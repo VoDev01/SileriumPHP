@@ -6,7 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Seller;
 use App\Enum\TaxSystem;
-use App\Actions\UserAction;
+use App\Repositories\UserRepository;
 use App\Enum\OrganizationType;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,7 +21,7 @@ class SellerAuthTest extends TestCase
      */
     public function testLogin()
     {
-        $user = UserAction::make(User::factory()->make()->toArray(), 'default');
+        $user = UserRepository::create(User::factory()->make()->toArray(), 'default');
         Seller::factory()->create(['user_id' => $user->id]);
 
         $response = $this->post("/seller/login", ["email" => "kar332@gmail.com", "password" => "1122334455"]);
@@ -29,8 +29,8 @@ class SellerAuthTest extends TestCase
         $response->assertInvalid(["email"]);
 
         $response = $this->post("/seller/login", ["email" => $user->email, "password" => "1122334456654"]);
-        
-        $response->assertInvalid(["password"]);
+
+        $response->assertUnauthorized();
 
         $response = $this->post("/seller/login", ["email" => $user->email, "password" => "1122334455"]);
 

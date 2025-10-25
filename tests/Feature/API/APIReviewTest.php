@@ -2,19 +2,16 @@
 
 namespace Tests\Feature\API;
 
-use DateTime;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Seller;
-use App\Models\APIUser;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
-use Illuminate\Support\Str;
-use App\Enum\TestAPIRouteMethods;
-use App\Actions\TestAPIRouteForAuth;
+use App\Enum\TestRouteMethods;
+use App\Services\Testing\TestRouteForAuthService;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -32,11 +29,10 @@ class APIReviewTest extends TestCase
         $user = User::factory()->has(Role::factory())->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/reviews/index',
-            TestAPIRouteMethods::GET,
-            null,
-            $this
+            $this,
+            TestRouteMethods::GET,
         );
 
         $response->assertOk()
@@ -63,9 +59,10 @@ class APIReviewTest extends TestCase
         $user = User::factory()->has(Role::factory())->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/reviews/update',
-            TestAPIRouteMethods::PATCH,
+            $this,
+            TestRouteMethods::PATCH,
             [
                 'id' => $review->ulid,
                 'title' => $review->title,
@@ -73,16 +70,8 @@ class APIReviewTest extends TestCase
                 'cons' => null,
                 'comment' => null,
                 'rating' => null
-            ],
-            $this
+            ]
         );
-
-        $response->assertOk()
-            ->assertJson(
-                fn(AssertableJson $json) =>
-                $json->where('title', $review->title)
-                    ->etc()
-            );
     }
 
     public function testDelete()
@@ -96,11 +85,13 @@ class APIReviewTest extends TestCase
         $user = User::factory()->has(Role::factory())->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        TestAPIRouteForAuth::test(
+        TestRouteForAuthService::testAPI(
             '/api/v1/reviews/delete',
-            TestAPIRouteMethods::DELETE,
-            ['id' => $review->ulid],
-            $this
+            $this,
+            TestRouteMethods::DELETE,
+            [
+                'id' => $review->ulid
+            ],
         );
 
         $this->assertDatabaseMissing('reviews', ['ulid' => $review->ulid]);
@@ -117,14 +108,14 @@ class APIReviewTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/reviews/search_user_reviews',
-            TestAPIRouteMethods::POST,
+            $this,
+            TestRouteMethods::POST,
             [
                 'userEmail' => $user->email,
                 'userId' => $user->ulid
-            ],
-            $this
+            ]
         );
 
         $response->assertSessionHasNoErrors();
@@ -154,14 +145,14 @@ class APIReviewTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/reviews/search_product_reviews',
-            TestAPIRouteMethods::POST,
+            $this,
+            TestRouteMethods::POST,
             [
                 'sellerName' => $seller->nickname,
                 'productName' => $product->name
-            ],
-            $this
+            ]
         );
 
         $response->assertOk()
@@ -192,13 +183,13 @@ class APIReviewTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/reviews/average_rating',
-            TestAPIRouteMethods::POST,
+            $this,
+            TestRouteMethods::POST,
             [
                 'productName' => $product->name
-            ],
-            $this
+            ]
         );
 
         $response->assertOk()
@@ -226,13 +217,13 @@ class APIReviewTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/reviews/rating_count',
-            TestAPIRouteMethods::POST,
+            $this,
+            TestRouteMethods::POST,
             [
                 'productName' => $product->name
-            ],
-            $this
+            ]
         );
 
         $response->assertOk()

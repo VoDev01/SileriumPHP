@@ -7,29 +7,28 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use App\Actions\ManualPaginatorAction;
+use App\Services\SearchForms\FormInputData\SearchFormInput;
 use App\Http\Requests\API\Products\APIProductsCreateRequest;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
-use App\Http\Requests\API\Products\APIProductsUpdateRequest;
-use Illuminate\Support\Facades\Http;
-use App\Actions\ManualPaginatorAction;
-use App\Services\SearchFormPaginateResponseService;
-use App\Services\UpdateSessionValueJsonService;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
-use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
-use Illuminate\Support\Str;
+use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
+use App\Services\SearchFormsForms\ProductSearchFormService;
+use App\Services\SearchFormsForms\SearchFormPaginateResponseService;
 
 class SellerProductsController extends Controller
 {
     public function list(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+        $products = SearchFormPaginateResponseService::paginate('products',  $request->page, 15); 
         if ($products == null)
             $products = Product::paginate(15);
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
         ];
+
         $queryInputs = new SearchFormQueryInput('/seller/products/search', 'seller.products.list', null);
         return view('seller.products.products-list', ['products' => $products, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
@@ -51,7 +50,7 @@ class SellerProductsController extends Controller
     public function update(Request $request)
     {
         $this->authorize('update', Product::class);
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+        $products = SearchFormPaginateResponseService::paginate('products',  $request->page, 15); 
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'product_name', true),
         ];
@@ -69,17 +68,17 @@ class SellerProductsController extends Controller
             'priceRub' => $request->priceRub,
             'productAmount' => $request->productAmount,
             'available' => $request->available
-        ]);
+        ])->json('updated_product');
         if ($response->ok())
         {
-            UpdateSessionValueJsonService::update($request, 'products', $response->json(['updated_product']), 'ulid');
+            Cache::add("product_{$response['ulid']}", $response, env('CACHE_TTL'));
             return redirect()->route("seller.products.update");
         }
     }
     public function delete(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+        $products = SearchFormPaginateResponseService::paginate('products',  $request->page, 15); 
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
         ];
@@ -89,10 +88,14 @@ class SellerProductsController extends Controller
     public function postDeletedProduct(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
+
+        $response = Http::asJson()
+        ->withHeaders(['API-Secret' => $request->api_secret])
+        ->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->ulid]);
+
         if ($response->ok())
         {
-            UpdateSessionValueJsonService::delete($request, 'products', $response->json(['updated_product']), 'ulid');
+            Cache::delete("product_{$request->ulid}");
             return redirect()->route("seller.products.delete");
         }
     }
@@ -107,7 +110,7 @@ class SellerProductsController extends Controller
 
     public function reviews(Request $request)
     {
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+        $products = SearchFormPaginateResponseService::paginate('products',  $request->page, 15); 
         $reviews = $request->session()->get('reviews');
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true)
@@ -135,6 +138,6 @@ class SellerProductsController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::search($request, $validated);
+        return (new ProductSearchFormService)->search($validated);
     }
 }

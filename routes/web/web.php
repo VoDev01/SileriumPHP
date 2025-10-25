@@ -9,7 +9,9 @@ use App\Http\Controllers\BannedController;
 use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\Formatting\PdfFormatterController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,16 +26,18 @@ use Illuminate\Support\Facades\Auth;
 
 Route::withoutMiddleware('auth.refresh.token')->group(function ()
 {
-
     Route::get('/media/{file}', function (string $file, Request $request)
     {
-        if (!is_file(env('APP_MEDIA_PATH') . $file))
-            abort(404);
-
-        foreach (explode(', ', env('APP_RESTRICTED_MEDIA_DIR')) as $dir)
+        if (!App::environment('testing'))
         {
-            if (strpos($file, $dir) && !Auth::check())
-                abort(404);
+            if (!is_file(env('APP_MEDIA_PATH') . $file))
+                throw new NotFoundHttpException;
+
+            foreach (explode(', ', env('APP_RESTRICTED_MEDIA_DIR')) as $dir)
+            {
+                if (strpos($file, $dir) && !Auth::check())
+                    throw new NotFoundHttpException;
+            }
         }
 
         $fileName = basename($file);
@@ -45,7 +49,7 @@ Route::withoutMiddleware('auth.refresh.token')->group(function ()
             if ($request->header('Is-Modified-Since') === $lastModified || trim($request->header('If-None-Match')) === $etag)
             {
                 return response(status: 304, headers: [
-                    'Cache-Control' => 'public, no-cache, must-revalidate, max-age=1209600',
+                    'Cache-Control' => 'public, no-cache, must-revalidate, max-age=2592000',
                     'ETag' => $etag,
                     'Last-Modified' => $lastModified
                 ]);
@@ -54,7 +58,7 @@ Route::withoutMiddleware('auth.refresh.token')->group(function ()
 
         return response(headers: [
             'X-Sendfile' => env('APP_MEDIA_PATH') . $file,
-            'Cache-Control' => 'public, no-cache, must-revalidate, max-age=1209600',
+            'Cache-Control' => 'public, no-cache, must-revalidate, max-age=2592000',
             'Last-Modified' => $lastModified,
             'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => "attachment; filename=\"$fileName\"",
@@ -64,7 +68,7 @@ Route::withoutMiddleware('auth.refresh.token')->group(function ()
 
     Route::get('/', [HomeController::class, 'index'])->middleware(['banned'])->name('home');
 
-    Route::get('/banned', [BannedController::class, 'banned'])->name('banned');
+    Route::get('/banned', [BannedController::class, 'banned'])->name('banned')->withoutMiddleware('banned');
 
     Route::controller(PdfFormatterController::class)->prefix('format')->middleware(['auth', 'banned'])->group(function ()
     {

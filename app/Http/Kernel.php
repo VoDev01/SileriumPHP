@@ -38,7 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CheckBannedUserMiddleware::class,
+            \App\Http\Middleware\Auth\CheckBannedUser::class,
             'auth.refresh.token'
             //\App\Http\Middleware\TimezoneBasedOnIP::class
         ],
@@ -48,8 +48,8 @@ class Kernel extends HttpKernel
             TrustProxies::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\AuthorizeApiMiddleware::class,
-            //\App\Http\Middleware\CheckBannedUser::class,
+            //\App\Http\Middleware\Auth\AuthorizeApi::class,
+            \App\Http\Middleware\Auth\CheckBannedUser::class,
             //\App\Http\Middleware\TimezoneBasedOnIP::class
         ],
     ];
@@ -62,23 +62,23 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
+        'authorize.api' => \App\Http\Middleware\Auth\AuthorizeApi::class,
+        'authorize.admin' => \App\Http\Middleware\Auth\AuthorizeAdminPanel::class,
+        'authorize.seller' => \App\Http\Middleware\Auth\AuthorizeSeller::class,
+        'authorize.seller.admin' => \App\Http\Middleware\Auth\AuthorizeSellerAdmin::class,
+        'authorize.user.routes' => \App\Http\Middleware\Auth\AuthorizeUserRoute::class,
+        'banned' => \App\Http\Middleware\Auth\CheckBannedUser::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.refresh.token' => \App\Http\Middleware\RefreshUserTokenMiddleware::class,
+        'auth.refresh.token' => \App\Http\Middleware\Auth\RefreshUserToken::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'cache.media.headers' => \App\Http\Middleware\SetMediaCacheHeaders::class,
+        'cache.media.headers' => \App\Http\Middleware\Utility\SetMediaCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'throttle' => \App\Http\Middleware\Utility\ThrottleTestRequests::class, #\Illuminate\Http\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'authorize.api' => \App\Http\Middleware\AuthorizeApiMiddleware::class,
-        'authorize.admin' => \App\Http\Middleware\AuthorizeAdminPanelMiddleware::class,
-        'authorize.seller' => \App\Http\Middleware\AuthorizeSellerMiddleware::class,
-        'authorize.seller.admin' => \App\Http\Middleware\AuthorizeSellerAdminMiddleware::class,
-        'authorize.user.routes' => \App\Http\Middleware\AuthorizeUserRouteMiddleware::class,
-        'banned' => \App\Http\Middleware\CheckBannedUserMiddleware::class
     ];
 }

@@ -10,6 +10,7 @@ use App\Services\PaymentService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\PaymentRequest;
 use App\Models\Refund;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PaymentController extends Controller
 {
@@ -54,49 +55,54 @@ class PaymentController extends Controller
 
         $client = new \YooKassa\Client();
 
-        if (!$client->isNotificationIPTrusted($_SERVER['REMOTE_ADDR']))
+        try
         {
-            header('HTTP/1.1 400 Something went wrong');
-            exit();
-        }
+            if (!$client->isNotificationIPTrusted($_SERVER['REMOTE_ADDR']))
+            {
+                throw new HttpException(400, 'Что то пошло не так');
+            }
 
-        if ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_SUCCEEDED)
-        {
-            $responseData = [
-                'paymentId' => $responseObject->getId(),
-                'paymentStatus' => $responseObject->getStatus(),
-            ];
-            Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
+            if ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_SUCCEEDED)
+            {
+                $responseData = [
+                    'paymentId' => $responseObject->getId(),
+                    'paymentStatus' => $responseObject->getStatus(),
+                ];
+                Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
+            }
+            elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE)
+            {
+                $responseData = [
+                    'paymentId' => $responseObject->getId(),
+                    'paymentStatus' => $responseObject->getStatus(),
+                ];
+                Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
+            }
+            elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_CANCELED)
+            {
+                $responseData = [
+                    'paymentId' => $responseObject->getId(),
+                    'paymentStatus' => $responseObject->getStatus(),
+                ];
+                Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
+            }
+            elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::REFUND_SUCCEEDED)
+            {
+                $responseData = [
+                    'refundId' => $responseObject->getId(),
+                    'refundStatus' => $responseObject->getStatus(),
+                    'paymentId' => $responseObject->getPaymentId(),
+                ];
+                Refund::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['refundStatus']]);
+            }
+            else
+            {
+                throw new HttpException(400, 'Что то пошло не так');
+            }
         }
-        elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE)
+        catch (HttpException $e)
         {
-            $responseData = [
-                'paymentId' => $responseObject->getId(),
-                'paymentStatus' => $responseObject->getStatus(),
-            ];
-            Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
-        }
-        elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::PAYMENT_CANCELED)
-        {
-            $responseData = [
-                'paymentId' => $responseObject->getId(),
-                'paymentStatus' => $responseObject->getStatus(),
-            ];
-            Payment::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['paymentStatus']]);
-        }
-        elseif ($notificationObject->getEvent() === \YooKassa\Model\Notification\NotificationEventType::REFUND_SUCCEEDED)
-        {
-            $responseData = [
-                'refundId' => $responseObject->getId(),
-                'refundStatus' => $responseObject->getStatus(),
-                'paymentId' => $responseObject->getPaymentId(),
-            ];
-            Refund::where('payment_id', $responseData['paymentId'])->update(['status' => $responseData['refundStatus']]);
-        }
-        else
-        {
-            header('HTTP/1.1 400 Something went wrong');
-            exit();
+            return response($e->getMessage(), $e->getStatusCode());
         }
 
         return response();

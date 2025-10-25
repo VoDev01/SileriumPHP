@@ -3,7 +3,6 @@
         <h5>{{ $header }}</h5>
         @csrf
         <input hidden name="loadWith" id="loadWith" value="{{ $queryInputs->loadWith }}" />
-        <input hidden name="redirect" id="redirect" value="{{ $queryInputs->redirect }}" />
         @if ($hiddenInputs != null)
             @foreach ($hiddenInputs as $hiddenInput)
                 @if ($hiddenInput->inputId == null)

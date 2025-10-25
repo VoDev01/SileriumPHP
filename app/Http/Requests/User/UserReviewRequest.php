@@ -32,8 +32,14 @@ class UserReviewRequest extends FormRequest
             'cons' => ['required', 'min:5', 'max:1500'],
             'comment' => ['min:5', 'max:1500', 'nullable'],
             'rating' => ['required', 'numeric', 'min:1', 'max:10'],
-            'review_images' => ['array', 'max:5'],
-            'review_images.*' => [File::image()->min(1024)->max(2000 * 1024)->dimensions(Rule::dimensions()->minWidth(128)->minHeight(128)->maxWidth(5000)->maxHeight(5000))],
+            'product_id' => ['integer'],
+            'review_images' => ['array', 'max:5', 'nullable'],
+            'review_images.*' => [
+                File::image()->min(10)->max(10000)->dimensions(
+                    Rule::dimensions()
+                        ->minWidth(128)->minHeight(128)->maxWidth(2500)->maxHeight(2500)
+                )
+            ],
         ];
     }
 }

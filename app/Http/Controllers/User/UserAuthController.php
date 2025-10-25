@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
-use App\Actions\UserAction;
+use App\Models\BannedUser;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use App\Services\VerifyPhoneService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Services\HandleUserLoginService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\User\UserLoginRequest;
+use App\Services\Auth\HandleUserLoginService;
 use App\Http\Requests\User\UserRegisterRequest;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Password as PasswordUtil;
@@ -24,6 +25,10 @@ class UserAuthController extends Controller
 {
     public function login(Request $request)
     {
+        $user = Auth::user() !== null ? Auth::user()->ulid : null; 
+        if(BannedUser::where('user_id', $user)->get()->first())
+            return view('user.auth.loginbanned', ['api' => $request->api]);
+
         return view('user.auth.login', ['api' => $request->api]);
     }
 
@@ -128,6 +133,10 @@ class UserAuthController extends Controller
     }
     public function register()
     {
+        $user = Auth::user() !== null ? Auth::user()->ulid : null; 
+        if(BannedUser::where('user_id', $user)->get()->first())
+            return view('user.auth.registerbanned');
+
         return view('user.auth.register');
     }
     public function postRegister(UserRegisterRequest $request)
@@ -135,14 +144,16 @@ class UserAuthController extends Controller
         $validated = $request->validated();
         if ($request->pfp != null)
         {
-            $pfpPath = Storage::putFile('pfp', $validated['pfp']);
+            $userNum = User::all()->count() + 1;
+            $pfpPath = Storage::putFile('/images/pfp/pfp_' . substr_replace('0000000000', $userNum, strlen((string)abs($userNum))), $validated['pfp']);
         }
         else
         {
             $pfpPath = '\\images\\pfp\\default_user.png';
         }
-        $user = UserAction::make($validated, $pfpPath);
+        $user = (new UserRepository)->create($validated, $pfpPath);
         event(new Registered($user));
+        $request->session()->regenerate();
         return redirect()->route('login');
     }
 }

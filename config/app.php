@@ -201,7 +201,6 @@ return [
         */
 
         Darryldecode\Cart\CartServiceProvider::class,
-        App\Providers\ConvertCurrencyServiceProvider::class,
         App\Providers\PhoneValidationProvider::class,
         App\Providers\EmailValidationProvider::class,
         App\Providers\ProductCartServiceProvider::class
@@ -221,7 +220,6 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Redis' => Illuminate\Support\Facades\Redis::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
-        'ConvertCurrency' => App\Facades\ConvertCurrencyFacade::class,
         'ValidatePhone' => App\Facades\ValidatePhoneFacade::class,
         'ValidateEmail' => App\Facades\ValidateEmailFacade::class,
         'ProductCart' => App\Facades\ProductCartServiceFacade::class

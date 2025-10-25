@@ -17,7 +17,7 @@ Route::middleware('banned')->group(function ()
         Route::get('/account/edit', 'editAccount')->middleware(['auth', 'authorize.seller']);
         Route::post('/account/edit', 'postEditAccount');
     });
-    Route::controller(SellerAuthController::class)->group(function ()
+    Route::controller(SellerAuthController::class)->middleware('throttle:auth')->withoutMiddleware('auth.refresh.token')->group(function ()
     {
         Route::get('register', 'register');
         Route::post('register', 'postRegister');

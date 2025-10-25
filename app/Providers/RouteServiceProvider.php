@@ -47,9 +47,9 @@ class RouteServiceProvider extends ServiceProvider
     }
     public function mapAPIRoutes()
     {
-        Route::middleware('api')
+        Route::middleware(['api', 'auth:api'])
             ->prefix('/api/v1')
-            ->group(base_path('routes/api.php'), ['guard' => 'api']);
+            ->group(base_path('routes/api.php'));
     }
     public function mapPaymentRoutes()
     {
@@ -104,9 +104,9 @@ class RouteServiceProvider extends ServiceProvider
 
         RateLimiter::for('auth', function (Request $request)
         {
-            return Limit::perMinute(5)->by($request->ip())->response(function () use ($request)
+            return Limit::perMinute(5)->by($request->ip())->response(function ()
             {
-                return response()->json(['errors' => ['attempts_available_in' => 'Превышено количество попыток. Повторить можно будет через 60 сек']], 429);
+                return response('Превышено количество попыток. Повторить можно будет через 60 сек', 429);
             });
         });
     }

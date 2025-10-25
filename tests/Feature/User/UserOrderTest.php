@@ -54,7 +54,7 @@ class UserOrderTest extends TestCase
 
         $this->assertEquals('CANCELLED', $order->status);
 
-        Carbon::setTestNow(Carbon::now()->addDays(8)); 
+        Carbon::setTestNow(Carbon::now()->addDays(10)); 
 
         $this->actingAs($user)->get('/user/orders/history');
 

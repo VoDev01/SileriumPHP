@@ -20,7 +20,7 @@ class SellerController extends Controller
     }
     public function account()
     {
-        $seller = Seller::with('user')->where('id', session('seller_id'))->get()->first();
+        $seller = Seller::with('user')->where('user_id', Auth::id())->get()->first();
         return view('seller.account', ['seller' => $seller]);
     }
     public function editAccount()
@@ -31,8 +31,10 @@ class SellerController extends Controller
     {
         $validated = $request->validated();
         $path = null;
+        
         if (isset($validated['logo']))
             $path = Storage::putFile('logo', $validated['logo']);
+
         DB::update('UPDATE TABLE sellers INNER JOIN users ON sellers.user_id = users.id SET (
             nickname = ?,
             organization_name = ?,
@@ -51,6 +53,7 @@ class SellerController extends Controller
             $validated['email'],
             $path
         ]);
+
         return redirect('/seller/account');
     }
 }

@@ -42,7 +42,7 @@
               <input type="file" class="form-control" name="reviewImages" id="reviewImages" multiple>
               <x-error field="reviewImages"/>
             </div>
-            <input hidden name="productId" value="{{$product->id}}">
+            <input hidden name="product_id" value="{{$product->id}}">
             <input hidden name="reviewId" value="{{$review->id}}">
             <button type="submit" class="btn btn-primary">Отправить</button>
         </form>

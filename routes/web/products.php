@@ -14,14 +14,19 @@ use App\Http\Controllers\Product\CategoriesController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/categories/all', [CategoriesController::class, 'index']);
-Route::get('/categories/{category}/subcategories', [CategoriesController::class, 'subcategories']);
 
-Route::controller(CatalogController::class)->prefix('catalog')->group(function(){
-    Route::get('products/{subcategory?}/{sortOrder?}/{available?}/{name?}', 'products')->name('allproducts');
-    Route::post('rub_currency', 'rubCurrency');
-    Route::post('dol_currency','dolCurrency');
-    Route::post('filter','filterProducts');
-    Route::get('product/{productId}', 'product')->middleware('auth');
-    Route::post('/products/search', 'searchPorducts');
+Route::withoutMiddleware('auth.refresh.token')->group(function ()
+{
+    Route::get('/categories/all', [CategoriesController::class, 'index']);
+    Route::get('/categories/{category}/subcategories', [CategoriesController::class, 'subcategories']);
+
+    Route::controller(CatalogController::class)->prefix('catalog')->group(function ()
+    {
+        Route::get('products', 'products')->name('allproducts');
+        Route::post('rub_currency', 'rubCurrency');
+        Route::post('dol_currency', 'dolCurrency');
+        Route::post('filter', 'filterProducts');
+        Route::get('product/{ulid}', 'product');
+        Route::post('/products/search', 'searchProducts');
+    });
 });

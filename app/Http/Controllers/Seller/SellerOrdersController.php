@@ -2,50 +2,62 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Products\APIProductsSearchRequest;
-use App\Models\Order;
 use App\Models\Seller;
-use App\Services\SearchFormPaginateResponseService;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
-use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Collection;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Services\SearchForms\FormInputData\SearchFormInput;
+use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
+use App\Services\SearchFormsForms\ProductSearchFormService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Services\SearchFormsForms\SearchFormPaginateResponseService;
 
 class SellerOrdersController extends Controller
 {
     public function orders(Request $request)
     {
-        $orders = SearchFormPaginateResponseService::paginateRelations($request, 'products', 'orders', 15);
-        if (session('products') == null)
+        try
         {
-            $productsNames = null;
-            $productsAmounts = null;
-        }
-        else
-        {
-            if ($orders->total() == 1)
+            $orders = SearchFormPaginateResponseService::paginateRelations($request, 'products', 'orders', 15);
+
+            if (Cache::get('products') == null)
             {
-                $productsNames = substr(session('products')[0]['name'], 0, 5);
-                dd(session('products'));
-                $productsAmounts = implode(session('products')[0]['orders']);
+                $productsNames = null;
+                $productsAmounts = null;
             }
             else
             {
-                $productsNames = new Collection();
-                foreach (session('products') as $product)
+                if ($orders->total() == 1)
                 {
-                    $productsNames->push($product['name']);
+                    $productsNames = substr(Cache::get('products')[0]['name'], 0, 5);
+                    $productsAmounts = implode(Cache::get('products')[0]['orders']);
                 }
-                $productsNames = substr(implode(', ', $productsNames->toArray()), 0, 5);
+                else
+                {
+                    $productsNames = new Collection();
+                    foreach (Cache::get('products') as $product)
+                    {
+                        $productsNames->push($product['name']);
+                    }
+                    $productsNames = substr(implode(', ', $productsNames->toArray()), 0, 5);
+                }
             }
+            if (!isset($orders))
+                throw new NotFoundHttpException('Заказов с данным товаром не найдено');
         }
+        catch (HttpException $e)
+        {
+            abort($e->getStatusCode(), $e->getMessage());
+        }
+
         $queryInputs = new SearchFormQueryInput("/seller/orders/searchOrders", "seller.orders.list", "orders, orders.user");
         $inputs = [
             new SearchFormInput("productName", "Название товара", "productName", true, "productName")
         ];
+
         return view('seller.orders.list', ['orders' => $orders, 'queryInputs' => $queryInputs, 'inputs' => $inputs, 'productsNames' => $productsNames]);
     }
     public function searchProductsOrders(APIProductsSearchRequest $request)
@@ -54,6 +66,6 @@ class SellerOrdersController extends Controller
         if (!array_key_exists('sellerName', $validated))
             $validated['sellerName'] = Seller::where('id', session('seller_id'))->get()->first()->nickname;
 
-        return SearchFormProductsSearchMethod::search($request, $validated);
+        return (new ProductSearchFormService)->search($validated);
     }
 }

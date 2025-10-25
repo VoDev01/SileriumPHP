@@ -81,15 +81,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Actions-OrderItemsAction.html#method_orderItem"
         },                {
-            "fqsen": "\\App\\Actions\\TestAPIRouteForAuth",
-            "name": "TestAPIRouteForAuth",
+            "fqsen": "\\App\\Actions\\SetConfigAction",
+            "name": "SetConfigAction",
             "summary": "",
-            "url": "classes/App-Actions-TestAPIRouteForAuth.html"
+            "url": "classes/App-Actions-SetConfigAction.html"
         },                {
-            "fqsen": "\\App\\Actions\\TestAPIRouteForAuth\u003A\u003Atest\u0028\u0029",
-            "name": "test",
+            "fqsen": "\\App\\Actions\\SetConfigAction\u003A\u003Aset\u0028\u0029",
+            "name": "set",
             "summary": "",
-            "url": "classes/App-Actions-TestAPIRouteForAuth.html#method_test"
+            "url": "classes/App-Actions-SetConfigAction.html#method_set"
+        },                {
+            "fqsen": "\\App\\Actions\\SetEnvAction",
+            "name": "SetEnvAction",
+            "summary": "",
+            "url": "classes/App-Actions-SetEnvAction.html"
+        },                {
+            "fqsen": "\\App\\Actions\\SetEnvAction\u003A\u003Aset\u0028\u0029",
+            "name": "set",
+            "summary": "",
+            "url": "classes/App-Actions-SetEnvAction.html#method_set"
         },                {
             "fqsen": "\\App\\Actions\\UserAction",
             "name": "UserAction",
@@ -306,35 +316,35 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Enum-TaxSystem.html#enumcase_ESHN"
         },                {
-            "fqsen": "\\App\\Enum\\TestAPIRouteMethods",
-            "name": "TestAPIRouteMethods",
+            "fqsen": "\\App\\Enum\\TestRouteMethods",
+            "name": "TestRouteMethods",
             "summary": "",
-            "url": "classes/App-Enum-TestAPIRouteMethods.html"
+            "url": "classes/App-Enum-TestRouteMethods.html"
         },                {
-            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003AGET",
+            "fqsen": "\\App\\Enum\\TestRouteMethods\u003A\u003AGET",
             "name": "GET",
             "summary": "",
-            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_GET"
+            "url": "classes/App-Enum-TestRouteMethods.html#enumcase_GET"
         },                {
-            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003APOST",
+            "fqsen": "\\App\\Enum\\TestRouteMethods\u003A\u003APOST",
             "name": "POST",
             "summary": "",
-            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_POST"
+            "url": "classes/App-Enum-TestRouteMethods.html#enumcase_POST"
         },                {
-            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003APUT",
+            "fqsen": "\\App\\Enum\\TestRouteMethods\u003A\u003APUT",
             "name": "PUT",
             "summary": "",
-            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_PUT"
+            "url": "classes/App-Enum-TestRouteMethods.html#enumcase_PUT"
         },                {
-            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003APATCH",
+            "fqsen": "\\App\\Enum\\TestRouteMethods\u003A\u003APATCH",
             "name": "PATCH",
             "summary": "",
-            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_PATCH"
+            "url": "classes/App-Enum-TestRouteMethods.html#enumcase_PATCH"
         },                {
-            "fqsen": "\\App\\Enum\\TestAPIRouteMethods\u003A\u003ADELETE",
+            "fqsen": "\\App\\Enum\\TestRouteMethods\u003A\u003ADELETE",
             "name": "DELETE",
             "summary": "",
-            "url": "classes/App-Enum-TestAPIRouteMethods.html#enumcase_DELETE"
+            "url": "classes/App-Enum-TestRouteMethods.html#enumcase_DELETE"
         },                {
             "fqsen": "\\App\\Events\\Order\\OrderStatusEvent",
             "name": "OrderStatusEvent",
@@ -500,6 +510,26 @@ Search.appendIndex(
             "name": "documentation",
             "summary": "",
             "url": "classes/App-Http-Controllers-Admin-AdminPanelController.html#method_documentation"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\Admin\\AdminPanelController\u003A\u003Acoverage\u0028\u0029",
+            "name": "coverage",
+            "summary": "",
+            "url": "classes/App-Http-Controllers-Admin-AdminPanelController.html#method_coverage"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\Admin\\AdminPanelController\u003A\u003AcontrolAuthDropbox\u0028\u0029",
+            "name": "controlAuthDropbox",
+            "summary": "",
+            "url": "classes/App-Http-Controllers-Admin-AdminPanelController.html#method_controlAuthDropbox"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\Admin\\AdminPanelController\u003A\u003ArevokeDropboxToken\u0028\u0029",
+            "name": "revokeDropboxToken",
+            "summary": "",
+            "url": "classes/App-Http-Controllers-Admin-AdminPanelController.html#method_revokeDropboxToken"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\Admin\\AdminPanelController\u003A\u003AreceiveDropboxToken\u0028\u0029",
+            "name": "receiveDropboxToken",
+            "summary": "",
+            "url": "classes/App-Http-Controllers-Admin-AdminPanelController.html#method_receiveDropboxToken"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\Admin\\ProductsAdminPanelController",
             "name": "ProductsAdminPanelController",
@@ -710,16 +740,6 @@ Search.appendIndex(
             "name": "profile",
             "summary": "",
             "url": "classes/App-Http-Controllers-API-V1-APIProfileController.html#method_profile"
-        },                {
-            "fqsen": "\\App\\Http\\Controllers\\API\\V1\\APIProfileController\u003A\u003AgenerateToken\u0028\u0029",
-            "name": "generateToken",
-            "summary": "",
-            "url": "classes/App-Http-Controllers-API-V1-APIProfileController.html#method_generateToken"
-        },                {
-            "fqsen": "\\App\\Http\\Controllers\\API\\V1\\APIProfileController\u003A\u003ArefreshToken\u0028\u0029",
-            "name": "refreshToken",
-            "summary": "",
-            "url": "classes/App-Http-Controllers-API-V1-APIProfileController.html#method_refreshToken"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\API\\V1\\APIProfileController\u003A\u003Alogout\u0028\u0029",
             "name": "logout",
@@ -1001,11 +1021,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Http-Controllers-Seller-SellerAccountingReportsController.html#method_searchPayments"
         },                {
-            "fqsen": "\\App\\Http\\Controllers\\Seller\\SellerAccountingReportsController\u003A\u003AformatPdfProductReport\u0028\u0029",
-            "name": "formatPdfProductReport",
-            "summary": "",
-            "url": "classes/App-Http-Controllers-Seller-SellerAccountingReportsController.html#method_formatPdfProductReport"
-        },                {
             "fqsen": "\\App\\Http\\Controllers\\Seller\\SellerAuthController",
             "name": "SellerAuthController",
             "summary": "",
@@ -1221,6 +1236,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Http-Controllers-User-UserAuthController.html#method_postRegister"
         },                {
+            "fqsen": "\\App\\Http\\Controllers\\User\\UserAuthController\u003A\u003AloginBanned\u0028\u0029",
+            "name": "loginBanned",
+            "summary": "",
+            "url": "classes/App-Http-Controllers-User-UserAuthController.html#method_loginBanned"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\User\\UserAuthController\u003A\u003AregisterBanned\u0028\u0029",
+            "name": "registerBanned",
+            "summary": "",
+            "url": "classes/App-Http-Controllers-User-UserAuthController.html#method_registerBanned"
+        },                {
             "fqsen": "\\App\\Http\\Controllers\\User\\UserCartController",
             "name": "UserCartController",
             "summary": "",
@@ -1371,6 +1396,86 @@ Search.appendIndex(
             "summary": "The\u0020application\u0027s\u0020route\u0020middleware.",
             "url": "classes/App-Http-Kernel.html#property_routeMiddleware"
         },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeAdminApi",
+            "name": "AuthorizeAdminApi",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeAdminApi.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeAdminApi\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeAdminApi.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeAdminPanel",
+            "name": "AuthorizeAdminPanel",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeAdminPanel.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeAdminPanel\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeAdminPanel.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeApi",
+            "name": "AuthorizeApi",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeApi.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeApi\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeApi.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeSeller",
+            "name": "AuthorizeSeller",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeSeller.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeSeller\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeSeller.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeSellerAdmin",
+            "name": "AuthorizeSellerAdmin",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeSellerAdmin.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeSellerAdmin\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeSellerAdmin.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeUserRoute",
+            "name": "AuthorizeUserRoute",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeUserRoute.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\AuthorizeUserRoute\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-AuthorizeUserRoute.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\CheckBannedUser",
+            "name": "CheckBannedUser",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-CheckBannedUser.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\CheckBannedUser\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-CheckBannedUser.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\RefreshUserToken",
+            "name": "RefreshUserToken",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Auth-RefreshUserToken.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth\\RefreshUserToken\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Auth-RefreshUserToken.html#method_handle"
+        },                {
             "fqsen": "\\App\\Http\\Middleware\\Authenticate",
             "name": "Authenticate",
             "summary": "",
@@ -1380,76 +1485,6 @@ Search.appendIndex(
             "name": "redirectTo",
             "summary": "Get\u0020the\u0020path\u0020the\u0020user\u0020should\u0020be\u0020redirected\u0020to\u0020when\u0020they\u0020are\u0020not\u0020authenticated.",
             "url": "classes/App-Http-Middleware-Authenticate.html#method_redirectTo"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeAdminApiMiddleware",
-            "name": "AuthorizeAdminApiMiddleware",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-AuthorizeAdminApiMiddleware.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeAdminApiMiddleware\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-AuthorizeAdminApiMiddleware.html#method_handle"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeAdminPanelMiddleware",
-            "name": "AuthorizeAdminPanelMiddleware",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-AuthorizeAdminPanelMiddleware.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeAdminPanelMiddleware\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-AuthorizeAdminPanelMiddleware.html#method_handle"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeApiMiddleware",
-            "name": "AuthorizeApiMiddleware",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-AuthorizeApiMiddleware.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeApiMiddleware\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-AuthorizeApiMiddleware.html#method_handle"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeSellerAdminMiddleware",
-            "name": "AuthorizeSellerAdminMiddleware",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-AuthorizeSellerAdminMiddleware.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeSellerAdminMiddleware\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-AuthorizeSellerAdminMiddleware.html#method_handle"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeSellerMiddleware",
-            "name": "AuthorizeSellerMiddleware",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-AuthorizeSellerMiddleware.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeSellerMiddleware\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-AuthorizeSellerMiddleware.html#method_handle"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeUserRouteMiddleware",
-            "name": "AuthorizeUserRouteMiddleware",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-AuthorizeUserRouteMiddleware.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\AuthorizeUserRouteMiddleware\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-AuthorizeUserRouteMiddleware.html#method_handle"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\CheckBannedUserMiddleware",
-            "name": "CheckBannedUserMiddleware",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-CheckBannedUserMiddleware.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\CheckBannedUserMiddleware\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-CheckBannedUserMiddleware.html#method_handle"
         },                {
             "fqsen": "\\App\\Http\\Middleware\\EncryptCookies",
             "name": "EncryptCookies",
@@ -1480,16 +1515,6 @@ Search.appendIndex(
             "name": "handle",
             "summary": "Handle\u0020an\u0020incoming\u0020request.",
             "url": "classes/App-Http-Middleware-RedirectIfAuthenticated.html#method_handle"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\TimezoneBasedOnIP",
-            "name": "TimezoneBasedOnIP",
-            "summary": "",
-            "url": "classes/App-Http-Middleware-TimezoneBasedOnIP.html"
-        },                {
-            "fqsen": "\\App\\Http\\Middleware\\TimezoneBasedOnIP\u003A\u003Ahandle\u0028\u0029",
-            "name": "handle",
-            "summary": "Handle\u0020an\u0020incoming\u0020request.",
-            "url": "classes/App-Http-Middleware-TimezoneBasedOnIP.html#method_handle"
         },                {
             "fqsen": "\\App\\Http\\Middleware\\TrimStrings",
             "name": "TrimStrings",
@@ -1525,6 +1550,36 @@ Search.appendIndex(
             "name": "headers",
             "summary": "The\u0020headers\u0020that\u0020should\u0020be\u0020used\u0020to\u0020detect\u0020proxies.",
             "url": "classes/App-Http-Middleware-TrustProxies.html#property_headers"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Utility\\SetMediaCacheHeaders",
+            "name": "SetMediaCacheHeaders",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Utility-SetMediaCacheHeaders.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Utility\\SetMediaCacheHeaders\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Utility-SetMediaCacheHeaders.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Utility\\ThrottleTestRequests",
+            "name": "ThrottleTestRequests",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Utility-ThrottleTestRequests.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Utility\\ThrottleTestRequests\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Utility-ThrottleTestRequests.html#method_handle"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Utility\\TimezoneBasedOnIP",
+            "name": "TimezoneBasedOnIP",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-Utility-TimezoneBasedOnIP.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Utility\\TimezoneBasedOnIP\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Handle\u0020an\u0020incoming\u0020request.",
+            "url": "classes/App-Http-Middleware-Utility-TimezoneBasedOnIP.html#method_handle"
         },                {
             "fqsen": "\\App\\Http\\Middleware\\ValidateSignature",
             "name": "ValidateSignature",
@@ -1665,21 +1720,6 @@ Search.appendIndex(
             "name": "rules",
             "summary": "Get\u0020the\u0020validation\u0020rules\u0020that\u0020apply\u0020to\u0020the\u0020request.",
             "url": "classes/App-Http-Requests-API-Profile-APILoginRequest.html#method_rules"
-        },                {
-            "fqsen": "\\App\\Http\\Requests\\API\\Profile\\APIRefreshTokenRequest",
-            "name": "APIRefreshTokenRequest",
-            "summary": "",
-            "url": "classes/App-Http-Requests-API-Profile-APIRefreshTokenRequest.html"
-        },                {
-            "fqsen": "\\App\\Http\\Requests\\API\\Profile\\APIRefreshTokenRequest\u003A\u003Aauthorize\u0028\u0029",
-            "name": "authorize",
-            "summary": "Determine\u0020if\u0020the\u0020user\u0020is\u0020authorized\u0020to\u0020make\u0020this\u0020request.",
-            "url": "classes/App-Http-Requests-API-Profile-APIRefreshTokenRequest.html#method_authorize"
-        },                {
-            "fqsen": "\\App\\Http\\Requests\\API\\Profile\\APIRefreshTokenRequest\u003A\u003Arules\u0028\u0029",
-            "name": "rules",
-            "summary": "Get\u0020the\u0020validation\u0020rules\u0020that\u0020apply\u0020to\u0020the\u0020request.",
-            "url": "classes/App-Http-Requests-API-Profile-APIRefreshTokenRequest.html#method_rules"
         },                {
             "fqsen": "\\App\\Http\\Requests\\API\\Profile\\APIRegisterRequest",
             "name": "APIRegisterRequest",
@@ -2071,10 +2111,10 @@ Search.appendIndex(
             "summary": "Create\u0020the\u0020event\u0020listener.",
             "url": "classes/App-Listeners-OrderSubcriber.html#method___construct"
         },                {
-            "fqsen": "\\App\\Listeners\\OrderSubcriber\u003A\u003AhandleStatusEvent\u0028\u0029",
-            "name": "handleStatusEvent",
+            "fqsen": "\\App\\Listeners\\OrderSubcriber\u003A\u003AhandleOrderStatusEvent\u0028\u0029",
+            "name": "handleOrderStatusEvent",
             "summary": "Handle\u0020the\u0020event.",
-            "url": "classes/App-Listeners-OrderSubcriber.html#method_handleStatusEvent"
+            "url": "classes/App-Listeners-OrderSubcriber.html#method_handleOrderStatusEvent"
         },                {
             "fqsen": "\\App\\Listeners\\OrderSubcriber\u003A\u003Asubscribe\u0028\u0029",
             "name": "subscribe",
@@ -2516,10 +2556,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Models-User.html#method_roles"
         },                {
-            "fqsen": "\\App\\Models\\User\u003A\u003Asellers\u0028\u0029",
-            "name": "sellers",
+            "fqsen": "\\App\\Models\\User\u003A\u003Aseller\u0028\u0029",
+            "name": "seller",
             "summary": "",
-            "url": "classes/App-Models-User.html#method_sellers"
+            "url": "classes/App-Models-User.html#method_seller"
         },                {
             "fqsen": "\\App\\Models\\User\u003A\u003Abanned\u0028\u0029",
             "name": "banned",
@@ -2636,35 +2676,35 @@ Search.appendIndex(
             "summary": "App\\Models\\UserWallet",
             "url": "classes/App-Models-UserWallet.html"
         },                {
-            "fqsen": "\\App\\Notifications\\statusChangedNotification",
-            "name": "statusChangedNotification",
+            "fqsen": "\\App\\Notifications\\OrderStatusChangedNotification",
+            "name": "OrderStatusChangedNotification",
             "summary": "",
-            "url": "classes/App-Notifications-statusChangedNotification.html"
+            "url": "classes/App-Notifications-OrderStatusChangedNotification.html"
         },                {
-            "fqsen": "\\App\\Notifications\\statusChangedNotification\u003A\u003A__construct\u0028\u0029",
+            "fqsen": "\\App\\Notifications\\OrderStatusChangedNotification\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "Create\u0020a\u0020new\u0020notification\u0020instance.",
-            "url": "classes/App-Notifications-statusChangedNotification.html#method___construct"
+            "url": "classes/App-Notifications-OrderStatusChangedNotification.html#method___construct"
         },                {
-            "fqsen": "\\App\\Notifications\\statusChangedNotification\u003A\u003Avia\u0028\u0029",
+            "fqsen": "\\App\\Notifications\\OrderStatusChangedNotification\u003A\u003Avia\u0028\u0029",
             "name": "via",
             "summary": "Get\u0020the\u0020notification\u0027s\u0020delivery\u0020channels.",
-            "url": "classes/App-Notifications-statusChangedNotification.html#method_via"
+            "url": "classes/App-Notifications-OrderStatusChangedNotification.html#method_via"
         },                {
-            "fqsen": "\\App\\Notifications\\statusChangedNotification\u003A\u003AtoMail\u0028\u0029",
+            "fqsen": "\\App\\Notifications\\OrderStatusChangedNotification\u003A\u003AtoMail\u0028\u0029",
             "name": "toMail",
             "summary": "Get\u0020the\u0020mail\u0020representation\u0020of\u0020the\u0020notification.",
-            "url": "classes/App-Notifications-statusChangedNotification.html#method_toMail"
+            "url": "classes/App-Notifications-OrderStatusChangedNotification.html#method_toMail"
         },                {
-            "fqsen": "\\App\\Notifications\\statusChangedNotification\u003A\u003AtoArray\u0028\u0029",
+            "fqsen": "\\App\\Notifications\\OrderStatusChangedNotification\u003A\u003AtoArray\u0028\u0029",
             "name": "toArray",
             "summary": "Get\u0020the\u0020array\u0020representation\u0020of\u0020the\u0020notification.",
-            "url": "classes/App-Notifications-statusChangedNotification.html#method_toArray"
+            "url": "classes/App-Notifications-OrderStatusChangedNotification.html#method_toArray"
         },                {
-            "fqsen": "\\App\\Notifications\\statusChangedNotification\u003A\u003A\u0024order",
+            "fqsen": "\\App\\Notifications\\OrderStatusChangedNotification\u003A\u003A\u0024order",
             "name": "order",
             "summary": "",
-            "url": "classes/App-Notifications-statusChangedNotification.html#property_order"
+            "url": "classes/App-Notifications-OrderStatusChangedNotification.html#property_order"
         },                {
             "fqsen": "\\App\\Policies\\OrderPolicy",
             "name": "OrderPolicy",
@@ -3101,6 +3141,21 @@ Search.appendIndex(
             "summary": "Paginate\u0020relations\u0020of\u0020the\u0020found\u0020models",
             "url": "classes/App-Services-SearchFormPaginateResponseService.html#method_paginateRelations"
         },                {
+            "fqsen": "\\App\\Services\\TestRouteForAuthService",
+            "name": "TestRouteForAuthService",
+            "summary": "",
+            "url": "classes/App-Services-TestRouteForAuthService.html"
+        },                {
+            "fqsen": "\\App\\Services\\TestRouteForAuthService\u003A\u003AtestAPI\u0028\u0029",
+            "name": "testAPI",
+            "summary": "",
+            "url": "classes/App-Services-TestRouteForAuthService.html#method_testAPI"
+        },                {
+            "fqsen": "\\App\\Services\\TestRouteForAuthService\u003A\u003AtestWeb\u0028\u0029",
+            "name": "testWeb",
+            "summary": "",
+            "url": "classes/App-Services-TestRouteForAuthService.html#method_testWeb"
+        },                {
             "fqsen": "\\App\\Services\\UpdateSessionValueJsonService",
             "name": "UpdateSessionValueJsonService",
             "summary": "",
@@ -3195,6 +3250,21 @@ Search.appendIndex(
             "name": "render",
             "summary": "Get\u0020the\u0020view\u0020\/\u0020contents\u0020that\u0020represent\u0020the\u0020component.",
             "url": "classes/App-View-Components-APILayout.html#method_render"
+        },                {
+            "fqsen": "\\App\\View\\Components\\BannedLayout",
+            "name": "BannedLayout",
+            "summary": "",
+            "url": "classes/App-View-Components-BannedLayout.html"
+        },                {
+            "fqsen": "\\App\\View\\Components\\BannedLayout\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Create\u0020a\u0020new\u0020component\u0020instance.",
+            "url": "classes/App-View-Components-BannedLayout.html#method___construct"
+        },                {
+            "fqsen": "\\App\\View\\Components\\BannedLayout\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Get\u0020the\u0020view\u0020\/\u0020contents\u0020that\u0020represent\u0020the\u0020component.",
+            "url": "classes/App-View-Components-BannedLayout.html#method_render"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsInputs\\SearchForm\\SearchFormCheckboxInput",
             "name": "SearchFormCheckboxInput",
@@ -3301,6 +3371,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-View-Components-ComponentsInputs-SearchForm-SearchFormQueryInput.html#property_redirect"
         },                {
+            "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormBase",
+            "name": "SearchFormBase",
+            "summary": "",
+            "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormBase.html"
+        },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormInterface",
             "name": "SearchFormInterface",
             "summary": "",
@@ -3308,7 +3383,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormInterface\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020the\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormInterface.html#method_search"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormPaymentsSearchMethod",
@@ -3318,7 +3393,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormPaymentsSearchMethod\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020the\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormPaymentsSearchMethod.html#method_search"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormProductsSearchMethod",
@@ -3328,7 +3403,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormProductsSearchMethod\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020the\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormProductsSearchMethod.html#method_search"
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormUsersSearchMethod",
@@ -3338,8 +3413,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormUsersSearchMethod\u003A\u003Asearch\u0028\u0029",
             "name": "search",
-            "summary": "Defines\u0020how\u0020to\u0020search\u0020a\u0020model",
+            "summary": "Defines\u0020how\u0020to\u0020search\u0020the\u0020model",
             "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormUsersSearchMethod.html#method_search"
+        },                {
+            "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormValidateResponse",
+            "name": "SearchFormValidateResponse",
+            "summary": "",
+            "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormValidateResponse.html"
+        },                {
+            "fqsen": "\\App\\View\\Components\\ComponentsMethods\\SearchForm\\SearchFormValidateResponse\u003A\u003Avalidate\u0028\u0029",
+            "name": "validate",
+            "summary": "",
+            "url": "classes/App-View-Components-ComponentsMethods-SearchForm-SearchFormValidateResponse.html#method_validate"
         },                {
             "fqsen": "\\App\\View\\Components\\Error",
             "name": "Error",
@@ -3621,10 +3706,20 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/app-http.html"
         },                {
+            "fqsen": "\\App\\Http\\Middleware\\Auth",
+            "name": "Auth",
+            "summary": "",
+            "url": "namespaces/app-http-middleware-auth.html"
+        },                {
             "fqsen": "\\App\\Http\\Middleware",
             "name": "Middleware",
             "summary": "",
             "url": "namespaces/app-http-middleware.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\Utility",
+            "name": "Utility",
+            "summary": "",
+            "url": "namespaces/app-http-middleware-utility.html"
         },                {
             "fqsen": "\\App\\Http\\Requests\\API\\Products",
             "name": "Products",

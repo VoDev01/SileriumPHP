@@ -5,8 +5,9 @@ namespace App\Http\Controllers\User;
 use App\Models\Review;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Services\ReviewService;
+use App\Repositories\ReviewRepository;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserEditReviewRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\User\UserReviewRequest;
 
@@ -25,17 +26,17 @@ class UserReviewController extends Controller
     public function postReview(UserReviewRequest $request)
     {
         $validated = $request->validated();
-        $review = ReviewService::make($validated, Auth::id(), $request->product_id, $request->review_images);
+        $review = (new ReviewRepository)->create($validated, Auth::id());
         return redirect()->route('userReviews');
     }
     public function editReview(Review $review)
     {
         return view('user.review.reviewproduct', ['review' => $review, 'product' => $review->product]);
     }
-    public function postEditReview(UserReviewRequest $request)
+    public function postEditReview(UserEditReviewRequest $request)
     {
         $validated = $request->validated();
-        ReviewService::update($request->review_id, $validated, $request->product_id, Auth::id());
+        (new ReviewRepository)->update($validated);
         return redirect()->route('userReviews');
     }
     public function deleteReview(Request $request)

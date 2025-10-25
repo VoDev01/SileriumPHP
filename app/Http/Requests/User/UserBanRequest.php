@@ -24,7 +24,7 @@ class UserBanRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['ulid', 'required'],
+            'user_id' => ['string', 'max:500', 'required'],
             'admin_id' => ['ulid', 'required'],
             'reason' => ['min:4', 'max:500', 'required', 'string'],
             'duration' => ['numeric', 'required'],

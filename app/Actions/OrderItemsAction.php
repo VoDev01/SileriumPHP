@@ -16,19 +16,19 @@ class OrderItemsAction
                 $orderingType = 'name ASC';
                 break;
             case SortOrder::NAME_DESC->value:
-                $orderingType = 'name desc';
+                $orderingType = 'name DESC';
                 break;
             case SortOrder::POP_ASC->value:
-                $orderingType = 'timesPurchased asc';
+                $orderingType = 'timesPurchased ASC';
                 break;
             case SortOrder::POP_DESC->value:
-                $orderingType = 'timesPurchased desc';
+                $orderingType = 'timesPurchased DESC';
                 break;
             case SortOrder::PRICE_ASC->value:
-                $orderingType = 'priceRub asc';
+                $orderingType = 'priceRub ASC';
                 break;
             case SortOrder::PRICE_DESC->value:
-                $orderingType = 'priceRub desc';
+                $orderingType = 'priceRub DESC';
                 break;
         }
         return $orderingType;

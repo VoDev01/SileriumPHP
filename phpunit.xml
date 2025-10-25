@@ -14,8 +14,18 @@
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">app/Http/Controllers</directory>
+            <directory suffix=".php">app/Http/Middleware</directory>
+            <directory suffix=".php">app/Services</directory>
+            <directory suffix=".php">app/Actions</directory>
+            <directory suffix=".php">app/View/Components/ComponentsMethods</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">app/Http/Controllers/Formatting</directory>
+        </exclude>
+        <report>
+          <html outputDirectory="tests/reports/coverage"/>
+        </report>
     </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>

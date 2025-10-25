@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Authenticate extends Middleware
 {
@@ -24,6 +25,10 @@ class Authenticate extends Middleware
             {
                 return route('login', ['api' => 'api']);
             }
+            // else if($request->is('admin*'))
+            // {
+            //     abort(404);
+            // }
             else
                 return route('login');
         }

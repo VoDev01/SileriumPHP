@@ -58,35 +58,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read int|null $reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property-read int|null $roles_count
- * @property-read Seller|null $sellers
+ * @property-read Seller|null $seller
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Passport\Token> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBirthDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCountry($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereHomeAdress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePhoneVerified($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereProfilePicture($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSurname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUlid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, PassportTokenPrint, HasFactory, HasUlids, Notifiable;
+    use HasFactory, HasUlids, Notifiable;
     //protected $primaryKey = 'ulid';
 
     /**
@@ -104,7 +84,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'city',
         'homeAdress',
         'phone',
-        'profilePicture'
+        'profilePicture',
+        'token',
+        'expiresIn'
     ];
 
     protected $guarded = [
@@ -142,7 +124,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
     }
-    public function sellers()
+    public function seller()
     {
         return $this->hasOne(Seller::class);
     }

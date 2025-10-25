@@ -2,20 +2,13 @@
 
 namespace Tests\Feature\API;
 
-use App\Actions\TestAPIRouteForAuth;
-use App\Enum\TestAPIRouteMethods;
-use DateTime;
+use App\Enum\TestRouteMethods;
+use App\Services\Testing\TestRouteForAuthService;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\APIUser;
 use App\Models\Category;
-use App\Models\UserApiKey;
 use App\Models\Subcategory;
-use Illuminate\Support\Str;
-use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\DB;
-use Laravel\Passport\ClientRepository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,10 +28,8 @@ class APISubcategoriesTest extends TestCase
         $subcategories = Subcategory::factory()->count(20)->create();
         $subcategory = $subcategories->first();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/subcategories/index/15',
-            TestAPIRouteMethods::GET,
-            null,
             $this
         );
 
@@ -64,10 +55,8 @@ class APISubcategoriesTest extends TestCase
         $user = User::factory()->has(Role::factory())->create();
         $subcategory = Subcategory::factory()->create();
 
-        $response = TestAPIRouteForAuth::test(
+        $response = TestRouteForAuthService::testAPI(
             '/api/v1/subcategories/show/' . $subcategory->id,
-            TestAPIRouteMethods::GET,
-            null,
             $this
         );
 
@@ -86,15 +75,15 @@ class APISubcategoriesTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $subcategory = Subcategory::factory()->create();
 
-        TestAPIRouteForAuth::test(
+        TestRouteForAuthService::testAPI(
             '/api/v1/subcategories/create',
-            TestAPIRouteMethods::POST,
+            $this,
+            TestRouteMethods::POST,
             [
                 'name' => $subcategory->name,
                 'image' => $subcategory->image,
                 'categoryId' => $subcategory->category_id
-            ],
-            $this
+            ]
         );
     }
 
@@ -105,15 +94,15 @@ class APISubcategoriesTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $subcategory = Subcategory::factory()->create();
 
-        TestAPIRouteForAuth::test(
+        TestRouteForAuthService::testAPI(
             '/api/v1/subcategories/update',
-            TestAPIRouteMethods::PATCH,
+            $this,
+            TestRouteMethods::PATCH,
             [
                 'id' => $subcategory->id,
                 'name' => $subcategory->name,
                 'image' => $subcategory->image
-            ],
-            $this
+            ]
         );
     }
 
@@ -124,13 +113,13 @@ class APISubcategoriesTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $subcategory = Subcategory::factory()->create();
 
-        TestAPIRouteForAuth::test(
+        TestRouteForAuthService::testAPI(
             '/api/v1/subcategories/delete',
-            TestAPIRouteMethods::DELETE,
+            $this,
+            TestRouteMethods::DELETE,
             [
                 'id' => $subcategory->id
-            ],
-            $this
+            ]
         );
     }
 }

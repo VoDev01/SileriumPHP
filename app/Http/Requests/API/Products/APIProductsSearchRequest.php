@@ -29,7 +29,9 @@ class APIProductsSearchRequest extends FormRequest
             'reviewsCount' => ['boolean', 'nullable'],
             'redirect' => ['max:100', 'string', 'nullable'],
             'loadWith' => ['max:100', 'string', 'nullable'],
-            'sellerId' => ['integer', 'nullable']
+            'sellerId' => ['integer', 'nullable'],
+            'sortOrder' => ['integer', 'nullable'],
+            'page' => ['integer', 'nullable']
         ];
     }
 }

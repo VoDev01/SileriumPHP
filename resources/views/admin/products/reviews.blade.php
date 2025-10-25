@@ -34,7 +34,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <x-pagination :model="$products" :params="$searchKey" />
+                <x-pagination :model="$products" />
 
                 <form action="/admin/products/receive_product_reviews" method="POST" style="width: 300px;">
                     <h5>Показать отзывы товара</h5>

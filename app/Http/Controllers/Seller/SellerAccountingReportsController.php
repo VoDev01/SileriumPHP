@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers\Seller;
 
+use Carbon\Carbon;
+use App\Models\Seller;
 use App\Models\Payment;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\SearchFormPaginateResponseService;
-use App\Http\Requests\Payment\SearchPaymentsRequest;
-use App\Http\Requests\API\Products\APIProductsSearchRequest;
-use App\Http\Requests\Formatting\PdfFormattingRequest;
-use App\Models\Seller;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
-use App\View\Components\ComponentsMethods\SearchForm\SearchFormPaymentsSearchMethod;
-use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Session;
+use App\Http\Requests\Payment\SearchPaymentsRequest;
+use App\Services\SearchForms\FormInputData\SearchFormInput;
+use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
+use App\Services\SearchForms\FormInputData\SearchFormHiddenInput;
+use App\Services\SearchFormsForms\PaymentSearchFormService;
+use App\Services\SearchFormsForms\SearchFormPaginateResponseService;
 
 class SellerAccountingReportsController extends Controller
 {
@@ -29,7 +26,7 @@ class SellerAccountingReportsController extends Controller
     }
     public function paymentsReport(Request $request)
     {
-        $payments = SearchFormPaginateResponseService::paginate($request, 'payments', 15) ?? Payment::with(['order', 'order.user'])->paginate(15);
+        $payments = SearchFormPaginateResponseService::paginate('payments', $request->page, 15) ?? Payment::with(['order', 'order.user'])->paginate(15); 
         $inputs = [
             new SearchFormInput('name', 'Имя заказчика', 'name', true),
             new SearchFormInput('surname', 'Фамилия заказчика', 'surname', true)
@@ -39,7 +36,7 @@ class SellerAccountingReportsController extends Controller
     }
     public function productsReports(Request $request)
     {
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+        $products = SearchFormPaginateResponseService::paginate('products', $request->page, 15); 
 
         $currnetPage = isset($products) ? $products->currentPage() : null;
         $totalPages = isset($products) ? $products->lastPage() : null;
@@ -131,12 +128,12 @@ class SellerAccountingReportsController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::search($request, $validated);
+        return (new PaymentSearchFormService)->search($validated);
     }
     public function searchPayments(SearchPaymentsRequest $request)
     {
         $validated = $request->validated();
 
-        return SearchFormPaymentsSearchMethod::search($request, $validated);
+        return (new PaymentSearchFormService)->search($validated);
     }
 }

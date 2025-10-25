@@ -47,19 +47,24 @@
             </p>
             <div class="collapse" id="banUser">
                 <form action="/admin/users/ban" method="POST">
+                    @csrf
+                    <input type="hidden" name="admin_id" value="{{$admin_id}}">
                     <div class="mb-3">
-                        <label for="id" class="form-label">Id пользователя</label>
-                        <input type="text" class="form-control" name="id" id="id" />
+                        <label for="user_id" class="form-label">Id пользователя</label>
+                        <input type="text" class="form-control" name="user_id" id="user_id" />
+                        <x-error field="user_id" />
                     </div>
                     <div class="mb-3">
                         <label for="reason" class="form-label">Причина бана</label>
                         <textarea class="form-control" name="reason" id="reason" rows="5" cols="50" autocomplete="off"
                             style="resize: none;"></textarea>
+                            <x-error field="reason" />
                     </div>
                     <div class="mb-3 row">
                         <div class="col">
-                            <label for="banTime" class="form-label">Время бана</label>
-                            <input type="text" class="form-control" name="banTime" id="banTime" />
+                            <label for="duration" class="form-label">Время бана</label>
+                            <input type="text" class="form-control" name="duration" id="duration" />
+                            <x-error field="duration" />
                         </div>
                         <div class="col">
                             <label for="timeType" class="form-label">В</label>
@@ -70,11 +75,13 @@
                                 <option value="days">Днях</option>
                                 <option value="years">Годах</option>
                             </select>
+                            <x-error field="timeType" />
                         </div>
                     </div>
-                    <div class="form-check">
+                    <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" value="0" id="api_user" name="api_user" />
                         <label class="form-check-label" for="api_user"> API пользователь </label>
+                        <x-error field="api_user" />
                     </div>
                     
                     <div class="mb-3">

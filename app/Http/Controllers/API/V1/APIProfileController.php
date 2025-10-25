@@ -2,25 +2,15 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use Carbon\Carbon;
-use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use App\Http\Requests\API\Profile\APIRefreshTokenRequest;
 
 class APIProfileController extends Controller
 {
-    public function profile()
+    public function profile(Request $request)
     {
-        $user = Auth::user();
-        if ($user->tokens !== null)
-        {
-            $token = $user->tokens->first()->id;
-            session()->flash('accessToken', $token);
-        }
+        $user = $request->user('api');
         return view('api.profile', ['user' => $user]);
     }
 

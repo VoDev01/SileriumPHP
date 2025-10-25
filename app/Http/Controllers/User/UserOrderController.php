@@ -41,24 +41,24 @@ class UserOrderController extends Controller
     {
         $order = Order::find($request->ulid);
         $order->delete();
+        $order->save();
         return redirect()->route('cart');
     }
     public function ordersHistory(Request $request)
     {
-        $orders = Cache::remember("user_" . Auth::id() . "orders_{$request->page}", env('CACHE_TTL'), function ()
-        {
-            return DeleteClosedOrdersAction::delete(
-                Order::with('payment')
-                ->withTrashed()
-                ->where('user_id', Auth::id())
-                ->with([
-                    'products',
-                    'products.images'
-                ])
-                ->get());
-        });
+        $orders = DeleteClosedOrdersAction::delete(
+            Order::with([
+                'products',
+                'products.images',
+                'payment'
+            ])
+            ->withTrashed()
+            ->where('user_id', Auth::id())
+            ->get()
+        );
 
         $orders = ManualPaginatorAction::paginate($orders, 15, $request->page);
+        
         return view('user.orders.ordershistory', ['orders' => $orders]);
     }
     public function checkoutOrder()

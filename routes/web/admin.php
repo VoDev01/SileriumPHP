@@ -14,6 +14,7 @@ Route::middleware(['authorize.admin', 'banned'])->group(function ()
         Route::get('profile', 'profile');
         Route::post('logout', 'logout');
         Route::get('documentation/{url?}', 'documentation')->where('url', '(.*)');
+        Route::get('coverage/{url?}', 'coverage')->where('url', '(.*)');
         Route::get('control_auth_dropbox', 'controlAuthDropbox');
         Route::post('revoke_dropbox_token', 'revokeDropboxToken');
         Route::get('receive_dropbox_token', 'receiveDropboxToken');
@@ -25,7 +26,7 @@ Route::middleware(['authorize.admin', 'banned'])->group(function ()
         Route::get('update', 'update')->name('admin.products.update');
         Route::patch('update', 'postUpdatedProduct');
         Route::get('delete', 'delete')->name('admin.products.delete');
-        Route::post('deletet', 'postDeletedProduct');
+        Route::delete('delete', 'postDeletedProduct');
         Route::get('category/{id}/subcategories', 'categories');
         Route::post('search', 'searchProducts');
         Route::get('reviews', 'reviews')->name('admin.products.reviews');
@@ -41,7 +42,7 @@ Route::middleware(['authorize.admin', 'banned'])->group(function ()
         Route::post('reviews', 'searchUserReviews');
         Route::get('ban', 'ban')->name("admin.users.ban");
         Route::post('ban', 'postBan');
-        Route::get('payments', 'payments');
+        Route::get('payments', 'payments')->name('admin.users.payments');
         Route::post('payments/search', 'searchPayments')->name('admin.payments.search');
         Route::post('search', 'searchUsers')->name('admin.users.search');
     });

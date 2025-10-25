@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Storage;
 use App\Actions\ValidatePasswordHashAction;
 use App\Http\Requests\Seller\SellerLoginRequest;
 use App\Http\Requests\Seller\SellerRegisterRequest;
+use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class SellerAuthController extends Controller
 {
@@ -22,25 +25,33 @@ class SellerAuthController extends Controller
     public function postLogin(SellerLoginRequest $request)
     {
         $validated = $request->validated();
+
         $user = User::where('email', $validated["email"])->get()->first();
-        $seller_id = Seller::where('user_id', $user->id)->get()->first()->id;
         $response = ValidatePasswordHashAction::validate($validated['password'], $user);
-        if($response['success'])
+
+        if ($response['success'])
         {
             $request->session()->regenerate();
-            $request->session()->put('seller_id', $seller_id);
             Auth::login($user);
             return response()->json(['redirect' => '/seller/account']);
         }
         else
-            return response()->json($response, 422);
+            throw new UnauthorizedHttpException(json_encode($response), true);
     }
     public function logout(Request $request)
     {
-        $request->session()->forget('seller_id');
-        Auth::logout(Auth::user());
-        $request->session()->invalidate();
-        $request->session()->regenerate();
+        try
+        {
+            $request->session()->forget('seller_id');
+            Auth::logout(Auth::user());
+            $request->session()->invalidate();
+            $request->session()->regenerate();
+        }
+        catch (Exception $e)
+        {
+            abort(404, $e->getMessage());
+        }
+
         return redirect()->route('seller.login');
     }
     public function register()
@@ -52,9 +63,12 @@ class SellerAuthController extends Controller
         $validated = $request->validated();
         $userId = User::where("email", $validated["email"])->first()->id;
 
-        if ($request->logo != null) {
+        if ($request->logo != null)
+        {
             $logoPath = Storage::putFile('logo', $validated['logo']);
-        } else {
+        }
+        else
+        {
             $logoPath = '/media/images/pfp/default_user.png';
         }
 

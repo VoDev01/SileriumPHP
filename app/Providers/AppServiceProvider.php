@@ -4,18 +4,22 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\APIUser;
+use App\Models\BannedUser;
 use Illuminate\Http\Request;
 use Laravel\Passport\Passport;
 use App\Actions\SetConfigAction;
 use League\Flysystem\Filesystem;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Dropbox\Client as DropboxClient;
 use Spatie\FlysystemDropbox\DropboxAdapter;
 use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -76,11 +80,6 @@ class AppServiceProvider extends ServiceProvider
                 $adapter,
                 $config
             );
-        });
-
-        Auth::viaRequest('custom-token', function (Request $request)
-        {
-            return User::where('token', (string) $request->header('Token'))->get()->first();
         });
     }
 }

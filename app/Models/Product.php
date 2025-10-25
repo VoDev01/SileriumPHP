@@ -61,6 +61,7 @@ class Product extends Model
         'available' => 'boolean'
     ];
     protected $fillable = [
+        'ulid',
         'name',
         'description',
         'priceRub',

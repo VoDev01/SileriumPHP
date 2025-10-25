@@ -40,8 +40,8 @@ class UserFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'profilePicture' => '/media/images/pfp/default_user.png',
             'remember_token' => Str::random(10),
-            'token' => Str::random(rand(16, 256)),
-            'expiresIn' => Carbon::now()->addMinutes(15)->format('Y-m-d H:i:s'),
+            'token' => Str::random(rand(16, 64)),
+            'expiresIn' => Carbon::now()->addMinutes(env('APP_USER_REFRESH'))->format('Y-m-d H:i:s'),
             'email_verified_at' => null
         ];
     }

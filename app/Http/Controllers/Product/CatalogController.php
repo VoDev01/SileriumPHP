@@ -2,35 +2,40 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Actions\EncodeImageBinaryToBase64Action;
-use App\Actions\ManualPaginatorAction;
-use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
-use App\Services\ProductService;
 use App\Http\Controllers\Controller;
-use App\Actions\OrderItemsAction;
-use App\Facades\ProductCartServiceFacade as ProductCart;
-use App\Http\Requests\API\Products\APIProductsSearchRequest;
-use App\Models\Seller;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormCheckboxInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormHiddenInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
-use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
+use App\Actions\ManualPaginatorAction;
+use App\Enum\SortOrder;
+use App\Facades\ProductCartServiceFacade as ProductCart;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Services\SearchForms\FormInputData\SearchFormInput;
+use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Repositories\ProductRepository;
+use App\Services\Products\ProductService;
+use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
+use App\Services\SearchForms\FormInputData\SearchFormHiddenInput;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Services\SearchForms\FormInputData\SearchFormCheckboxInput;
+use App\Services\SearchForms\ReviewSearchFormService;
+use App\Services\SearchForms\ProductSearchFormService;
+use App\Services\SearchForms\SearchFormPaginateResponseService;
+use App\Services\User\ReviewService;
 
 class CatalogController extends Controller
 {
-    public function products(Request $request, string $subcategory = "all", int $sortOrder = 1, int $available = 1, string $name = "")
+    public function products(Request $request)
     {
+        $sortOrder = $request->sortOrder ?? SortOrder::NAME_ASC->value;
+        $subcategory = $request->subcategory ?? 'all';
+        $name = $request->name ?? '';
+        $available = $request->available ?? true;
+        $page = $request->page ?? 1;
+
         $inputs = [
-            new SearchFormInput('name', 'Название товара', 'name', false)
+            new SearchFormInput('productName', 'Название товара', 'productName', false)
         ];
         $checkboxInputs = [
             new SearchFormCheckboxInput('available', 'В продаже', 'available', false, false, 'available', 1)
@@ -39,36 +44,47 @@ class CatalogController extends Controller
             new SearchFormHiddenInput('sortOrder', 'sortOrder',  $sortOrder),
             new SearchFormHiddenInput('available', 'availableHidden', 0),
             new SearchFormHiddenInput('subcategory', 'subcategory', $subcategory),
+            new SearchFormHiddenInput('page', 'page', $page)
         ];
-        $queryInputs = new SearchFormQueryInput('/catalog/products/search', '/catalog/products', 'images');
+        $queryInputs = new SearchFormQueryInput('/catalog/products/search', session('loadWith', 'images'));
 
-        $page = isset($request->page) ? $request->page : 1;
-
-        $products = Cache::remember("page_{$page}_products", 86400, function () use (
-            $subcategory,
-            $name,
-            $available,
-            $sortOrder
-        )
+        try
         {
-            return ProductService::getFilteredProducts(
-                [
-                    'id',
-                    'name',
-                    'available',
-                    'priceRub',
-                    'productAmount'
-                ],
-                $subcategory,
-                $name,
-                $available,
-                $sortOrder
-            );
-        });
+            $products = SearchFormPaginateResponseService::paginate("products_{$sortOrder}_$page", $page, 15);
+            $notFound = null;
+            if ($products === null)
+            {
+                $notFound = $request->session()->get("products_{$sortOrder}_$page") ?? 'По вашему запросу товаров не найдено';
+                $products = (new ProductService)->getFilteredProducts(
+                    $subcategory,
+                    $name,
+                    [
+                        'ulid',
+                        'id',
+                        'name',
+                        'available',
+                        'priceRub',
+                        'productAmount'
+                    ],
+                    $available,
+                    $sortOrder
+                );
 
-        if (session('products_currency') == 'dol')
+                Cache::put("products_{$sortOrder}_$page", $products, env('CACHE_TTL'));
+            }
+
+
+            if (!isset($products))
+                throw new NotFoundHttpException('Не найдено товаров по этому запросу');
+
+            if (session('products_currency') == 'dol')
+            {
+                ProductCart::convertCurrency($products);
+            }
+        }
+        catch (HttpException $e)
         {
-            ProductCart::convertCurrency($products);
+            return response($e->getMessage(), $e->getStatusCode());
         }
 
         return view('catalog.products', [
@@ -82,120 +98,96 @@ class CatalogController extends Controller
             'inputs' => $inputs,
             'checkboxInputs' => $checkboxInputs,
             'hiddenInputs' => $hiddenInputs,
-            'queryInputs' => $queryInputs
+            'queryInputs' => $queryInputs,
+            'notFound' => $notFound
         ]);
     }
     public function filterProducts(Request $request)
     {
-        session(['loadWith' => $request->loadWith]);
+        session(['loadWith' => $request->loadWith], 'images');
+
         return redirect()->route('allproducts', [
             'sortOrder' => $request->sortOrder,
             'available' => $request->available,
             'subcategory' => $request->subcategory,
             'product' => $request->name
-        ])->with(['loadWith' => $request->loadWith]);
+        ]);
     }
-    public function product(Request $request, int $productId)
+    public function product(Request $request, string $ulid)
     {
         start_measure('product_cache', 'product cache');
 
         $page = isset($request->page) ? $request->page : 1;
 
-        $product = Cache::remember("product_$productId", 86400, function () use ($productId)
+        try
         {
-            return DB::table('products')
-                ->selectRaw('products.*,
-            GROUP_CONCAT(ps.specification SEPARATOR \', \') AS specs,
-            GROUP_CONCAT(ps.name SEPARATOR \', \') AS specs_names,
-            GROUP_CONCAT(product_images.imagePath SEPARATOR \', \') as images')
-                ->where('products.id', $productId)
-                ->joinSub(
-                    DB::table('products_specifications')
-                        ->select('product_id', 'product_specifications.name', 'product_specifications.specification')
-                        ->where('product_id', $productId)
-                        ->rightJoin('product_specifications', 'products_specifications.specification_id', '=', 'product_specifications.id'),
-                    'ps',
-                    'products.id',
-                    '=',
-                    'ps.product_id',
-                    'left'
-                )
-                ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-                ->groupBy(
-                    'products.ulid',
-                    'products.id',
-                    'products.name',
-                    'products.description',
-                    'products.priceRub',
-                    'products.productAmount',
-                    'products.available',
-                    'products.subcategory_id',
-                    'products.seller_id',
-                    'products.timesPurchased'
-                )
-                ->get()->first();
-        });
-
-        stop_measure('product_cache');
-
-        $product->images = $product->images != null ? explode(', ', $product->images) : null;
-        $product->specs_names = $product->specs_names ? explode(', ', $product->specs_names) : null;
-        $product->specs = $product->specs ? explode(', ', $product->specs) : null;
-
-        if (isset($product->specs))
-        {
-            for ($i = 0; $i < count($product->specs); $i++)
+            $product = Cache::remember("product_$ulid", env('CACHE_TTL'), function () use ($ulid)
             {
-                $tmp[$i] = ['name' => $product->specs_names[$i], 'spec' => $product->specs[$i]];
-            }
-            $product->specs = $tmp;
-        }
+                return (new ProductRepository)->show($ulid);
+            });
 
-        start_measure('reviews_cache', 'Reviews cache');
-        $reviews = Cache::remember("product_{$productId}_reviews_$page", 86400, function () use ($product)
-        {
-            return Http::withoutVerifying()
-                ->withHeaders(['Token' => Auth::user()->token])
-                ->post(env('APP_URL') . '/api/v1/reviews/search_product_reviews', [
+            if (!isset($product))
+                throw new NotFoundHttpException('По данному запросу товар не найден');
+
+            stop_measure('product_cache');
+
+            $product->images = $product->images != null ? explode(', ', $product->images) : null;
+            $product->specs_names = $product->specs_names ? explode(', ', $product->specs_names) : null;
+            $product->specs = $product->specs ? explode(', ', $product->specs) : null;
+
+            if (isset($product->specs))
+            {
+                for ($i = 0; $i < count($product->specs); $i++)
+                {
+                    $tmp[$i] = ['name' => $product->specs_names[$i], 'spec' => $product->specs[$i]];
+                }
+                $product->specs = $tmp;
+            }
+
+            start_measure('reviews_cache', 'Reviews cache');
+            $reviews = Cache::remember("product_{$ulid}_reviews_$page", env('CACHE_TTL'), function () use ($product)
+            {
+                return (new ReviewSearchFormService)->searchProductReviews([
                     'productName' => $product->name,
                     'productId' => $product->id,
-                    'sellerName' => Seller::where('id', $product->seller_id)->get()->first()->nickname
-                ])
-                ->json('reviews');
-        });
-        $reviews = ManualPaginatorAction::paginate(
-            $reviews,
-            5,
-            $request->page
-        );
-        stop_measure('reviews_cache');
-
-        $ratingCount = null;
-        $avgRating = null;
-
-        if (isset($reviews))
-        {
-            start_measure('api_requests', 'Rating api requests');
-
-            $ratingCount = Cache::remember("product_{$productId}_rating_count_$page", 86400, function () use ($product)
-            {
-                return Http::withoutVerifying()
-                    ->withHeaders(['Token' => Auth::user()->token])
-                    ->post(env('APP_URL') . '/api/v1/reviews/rating_count', ['productName' => $product->name])
-                    ->json('ratingCount')[0];
+                    'sellerName' => $product->nickname
+                ]);
             });
+            $reviews = ManualPaginatorAction::paginate(
+                $reviews,
+                5,
+                $request->page
+            );
+            stop_measure('reviews_cache');
 
-            $avgRating = Cache::remember("product_{$productId}_avg_rating_$page", 86400, function () use ($product)
+            $ratingCount = null;
+            $avgRating = null;
+
+            if (isset($reviews))
             {
-                return round(Http::withoutVerifying()
-                    ->withHeaders(['Token' => Auth::user()->token])
-                    ->post(env('APP_URL') . '/api/v1/reviews/average_rating', ['productName' => $product->name])
-                    ->json('avgRating')[0]['averageRating'], 1);
-            });
+                start_measure('api_requests', 'Rating api requests');
 
-            stop_measure('api_requests');
+                $ratingCount = Cache::remember("product_{$ulid}_rating_count_$page", env('CACHE_TTL'), function () use ($product)
+                {
+                    return (new ReviewService)->ratingCount([
+                        'productName' => $product->name
+                    ]);
+                });
+
+                $avgRating = Cache::remember("product_{$ulid}_avg_rating_$page", env('CACHE_TTL'), function () use ($product)
+                {
+                    return (new ReviewService)->averageRating([
+                        'productName' => $product->name
+                    ]);
+                });
+
+                stop_measure('api_requests');
+            }
         }
-
+        catch (HttpException $e)
+        {
+            return response($e->getMessage(), $e->getStatusCode());
+        }
         return view('catalog.product', ['product' => $product, 'reviews' => $reviews, 'ratingCount' => $ratingCount, 'avgRating' => $avgRating]);
     }
     public function rubCurrency()
@@ -217,6 +209,6 @@ class CatalogController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return SearchFormProductsSearchMethod::search($request, $validated);
+        return (new ProductSearchFormService)->search($validated, "products_{$validated['sortOrder']}_{$validated['page']}", '/catalog/products');
     }
 }

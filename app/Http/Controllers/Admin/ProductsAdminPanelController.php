@@ -6,25 +6,29 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use App\Actions\ManualPaginatorAction;
-use App\Services\UpdateSessionValueJsonService;
-use App\Services\SearchFormPaginateResponseService;
+use App\Http\Requests\API\Products\APIProductsDeleteRequest;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
-use App\View\Components\ComponentsMethods\SearchForm\SearchFormProductsSearchMethod;
+use App\Http\Requests\API\Products\APIProductsUpdateRequest;
+use App\Repositories\ProductRepository;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Services\SearchForms\FormInputData\SearchFormInput;
+use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
+use App\Services\SearchForms\ProductSearchFormService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Services\SearchForms\SearchFormPaginateResponseService;
 
 class ProductsAdminPanelController extends Controller
 {
     public function index(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15) ?? Product::paginate(15);
+        $products = SearchFormPaginateResponseService::paginate('products', $request->page ?? 1, 15) ?? Product::paginate(15); 
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', false)
@@ -35,7 +39,7 @@ class ProductsAdminPanelController extends Controller
     public function update(Request $request)
     {
         $this->authorize('update', Product::class);
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+        $products = SearchFormPaginateResponseService::paginate('products', $request->page ?? 1, 15); 
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', false)
@@ -44,28 +48,35 @@ class ProductsAdminPanelController extends Controller
         $categories = Category::with('subcategories')->get();
         return view('admin.products.update', ['products' => $products, 'categories' => $categories, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
-    public function postUpdatedProduct(Request $request)
+    public function postUpdatedProduct(APIProductsUpdateRequest $request)
     {
-        $this->authorize('update', Product::class);
-        $user = User::where('id', Auth::id())->get()->first();
-        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->put(env('APP_URL') . '/api/v1/products/update', [
-            'id' => $request->id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'priceRub' => $request->priceRub,
-            'productAmount' => $request->productAmount,
-            'available' => $request->available
-        ]);
-        if ($response->ok())
+        try
         {
-            UpdateSessionValueJsonService::update($request, 'products', $response->json(['updated_product']), 'ulid');
-            return redirect()->route("admin.products.update");
+            $this->authorize('update', Product::class);
+            $admin = User::where('id', Auth::id())->get()->first();
+            $validated = $request->validated();
+
+            $product = (new ProductRepository)->update($validated);
+
+            if ($product !== null)
+            {
+                Cache::put("product_{$product->id}", $product, env('CACHE_TTL'));
+                return redirect()->route("admin.products.update");
+            }
+            else
+            {
+                throw new NotFoundHttpException('Товар не был обновлен');
+            }
+        }
+        catch (HttpException $e)
+        {
+            abort($e->getStatusCode(), $e->getMessage());
         }
     }
     public function delete(Request $request)
     {
         $this->authorize('delete', Product::class);
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
+        $products = SearchFormPaginateResponseService::paginate('products', $request->page ?? 1, 15); 
         $inputs = [
             new SearchFormInput('productName', 'Название товара', 'productName', true),
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', false)
@@ -73,15 +84,22 @@ class ProductsAdminPanelController extends Controller
         $queryInputs = new SearchFormQueryInput('/admin/products/search', 'admin.products.delete', null);
         return view('admin.products.delete', ['products' => $products, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
     }
-    public function postDeletedProduct(Request $request)
+    public function postDeletedProduct(APIProductsDeleteRequest $request)
     {
         $this->authorize('delete', Product::class);
         $user = User::where('id', Auth::id())->get()->first();
-        $response = Http::asJson()->withHeaders(['API-Secret' => $request->api_secret])->delete(env('APP_URL') . '/api/v1/products/delete', ['id' => $request->id]);
-        if ($response->ok())
+
+        $validated = $request->validated();
+
+        $product = (new ProductRepository)->delete($validated['id']);
+
+        if ($product)
         {
-            UpdateSessionValueJsonService::delete($request, 'products', $response->json(['updated_product']), 'ulid');
             return redirect()->route("admin.products.delete");
+        }
+        else
+        {
+            throw new NotFoundHttpException('Товар не найден');
         }
     }
     public function categories(Request $request, int $id)
@@ -95,9 +113,9 @@ class ProductsAdminPanelController extends Controller
 
     public function reviews(Request $request)
     {
-        $products = SearchFormPaginateResponseService::paginate($request, 'products', 15);
-        $reviews = $request->session()->get('reviews');
-        $message = $request->session()->get('message');
+        $products = SearchFormPaginateResponseService::paginate('products', $request->page ?? 1, 15); 
+        $reviews = Cache::get('reviews');
+        $message = Cache::get('message');
         $inputs = [
             new SearchFormInput('sellerName', 'Название продавца', 'sellerName', true),
             new SearchFormInput('productName', 'Название товара', 'productName', false)
@@ -109,11 +127,8 @@ class ProductsAdminPanelController extends Controller
     public function receiveProductReviews(Request $request)
     {
         $product = Product::with(['reviews', 'reviews.user', 'reviews.product'])->where('ulid', $request->id)->get()->first();
-        $reviews = null;
-        if (isset($request->id))
-            if ($product->ulid == $request->id)
-                $reviews = $product->reviews;
-        return redirect()->route('admin.products.reviews')->with('reviews', ManualPaginatorAction::paginate($reviews->toArray()));
+
+        return redirect()->route('admin.products.reviews')->with('reviews', ManualPaginatorAction::paginate($product->reviews->toArray(), page: $request->page));
     }
 
     public function searchProducts(APIProductsSearchRequest $request)
@@ -127,6 +142,6 @@ class ProductsAdminPanelController extends Controller
         if (!array_key_exists('reviewsCount', $validated))
             $validated['reviewsCount'] = false;
 
-        return SearchFormProductsSearchMethod::search($request, $validated);
+        return (new ProductSearchFormService)->search($validated);
     }
 }

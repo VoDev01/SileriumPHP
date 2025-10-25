@@ -21,19 +21,16 @@ use App\Http\Controllers\API\V1\APISubcategoriesController;
 |
 */
 
-Route::withoutMiddleware(['api'])->middleware(['web'])->group(function ()
+Route::withoutMiddleware(['api', 'auth.refresh.token'])->middleware(['web'])->group(function ()
 {
-    Route::get('/', [APIHomeController::class, 'index']);
+    Route::get('/', [APIHomeController::class, 'index'])->withoutMiddleware(['auth:api']);
 
-    Route::middleware(['auth'])->group(function ()
+    Route::controller(APIProfileController::class)->group(function ()
     {
-        Route::controller(APIProfileController::class)->group(function ()
-        {
-            Route::post('secret/refresh', 'refreshToken');
-            Route::post('secret', 'generateToken');
-            Route::get('profile', 'profile')->name('api.profile');
-            Route::post('logout', 'logout');
-        });
+        Route::post('secret/refresh', 'refreshToken');
+        Route::post('secret', 'generateToken');
+        Route::get('profile', 'profile')->name('api.profile');
+        Route::post('logout', 'logout');
     });
 });
 
@@ -44,7 +41,7 @@ Route::controller(APIProductsController::class)->prefix('products')->group(funct
     Route::post('create', 'create');
     Route::patch('update', 'update');
     Route::delete('delete', 'delete');
-    Route::post('by_name_seller', 'productsByNameSeller');
+    Route::post('search', 'search');
     Route::post('profit_between_date', 'profitBetweenDate');
     Route::post('consumption_between_date', 'consumptionBetweenDate');
     Route::post('est_amount_expiry', 'amountExpiry');
@@ -59,7 +56,7 @@ Route::controller(APISubcategoriesController::class)->prefix('subcategories')->g
 });
 Route::controller(APIReviewsController::class)->prefix('reviews')->group(function ()
 {
-    Route::get('index', 'index');
+    Route::get('index/{itemsPerPage?}', 'index');
     Route::patch('update', 'update');
     Route::delete('delete', 'delete');
     Route::post('search_user_reviews', 'searchUserReviews');

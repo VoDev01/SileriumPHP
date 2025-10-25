@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\API;
 
+use App\Enum\TestRouteMethods;
 use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\Role;
@@ -13,6 +14,7 @@ use App\Models\APIUser;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
+use App\Services\Testing\TestRouteForAuthService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -34,17 +36,7 @@ class APIProductTest extends TestCase
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->getJson('/api/v1/products/index/15', [
-            'API-Secret' => '12345',
-            'API-Key' => '12345'
-        ]);
-
-        $response->assertForbidden();
-
-        $response = $this->getJson('/api/v1/products/index/15', [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
+        $response = TestRouteForAuthService::testAPI('/api/v1/products/index/15', $this);
 
         $response
             ->assertOk()
@@ -69,30 +61,13 @@ class APIProductTest extends TestCase
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->getJson('/api/v1/products/show/' . DB::table('products')->max('id'), [
-            'API-Secret' => '12345',
-            'API-Key' => '12345'
-        ]);
-
-        $response->assertForbidden();
-
-        $response = $this->getJson('/api/v1/products/show/' . DB::table('products')->max('id'), [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
+        $response = TestRouteForAuthService::testAPI('/api/v1/products/show/' . $seller->products->first()->ulid, $this);
 
         $response
             ->assertOk()
             ->assertJson(
                 fn(AssertableJson $json) =>
-                $json->has(
-                    'product',
-                    1,
-                    fn($json) =>
-                    $json->where('id', $seller->products->last()->id)
-                        ->where('name', $seller->products->last()->name)
-                        ->etc()
-                )
+                $json->where('ulid', $seller->products->first()->ulid)
                     ->etc()
             );
     }
@@ -106,35 +81,20 @@ class APIProductTest extends TestCase
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->postJson('/api/v1/products/create/', [
-            'name' => $product->name,
-            'description' => $product->description,
-            'priceRub' => $product->priceRub,
-            'available' => $product->available,
-            'productAmount' => $product->productAmount,
-            'subcategory_id' => $product->subcategory_id,
-            'seller_id' => $seller->id
-        ], [
-            'API-Secret' => '12345',
-            'API-Key' => '12345'
-        ]);
-
-        $response->assertForbidden();
-
-        $response = $this->postJson('/api/v1/products/create/', [
-            'name' => $product->name,
-            'description' => $product->description,
-            'priceRub' => $product->priceRub,
-            'available' => $product->available,
-            'productAmount' => $product->productAmount,
-            'subcategory_id' => $product->subcategory_id,
-            'seller_id' => $seller->id
-        ], [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
-
-        $response->assertOk();
+        $response = TestRouteForAuthService::testAPI(
+            '/api/v1/products/create/',
+            $this,
+            TestRouteMethods::POST,
+            [
+                'name' => $product->name,
+                'description' => $product->description,
+                'priceRub' => $product->priceRub,
+                'available' => $product->available,
+                'productAmount' => $product->productAmount,
+                'subcategory_id' => $product->subcategory_id,
+                'seller_id' => $seller->id
+            ]
+        );
 
         $this->assertDatabaseHas('products', [
             'name' => $product->name,
@@ -156,37 +116,20 @@ class APIProductTest extends TestCase
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->patchJson('/api/v1/products/update', [
-            'id' => $product->ulid,
-            'name' => $product->name,
-            'description' => $product->description,
-            'priceRub' => $product->priceRub,
-            'available' => $product->available,
-            'productAmount' => $product->productAmount,
-            'subcategory_id' => $product->subcategory_id,
-            'seller_id' => $seller->id
-        ], [
-            'API-Secret' => '12345',
-            'API-Key' => '12345'
-        ]);
-
-        $response->assertForbidden();
-
-        $response = $this->patchJson('/api/v1/products/update', [
-            'id' => $product->ulid,
-            'name' => $product->name,
-            'description' => $product->description,
-            'priceRub' => $product->priceRub,
-            'available' => $product->available,
-            'productAmount' => $product->productAmount,
-            'subcategory_id' => $product->subcategory_id,
-            'seller_id' => $seller->id
-        ], [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
-
-        $response->assertOk();
+        $response = TestRouteForAuthService::testAPI(
+            '/api/v1/products/update',
+            $this,
+            TestRouteMethods::PATCH,
+            [
+                'id' => $product->ulid,
+                'name' => $product->name,
+                'description' => $product->description,
+                'priceRub' => $product->priceRub,
+                'available' => $product->available,
+                'productAmount' => $product->productAmount,
+                'subcategory_id' => $product->subcategory_id
+            ]
+        );
     }
 
     public function testDelete()
@@ -198,22 +141,17 @@ class APIProductTest extends TestCase
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->deleteJson('/api/v1/products/delete', ['id' => $product->ulid], [
-            'API-Secret' => '12345',
-            'API-Key' => '12345'
-        ]);
-
-        $response->assertForbidden();
-
-        $response = $this->deleteJson('/api/v1/products/delete', ['id' => $product->ulid], [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
-
-        $response->assertOk();
+        $response = TestRouteForAuthService::testAPI(
+            '/api/v1/products/delete',
+            $this,
+            TestRouteMethods::DELETE,
+            [
+                'id' => $product->ulid
+            ]
+        );
     }
 
-    public function testSearchByNameSeller()
+    public function testSearch()
     {
         Category::factory()->create();
         Subcategory::factory()->create();
@@ -222,35 +160,24 @@ class APIProductTest extends TestCase
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->postJson('/api/v1/products/by_name_seller/', [
-            'sellerName' => $seller->nickname,
-            'productName' => $product->name
-        ], [
-            'API-Secret' => '12345',
-            'API-Key' => '12345'
-        ]);
-
-        $response->assertForbidden();
-
-        $response = $this->postJson('/api/v1/products/by_name_seller/', [
-            'sellerName' => $seller->nickname,
-            'productName' => $product->name
-        ], [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
-
-        $response->assertSessionHasNoErrors();
+        $response = TestRouteForAuthService::testAPI(
+            '/api/v1/products/search/',
+            $this,
+            TestRouteMethods::POST,
+            [
+                'sellerName' => $seller->nickname,
+                'productName' => $product->name
+            ]
+        );
 
         $response
-            ->assertOk()
             ->assertJson(
                 fn(AssertableJson $json) =>
                 $json->has(
                     'products',
                     1,
                     fn($json) =>
-                    $json->where('id', $product->id)
+                    $json->where('ulid', $product->ulid)
                         ->etc()
                 )
                     ->etc()
@@ -260,61 +187,73 @@ class APIProductTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
+        $role = Role::factory()->create(['role' => 'admin']);
+        $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $seller = Seller::factory()->has(Product::factory(10))->create();
         $products = $seller->products;
-        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10]);
+        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10, 'productsPrice' => 10 * $products->first()->priceRub])->for($user)->create();
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->postJson('/api/v1/products/profit_between_date/', 
-        [
-            'productName' => $products->first()->name,
-            'sellerName' => $seller->nickname,
-            'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
-            'upperDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s')
-        ], 
-        [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->key
-        ]);
-
-        $response->assertOk()->assertJson(fn (AssertableJson $json) => 
-            $json->has('profits', 1, fn ($json) => 
-                $json->where('id', $products->first()->id)
-                ->etc()
-            )->etc()
+        $response = TestRouteForAuthService::testAPI(
+            '/api/v1/products/profit_between_date/',
+            $this,
+            TestRouteMethods::POST,
+            [
+                'productName' => $products->first()->name,
+                'sellerName' => $seller->nickname,
+                'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
+                'upperDate' => Carbon::now()->addDay()->toDateTime()->format('Y-m-d H:i:s')
+            ]
         );
+
+        $response
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'profits',
+                    1,
+                    fn($json) =>
+                    $json->where('id', $products->first()->id)
+                        ->etc()
+                )->etc()
+            );
     }
     public function testProductsConsumptionBetweenDate()
     {
-
         Category::factory()->create();
         Subcategory::factory()->create();
         $role = Role::factory()->create(['role' => 'admin']);
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $seller = Seller::factory()->has(Product::factory(10))->create();
         $products = $seller->products;
-        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10, 'productsPrice' => 10*$products->first()->priceRub])->for($user)->create();
+        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10, 'productsPrice' => 10 * $products->first()->priceRub])->for($user)->create();
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->postJson('/api/v1/products/consumption_between_date/', 
+        $response = TestRouteForAuthService::testAPI(
+            '/api/v1/products/consumption_between_date/',
+            $this,
+            TestRouteMethods::POST,
             [
                 'productName' => $products->first()->name,
                 'sellerName' => $seller->nickname,
                 'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
-                'upperDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s')
-            ], [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
-
-        $response->assertOk()->assertJson(fn (AssertableJson $json) => 
-            $json->has('consumption', 1, fn ($json) => 
-                $json->where('product_id', $products->first()->id)
-                ->etc()
-            )->etc()
+                'upperDate' => Carbon::now()->addDay()->toDateTime()->format('Y-m-d H:i:s')
+            ]
         );
+
+        $response
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'consumption',
+                    1,
+                    fn($json) =>
+                    $json->where('product_id', $products->first()->id)
+                        ->etc()
+                )->etc()
+            );
     }
     public function testProductsAmountExpiry()
     {
@@ -325,26 +264,32 @@ class APIProductTest extends TestCase
         $user = User::factory()->hasAttached($role, [], 'roles')->create();
         $seller = Seller::factory()->has(Product::factory(10))->create();
         $products = $seller->products;
-        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10, 'productsPrice' => 10*$products->first()->priceRub])->for($user)->create();
+        $orders = Order::factory()->hasAttached($products->first(), ['productAmount' => 10, 'productsPrice' => 10 * $products->first()->priceRub])->for($user)->create();
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
-        $response = $this->postJson('/api/v1/products/est_amount_expiry/',
-        [
-            'productName' => $products->first()->name,
-            'sellerName' => $seller->nickname,
-            'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
-            'upperDate' => Carbon::now()->toDateTime()->format('Y-m-d H:i:s')
-        ], [
-            'API-Secret' => $secret,
-            'API-Key' => $apiUser->api_key
-        ]);
-
-        $response->assertOk()->assertJson(fn (AssertableJson $json) => 
-            $json->has('expiresAt', 1, fn ($json) => 
-                $json->where('product_id', $products->first()->id)
-                ->etc()
-            )->etc()
+        $response = TestRouteForAuthService::testAPI(
+            '/api/v1/products/est_amount_expiry/',
+            $this,
+            TestRouteMethods::POST,
+            [
+                'productName' => $products->first()->name,
+                'sellerName' => $seller->nickname,
+                'lowerDate' => Carbon::now()->subMonths(12)->toDateTime()->format('Y-m-d H:i:s'),
+                'upperDate' => Carbon::now()->addDay()->toDateTime()->format('Y-m-d H:i:s')
+            ]
         );
+
+        $response
+            ->assertJson(
+                fn(AssertableJson $json) =>
+                $json->has(
+                    'expiresAt',
+                    1,
+                    fn($json) =>
+                    $json->where('product_id', $products->first()->id)
+                        ->etc()
+                )->etc()
+            );
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use App\Actions\EncodeImageBinaryToBase64Action;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdminPanelController extends Controller
 {
@@ -23,6 +24,8 @@ class AdminPanelController extends Controller
     }
     public function profile()
     {
+        if(!Auth::check())
+            throw new NotFoundHttpException;
         $user = User::find(Auth::id());
         return view("admin.profile", ['user' => $user]);
     }
@@ -37,7 +40,14 @@ class AdminPanelController extends Controller
     public function documentation(string $url = null)
     {
         $url = $url ?? 'index.html';
-        return response(File::get(storage_path('docs') . '/' . $url))
+        return response(File::get(storage_path('docs') . '/' . trim($url)))
+            ->withHeaders(['Content-Type' => MimeType::fromFilename($url)]);
+    }
+
+    public function coverage(string $url = null)
+    {
+        $url = $url ?? 'index.html';
+        return response(File::get(App::basePath('tests/reports/coverage') . '/' . trim($url)))
             ->withHeaders(['Content-Type' => MimeType::fromFilename($url)]);
     }
 

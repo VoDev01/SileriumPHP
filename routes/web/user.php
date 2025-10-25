@@ -9,7 +9,7 @@ use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserReviewController;
 
 
-Route::middleware(['banned', 'authorize.user.routes', 'throttle:auth'])->group(function ()
+Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
 {
     Route::controller(UserController::class)->group(function ()
     {
@@ -18,7 +18,8 @@ Route::middleware(['banned', 'authorize.user.routes', 'throttle:auth'])->group(f
         Route::post('edit_profile', 'postEditProfile');
         Route::post('logout', 'logout');
     });
-    Route::controller(UserAuthController::class)->withoutMiddleware(['authorize.user.routes', 'auth.refresh.token'])->group(function ()
+    Route::controller(UserAuthController::class)->withoutMiddleware(['authorize.user.routes', 'auth.refresh.token'])
+    ->middleware('throttle:auth')->group(function ()
     {
         Route::get('login/{api?}', 'login')->name('login');
         Route::post('login', 'postLogin');
@@ -28,6 +29,11 @@ Route::middleware(['banned', 'authorize.user.routes', 'throttle:auth'])->group(f
 
         Route::get('register', 'register');
         Route::post('register', 'postRegister');
+
+        Route::withoutMiddleware('banned')->group(function() {
+            Route::get('login', 'loginBanned')->name('login.banned');
+            Route::get('register', 'registerBanned')->name('register.banned');
+        });
 
         Route::get('forgot_password', 'forgotPassword')->middleware('guest')->name('password.request');
         Route::post('forgot_password', 'postForgotPassword')->middleware('guest')->name('password.email');

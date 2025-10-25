@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Str;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\ApiUser;
+use App\Models\APIUser;
 use App\Models\Payment;
 use App\Models\BannedUser;
 use Illuminate\Http\Request;
-use App\Models\BannedApiUser;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Actions\ManualPaginatorAction;
 use App\Http\Requests\User\UserBanRequest;
-use App\Services\SearchFormPaginateResponseService;
 use App\Http\Requests\API\Users\APIUserSearchRequest;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormInput;
-use App\View\Components\ComponentsInputs\SearchForm\SearchFormQueryInput;
-use App\View\Components\ComponentsMethods\SearchForm\SearchFormUsersSearchMethod;
+use App\Services\SearchForms\FormInputData\SearchFormInput;
+use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
+use App\Services\SearchForms\SearchFormPaginateResponseService;
+use App\Services\SearchForms\UserSearchFormService;
 
 class UsersAdminPanelController extends Controller
 {
     public function index(Request $request)
     {
-        $users = SearchFormPaginateResponseService::paginate($request, 'users') ?? User::paginate(15);
+        $users = SearchFormPaginateResponseService::paginate('users', $request->page ?? 1) ?? User::paginate(15);
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
             new SearchFormInput('name', 'Имя', 'name', false),
@@ -36,7 +36,7 @@ class UsersAdminPanelController extends Controller
     }
     public function roles()
     {
-        $users = User::with('roles:role')->paginate(10);
+        $users = User::with('roles:role')->paginate(15);
         $roles = Role::paginate(5);
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
@@ -49,28 +49,20 @@ class UsersAdminPanelController extends Controller
     }
     public function orders(Request $request)
     {
-        $users = SearchFormPaginateResponseService::paginate($request, 'users');
+        $users = SearchFormPaginateResponseService::paginate('users', $request->page ?? 1);
 
         $orders = null;
         $user = null;
         $message = null;
 
-        if ($request->session()->get('orders') != null)
+        if (Cache::has('orders'))
         {
-            $orders = $request->session()->get('orders');
-            foreach ($orders as $order)
-            {
-                foreach ($order['products'] as $product)
-                    array_push($order['productsNames'], $product['name']);
-                explode(', ', $order['productsNames']);
-                unset($order['products']);
-            }
-            $orders = ManualPaginatorAction::paginate($orders);
+            $orders = ManualPaginatorAction::paginate(Cache::get('orders'));
         }
-        if ($request->session()->get('user') != null)
-            $user = $request->session()->get('user');
-        if ($request->session()->get('message') != null)
-            $message = $request->session()->get('message');
+        if (Cache::has('user'))
+            $user = Cache::get('user');
+        if (Cache::has('message'))
+            $message = Cache::get('message');
 
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
@@ -78,38 +70,50 @@ class UsersAdminPanelController extends Controller
             new SearchFormInput('surname', 'Фамилия', 'surname', false),
             new SearchFormInput('phone', 'Телефон', 'phone', false)
         ];
+
         $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.orders', 'orders');
-        return view('admin.users.orders', ['users' => $users, 'user' => $user, 'message' => $message, 'orders' => $orders, 'inputs' => $inputs, 'queryInputs' => $queryInputs]);
+        return view('admin.users.orders', [
+            'users' => $users,
+            'user' => $user,
+            'message' => $message,
+            'orders' => $orders,
+            'inputs' => $inputs,
+            'queryInputs' => $queryInputs
+        ]);
     }
     public function searchUserOrders(Request $request)
     {
-        $user = User::with(['orders', 'orders.product'])->where('ulid', $request->id)->get()->first();
+        $user = User::with(['orders', 'orders.products'])->where('ulid', $request->id)->get()->first();
         if ($user != null)
         {
             if ($user->orders != null)
             {
                 $orders = $user->orders->toArray();
-                return redirect()->route('admin.users.orders')->with('orders', $orders)->with('user', $user);
+                Cache::put('orders', $orders, env('CACHE_TTL'));
+                Cache::put('user', $user, env('CACHE_TTL'));
+                return redirect()->back();
             }
             else
-                return redirect()->route('admin.users.orders')->with('message', 'Заказов данного пользователя не существует.');
+                return redirect()->back()->with('message', 'Заказов данного пользователя не существует.');
         }
         else
-            return redirect()->route('admin.users.orders')->with('message', 'Данного пользователя не существует.');
+            return redirect()->back()->with('message', 'Данного пользователя не существует.');
     }
     public function reviews(Request $request)
     {
-        $users = SearchFormPaginateResponseService::paginate($request, 'users');
+        $users = SearchFormPaginateResponseService::paginate('users');
         $reviews = null;
         $user = null;
         $message = null;
 
-        if ($request->session()->get('reviews') != null)
-            $reviews = ManualPaginatorAction::paginate($request->session()->get('reviews'));
-        if ($request->session()->get('user') != null)
-            $user = $request->session()->get('user');
-        if ($request->session()->get('message') != null)
-            $message = $request->session()->get('message');
+        if (Cache::get('reviews') != null)
+            $reviews = ManualPaginatorAction::paginate(Cache::get('reviews'));
+
+        if (Cache::get('user') != null)
+            $user = Cache::get('user');
+
+        if (Cache::get('message') != null)
+            $message = Cache::get('message');
 
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
@@ -122,7 +126,7 @@ class UsersAdminPanelController extends Controller
     }
     public function payments(Request $request)
     {
-        $payments = SearchFormPaginateResponseService::paginate($request, 'payments', 15) ?? Payment::with(['order', 'order.user'])->paginate(15);
+        $payments = SearchFormPaginateResponseService::paginate('payments', $request->page ?? 1, 15) ?? Payment::with(['order', 'order.user'])->paginate(15);
         $inputs = [
             new SearchFormInput('name', 'Имя заказчика', 'name', true),
             new SearchFormInput('surname', 'Фамилия заказчика', 'surname', true),
@@ -139,18 +143,20 @@ class UsersAdminPanelController extends Controller
             if ($user->reviews != null)
             {
                 $reviews = $user->reviews->toArray();
-                return redirect()->route('admin.users.reviews')->with('reviews', $reviews)->with('user', $user);
+                Cache::put('reviews', $reviews, env('CACHE_TTL'));
+                Cache::put('user', $user, env('CACHE_TTL'));
+                return redirect()->back();
             }
             else
-                return redirect()->route('admin.users.reviews')->with('message', 'Отзывов данного пользователя не существует.');
+                return redirect()->back()->with('message', 'Отзывов данного пользователя не существует.');
         }
         else
-            return redirect()->route('admin.users.reviews')->with('message', 'Данного пользователя не существует.');
+            return redirect()->back()->with('message', 'Данного пользователя не существует.');
     }
     public function ban(Request $request)
     {
-        $users = SearchFormPaginateResponseService::paginate($request, 'users', 15);
-        $message = $request->session()->get('message');
+        $users = SearchFormPaginateResponseService::paginate('users', perPage: 15);
+        $message = Cache::get('message');
         $inputs = [
             new SearchFormInput('email', 'Email', 'email', false),
             new SearchFormInput('name', 'Имя', 'name', false),
@@ -158,7 +164,13 @@ class UsersAdminPanelController extends Controller
             new SearchFormInput('phone', 'Телефон', 'phone', false)
         ];
         $queryInputs = new SearchFormQueryInput('/admin/users/search', 'admin.users.ban', null);
-        return view('admin.users.ban', ['users' => $users, 'inputs' => $inputs, 'queryInputs' => $queryInputs, 'message' => $message]);
+        return view('admin.users.ban', [
+            'users' => $users,
+            'inputs' => $inputs,
+            'queryInputs' => $queryInputs,
+            'message' => $message,
+            'admin_id' => Auth::user()->ulid
+        ]);
     }
     public function postBan(UserBanRequest $request)
     {
@@ -168,39 +180,53 @@ class UsersAdminPanelController extends Controller
         if (!key_exists('api_user', $validated))
         {
             $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
-            BannedUser::create([
-                'user_id' => $user_id,
-                'admin_id' => $admin_id,
-                'userIp' => $request->ip(),
-                'reason' => $validated['reason'],
-                'duration' => $validated['duration'],
-                'timeType' => $validated['timeType'],
-                'bannedAt' => Carbon::now()
-            ]);
         }
-        else
+        else if (key_exists('api_user', $validated))
         {
-            $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
-            BannedUser::create([
-                'user_id' => $user_id,
-                'admin_id' => $admin_id,
-                'userIp' => $request->ip(),
-                'reason' => $validated['reason'],
-                'duration' => $validated['duration'],
-                'timeType' => $validated['timeType'],
-                'bannedAt' => Carbon::now()
-            ]);
+            if ($validated['api_user'])
+                $user_id = APIUser::where('api_key', $validated['user_id'])->get()->first()->api_key;
+            else
+                $user_id = User::where('ulid', $validated['user_id'])->get()->first()->ulid;
         }
+        BannedUser::create([
+            'user_id' => $user_id,
+            'admin_id' => $admin_id,
+            'userIp' => $request->ip(),
+            'reason' => $validated['reason'],
+            'duration' => $validated['duration'],
+            'timeType' => $validated['timeType'],
+            'bannedAt' => Carbon::now()
+        ]);
         return redirect()->route('admin.users.ban');
     }
     public function searchUsers(APIUserSearchRequest $request)
     {
         $validated = $request->validated();
-        return SearchFormUsersSearchMethod::search($request, $validated);
+        return (new UserSearchFormService)->search($validated);
     }
-    public function searchPayments(APIUserSearchRequest $request)
+    public function searchPayments(Request $request)
     {
-        $validated = $request->validated();
-        return SearchFormUsersSearchMethod::search($request, $validated);
+        $user = User::with(['orders', 'orders.payment'])->where('ulid', $request->id)->get()->first();
+        if ($user != null)
+        {
+            if ($user->orders !== null)
+            {
+                $payments = [];
+
+                foreach($user->orders as $order)
+                    array_push($payments, $order->payment);
+
+                if(empty($payments))
+                    return redirect()->back()->with('message', 'У данного пользователя нет платежей.');
+
+                Cache::put('payments', $payments, env('CACHE_TTL'));
+                Cache::put('user', $user, env('CACHE_TTL'));
+                return redirect()->back();
+            }
+            else
+                return redirect()->back()->with('message', 'У данного пользователя нет заказов.');
+        }
+        else
+            return redirect()->back()->with('message', 'Данного пользователя не существует.');
     }
 }

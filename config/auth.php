@@ -41,9 +41,12 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'custom-token',
+            'driver' => 'custom-api-user',
             'provider' => 'api',
         ],
+        'api-user' => [
+            'driver' => 'custom-token',
+        ]
     ],
 
     /*
@@ -71,7 +74,7 @@ return [
 
         'api' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class
+            'model' => App\Models\APIUser::class
         ],
     ],
 
