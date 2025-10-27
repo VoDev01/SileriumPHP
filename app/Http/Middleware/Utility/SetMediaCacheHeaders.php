@@ -20,8 +20,8 @@ class SetMediaCacheHeaders
         if (stripos($request->url(), 'media/') === false)
             return $next($request);
 
-        $lastModified = filemtime(env('APP_MEDIA_PATH') . $request->file);
-        $etag = md5_file(env('APP_MEDIA_PATH') . $request->file);
+        $lastModified = filemtime(storage_path(env('APP_MEDIA_PATH')) . $request->file);
+        $etag = md5_file(storage_path(env('APP_MEDIA_PATH')) . $request->file);
 
         $request->headers->add([
             'Is-Modified-Since' => $lastModified,

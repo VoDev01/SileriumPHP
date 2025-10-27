@@ -32,7 +32,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => env('APP_MEDIA_PATH'),
+            'root' => storage_path(env('APP_MEDIA_PATH')),
             'throw' => false,
         ],
 

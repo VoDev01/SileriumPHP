@@ -30,19 +30,19 @@ Route::withoutMiddleware('auth.refresh.token')->group(function ()
     {
         if (!App::environment('testing'))
         {
-            if (!is_file(env('APP_MEDIA_PATH') . $file))
+            if (!is_file(storage_path(env('APP_MEDIA_PATH')) . $file))
                 throw new NotFoundHttpException;
 
             foreach (explode(', ', env('APP_RESTRICTED_MEDIA_DIR')) as $dir)
             {
-                if (strpos($file, $dir) && !Auth::check())
+                if (strpos($file, storage_path(env('APP_MEDIA_PATH') . '/' . $dir)) && !Auth::check())
                     throw new NotFoundHttpException;
             }
         }
 
         $fileName = basename($file);
-        $lastModified = filemtime(env('APP_MEDIA_PATH') . $file);
-        $etag = md5_file(env('APP_MEDIA_PATH') . $file);
+        $lastModified = filemtime(storage_path(env('APP_MEDIA_PATH')) . $file);
+        $etag = md5_file(storage_path(env('APP_MEDIA_PATH')) . $file);
 
         if ($request->hasHeader('Is-Modified-Since') || $request->hasHeader('If-None-Match'))
         {
@@ -57,7 +57,7 @@ Route::withoutMiddleware('auth.refresh.token')->group(function ()
         }
 
         return response(headers: [
-            'X-Sendfile' => env('APP_MEDIA_PATH') . $file,
+            'X-Sendfile' => storage_path(env('APP_MEDIA_PATH')) . $file,
             'Cache-Control' => 'public, no-cache, must-revalidate, max-age=2592000',
             'Last-Modified' => $lastModified,
             'Content-Type' => 'application/octet-stream',
