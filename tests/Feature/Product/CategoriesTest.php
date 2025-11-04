@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Product;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Category;
+use App\Models\Subcategory;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoriesTest extends TestCase
 {
@@ -13,10 +15,21 @@ class CategoriesTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function testCategories()
     {
-        $response = $this->get('/');
+        $categories = Category::factory(2)->create();
+        $subcategories = Subcategory::factory(4)->for($categories->first())->create();
+        
+        $response = $this->get('/categories/all');
 
         $response->assertStatus(200);
+
+        $response->assertViewHas('categories', $categories);
+
+        $response = $this->get("/categories/{$categories->first()->id}/subcategories");
+
+        $response->assertStatus(200);
+
+        $response->assertViewHas('subcategories', $subcategories);
     }
 }

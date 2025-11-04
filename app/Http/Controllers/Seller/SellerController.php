@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Models\Seller;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Seller\SellerEditAccountRequest;
 use Illuminate\Support\Facades\Auth;
-use ComponentsInputs\SearchForm\SearchFormInputs;
-use ComponentsInputs\SearchForm\SearchFormQueryInputs;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 

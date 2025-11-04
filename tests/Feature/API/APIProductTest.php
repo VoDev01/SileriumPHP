@@ -46,7 +46,7 @@ class APIProductTest extends TestCase
                     'data',
                     15,
                     fn($json) =>
-                    $json->where('id', $product->id)
+                    $json->where('ulid', $product->ulid)
                         ->etc()
                 )
                     ->etc()

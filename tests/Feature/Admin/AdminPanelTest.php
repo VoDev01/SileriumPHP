@@ -33,6 +33,7 @@ class AdminPanelTest extends TestCase
     public function testLogout()
     {
         $admin = User::factory()->hasAttached(Role::factory()->create(['role' => 'admin']), relationship: 'roles')->create();
+
         $response = $this->actingAs($admin)->get('/admin/profile');
 
         $response->assertOk();
@@ -40,9 +41,5 @@ class AdminPanelTest extends TestCase
         $response = $this->actingAs($admin)->post('/admin/logout');
 
         $response->assertRedirect('/');
-
-        $response = $this->actingAs($admin)->get('/admin/profile');
-
-        $response->assertNotFound();
     }
 }

@@ -1,0 +1,41 @@
+
+services:
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-Prod
+    ports:
+      - 4443:443
+    networks:
+      - backend
+      - cache
+  db:
+    image: mysql:8
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=SAmsuNG123sileriumdb
+      - MYSQL_DATABASE=sileriumdb
+      - LANG=C.UTF_8
+    command: 
+    - --character-set-server=utf8mb4 
+    - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - backend
+    volumes:
+      - db-data:/var/www/mysql
+  cache:
+    image: memcached:1.6.24
+    command:
+      - --conn-limit=1024
+      - --threads=4
+      - --memory-limit=4096
+    expose:
+      - 11211
+    networks:
+      - cache
+volumes:
+  db-data:
+networks:
+  backend:
+  cache:

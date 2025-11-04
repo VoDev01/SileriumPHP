@@ -42,7 +42,7 @@ Route::middleware('banned')->group(function ()
     Route::controller(SellerOrdersController::class)->prefix('orders')->middleware(['auth', 'authorize.seller'])->group(function ()
     {
         Route::get('list', 'orders')->name('seller.orders.list');
-        Route::post('searchOrders', 'searchProductsOrders');
+        Route::post('search', 'searchProductsOrders');
     });
     Route::controller(SellerAccountingReportsController::class)->prefix('accounting_reports')->middleware(['auth', 'authorize.seller'])->group(function ()
     {

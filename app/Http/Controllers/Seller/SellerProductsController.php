@@ -14,8 +14,8 @@ use App\Services\SearchForms\FormInputData\SearchFormInput;
 use App\Http\Requests\API\Products\APIProductsCreateRequest;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
-use App\Services\SearchFormsForms\ProductSearchFormService;
-use App\Services\SearchFormsForms\SearchFormPaginateResponseService;
+use App\Services\SearchForms\ProductSearchFormService;
+use App\Services\SearchForms\SearchFormPaginateResponseService;
 
 class SellerProductsController extends Controller
 {

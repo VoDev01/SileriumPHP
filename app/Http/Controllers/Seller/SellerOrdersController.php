@@ -11,9 +11,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Services\SearchForms\FormInputData\SearchFormInput;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
 use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
-use App\Services\SearchFormsForms\ProductSearchFormService;
+use App\Services\SearchForms\ProductSearchFormService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Services\SearchFormsForms\SearchFormPaginateResponseService;
+use App\Services\SearchForms\SearchFormPaginateResponseService;
 
 class SellerOrdersController extends Controller
 {
@@ -53,7 +53,7 @@ class SellerOrdersController extends Controller
             abort($e->getStatusCode(), $e->getMessage());
         }
 
-        $queryInputs = new SearchFormQueryInput("/seller/orders/searchOrders", "seller.orders.list", "orders, orders.user");
+        $queryInputs = new SearchFormQueryInput("/seller/orders/search", "seller.orders.list", "orders, orders.user");
         $inputs = [
             new SearchFormInput("productName", "Название товара", "productName", true, "productName")
         ];
@@ -66,6 +66,6 @@ class SellerOrdersController extends Controller
         if (!array_key_exists('sellerName', $validated))
             $validated['sellerName'] = Seller::where('id', session('seller_id'))->get()->first()->nickname;
 
-        return (new ProductSearchFormService)->search($validated);
+        return (new ProductSearchFormService)->search($validated, redirect: '/seller/orders/list');
     }
 }

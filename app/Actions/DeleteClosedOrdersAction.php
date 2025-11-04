@@ -17,11 +17,21 @@ class DeleteClosedOrdersAction
      */
     public static function delete($orders)
     {
-        foreach($orders as $order)
+        if (!is_countable($orders))
         {
-            if(Carbon::now()->diffInDays($order->deleted_at) >= 7 && $order->status == "CANCELLED")
+            $order = $orders;
+            if (Carbon::now()->diffInDays($order->deleted_at) >= 7 && $order->status == "CANCELLED")
                 $order->forceDelete();
+            return $order;
         }
-        return $orders->toArray();
+        else
+        {
+            foreach ($orders as $order)
+            {
+                if (Carbon::now()->diffInDays($order->deleted_at) >= 7 && $order->status == "CANCELLED")
+                    $order->forceDelete();
+            }
+            return $orders;
+        }
     }
 }

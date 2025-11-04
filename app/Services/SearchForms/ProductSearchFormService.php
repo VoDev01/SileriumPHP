@@ -13,7 +13,7 @@ use App\Services\SearchForms\Base\SearchFormInterface;
 
 class ProductSearchFormService extends SearchFormBase implements SearchFormInterface
 {
-    public function search(array $validated, string $responseName = 'products', ?string $redirect = null, ?string $notFoundMessage = null) : JsonResponse|RedirectResponse
+    public function search(array $validated, string $responseName = 'products', ?string $redirect = null, ?string $notFoundMessage = null): JsonResponse|RedirectResponse
     {
         $loadWithArray = null;
         if (array_key_exists('loadWith', $validated))
@@ -64,7 +64,14 @@ class ProductSearchFormService extends SearchFormBase implements SearchFormInter
         }
         else
         {
-            $products = Product::where('name', 'like', "%{$validated['productName']}%")->get()->toArray();
+            if (!empty($loadWithArray))
+            {
+                $products = Product::with($loadWithArray)->where('name', 'like', "%{$validated['productName']}%")->get()->toArray();
+            }
+            else
+            {
+                $products = Product::where('name', 'like', "%{$validated['productName']}%")->get()->toArray();
+            }
         }
 
         return parent::validate($products, $responseName, $redirect, $notFoundMessage);

@@ -2,7 +2,6 @@
 /public/build
 /public/hot
 /public/fonts
-/storage/*.key
 /vendor
 .env
 .env.development
@@ -24,7 +23,9 @@ yarn-error.log
 /_ide_helper_models.php
 /tools
 /storage
+/.phpdoc
 .phive
 .phpdoc/cache
 phive.phar.asc
 /tests/reports
+/env_conf
