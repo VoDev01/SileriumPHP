@@ -38,7 +38,9 @@ class HomeController extends Controller
             //     }
             // }
 
-            return view('home', ['categories' => Category::all()]);
+            $categorioes = Category::all();
+
+            return view('home', ['categories' => $categorioes]);
         }
     }
 }

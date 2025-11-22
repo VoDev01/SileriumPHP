@@ -3,7 +3,7 @@
     <x-slot name="title">
         Магазиг электронной техники маркетплейс | Silerium
     </x-slot>
-    @if (!empty($categories))
+    @if ($categories->isNotEmpty())
         <div id="homeCarousel" class="carousel slide carousel-fade w-100 d-md-block d-none" data-bs-ride="carousel">
             <div class="carousel-indicators bg-opacity-25 bg-black mx-auto" style="width: 150px;">
                 <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active"

@@ -29,3 +29,4 @@ yarn-error.log
 phive.phar.asc
 /tests/reports
 /env_conf
+/docker
