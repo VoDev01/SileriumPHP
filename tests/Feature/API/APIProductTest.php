@@ -32,7 +32,7 @@ class APIProductTest extends TestCase
     {
         Category::factory()->create();
         Subcategory::factory()->create();
-        $product = Seller::factory()->has(Product::factory(20))->create()->first();
+        $product = Seller::factory()->has(Product::factory(20))->create()->products->first();
         $secret = Str::random(32);
         $apiUser = APIUser::factory()->create(['secret' => $secret]);
 
