@@ -30,10 +30,10 @@ Route::middleware(['banned', 'authorize.user.routes'])->group(function ()
         Route::get('register', 'register');
         Route::post('register', 'postRegister');
 
-        Route::withoutMiddleware('banned')->group(function() {
-            Route::get('login', 'loginBanned')->name('login.banned');
-            Route::get('register', 'registerBanned')->name('register.banned');
-        });
+        // Route::withoutMiddleware('banned')->group(function() {
+        //     Route::get('login', 'loginBanned')->name('login.banned');
+        //     Route::get('register', 'registerBanned')->name('register.banned');
+        // });
 
         Route::get('forgot_password', 'forgotPassword')->middleware('guest')->name('password.request');
         Route::post('forgot_password', 'postForgotPassword')->middleware('guest')->name('password.email');

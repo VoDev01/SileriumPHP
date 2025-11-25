@@ -38,10 +38,6 @@
                 <label for="logo" class="form-label">Логотип организации</label>
                 <input type="file" class="form-control" name="logo" id="logo" />
             </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email продавца</label>
-                <input type="email" class="form-control" name="email" id="email" />
-            </div>
             <button type="submit" class="btn btn-primary">
                 Изменить
             </button>

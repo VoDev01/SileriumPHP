@@ -32,23 +32,21 @@ class SellerController extends Controller
         if (isset($validated['logo']))
             $path = Storage::putFile('logo', $validated['logo']);
 
-        DB::update('UPDATE TABLE sellers INNER JOIN users ON sellers.user_id = users.id SET (
+        DB::update('UPDATE sellers INNER JOIN users ON sellers.user_id = users.id SET
             nickname = ?,
-            organization_name = ?,
+            organization_name = COALESCE(organization_name, ?),
             organization_email = ?,
-            organization_type = ?,
-            tax_system = ?,
-            users.email = ?,
-            logo = ?
-        ) WHERE users.id = :user_id', [
-            ':user_id' => Auth::id(),
+            organization_type = COALESCE(organization_type, ?),
+            tax_system = COALESCE(tax_system, ?),
+            logo = COALESCE(logo, ?)
+        WHERE users.id = ?', [
             $validated['nickname'],
             $validated['organization_name'],
             $validated['organization_email'],
             $validated['organization_type'],
             $validated['tax_system'],
-            $validated['email'],
-            $path
+            $path,
+            Auth::id()
         ]);
 
         return redirect('/seller/account');

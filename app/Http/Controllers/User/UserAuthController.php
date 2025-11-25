@@ -135,7 +135,9 @@ class UserAuthController extends Controller
     {
         $user = Auth::user() !== null ? Auth::user()->ulid : null; 
         if(BannedUser::where('user_id', $user)->get()->first())
-            return view('user.auth.registerbanned');
+            return view('banned');
+        else if($user !== null)
+            return view('user.profile');
 
         return view('user.auth.register');
     }

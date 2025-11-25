@@ -33,7 +33,7 @@ class UserRegisterRequest extends FormRequest
             'country' => ['min:3', 'max:50', 'required'],
             'city' => ['min:2', 'max:50', 'required'],
             'homeAdress' => ['min:5', 'max:200', 'required'],
-            'phone' => ['min:8', 'max:20', 'nullable'],
+            'phone' => ['min:8', 'max:30', 'nullable'],
             'pfp' => ['mime:png,jpg,jpeg', 'dimensions:min_width=128,min_height=128,max_width=128,max_height=128', 'size:' . 150 * 1000000, 'nullable']
         ];
         if (app()->environment('testing'))

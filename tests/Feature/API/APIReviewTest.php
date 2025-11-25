@@ -82,7 +82,6 @@ class APIReviewTest extends TestCase
         $seller = Seller::factory()->has(Product::factory())->create();
         $product = $seller->products->first();
         $user = User::factory()->has(Role::factory())->create();
-        $user = User::factory()->has(Role::factory())->create();
         $review = Review::factory(30)->for($user)->for($product)->create()->first();
 
         TestRouteForAuthService::testAPI(

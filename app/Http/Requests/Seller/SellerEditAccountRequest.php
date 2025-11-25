@@ -24,12 +24,11 @@ class SellerEditAccountRequest extends FormRequest
     public function rules()
     {
         return [
-            "organization_name" => ["min:2", "max:75"],
-            "nickname" => ["min:2", "max:75"],
-            "organization_type" => ["string"],
-            "tax_system" => ["string"],
-            "organization_email" => ["min:5", "max:100", "email"],
-            "email" => ["min:5", "max:100", "email", "exists:users,email"],
+            "organization_name" => ["min:2", "max:75", "string", "nullable"],
+            "nickname" => ["min:2", "max:75", "string"],
+            "organization_type" => ["string", "nullable"],
+            "tax_system" => ["string", "nullable"],
+            "organization_email" => ["min:5", "max:100", "email", "nullable"],
             "logo" => ["mime:png,jpg,jpeg", "dimensions:min_width=128,min_height=128,max_width=128,max_height=128", "nullable"]
         ];
     }

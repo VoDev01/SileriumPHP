@@ -6,6 +6,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\Seller;
+use Illuminate\Support\Str;
 use App\Traits\PassportTokenPrint;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
@@ -114,7 +115,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function orders()
     {
-       return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class);
     }
     public function reviews()
     {
@@ -139,77 +140,59 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasRoles(array|string $roles)
     {
-        if(gettype($roles) == "string")
+        if (gettype($roles) == "string")
         {
-            foreach($this->roles as $role)
-                if($role->role == $roles)
+            foreach ($this->roles as $role)
+                if ($role->role == $roles)
                     return true;
             return false;
         }
-        else if(gettype($roles) == "array")
+        else if (gettype($roles) == "array")
         {
-            foreach($this->roles as $role)
+            foreach ($this->roles as $role)
             {
-                if(in_array($role->role, $roles))
+                if (in_array($role->role, $roles))
                     return true;
             }
             return false;
         }
     }
 
-    protected function name() : Attribute
+    protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => Crypt::decryptString($value)
         );
     }
-    protected function surname() : Attribute
+    protected function surname(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => Crypt::decryptString($value)
         );
     }
-    protected function password() : Attribute
+    protected function country(): Attribute
     {
         return Attribute::make(
-            set: fn($value) => Hash::make($value, ['rounds' => 10])
+            get: fn($value) => Crypt::decryptString($value)
         );
     }
-    protected function birthDate() : Attribute
+    protected function city(): Attribute
     {
         return Attribute::make(
-            set: fn($value) => Carbon::parse($value)->format('Y-m-d H:i:s')
-        ); 
-    }
-    protected function country() : Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => Crypt::decryptString($value)
         );
     }
-    protected function city() : Attribute
+    protected function homeAdress(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => Crypt::decryptString($value)
         );
     }
-    protected function homeAdress() : Attribute
+    protected function phone(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => Crypt::decryptString($value)
         );
-    }
-    protected function phone() : Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
-        );   
     }
 
     // protected function profilePicture() : Attribute

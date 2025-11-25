@@ -7,9 +7,11 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\SearchForms\SearchFormPaginateResponseService;
 use App\Services\SearchForms\UserSearchFormService;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Cache;
+use ParaTest\Util\Str;
 use Tests\TestCase;
 
 class SearchFormPaginateResponseServiceTest extends TestCase
@@ -26,8 +28,8 @@ class SearchFormPaginateResponseServiceTest extends TestCase
 
         $response = (new UserSearchFormService)->search([
             'email' => $user->email
-        ]);        
-        
+        ]);
+
         $response = json_decode($response->content(), true);
 
         $this->assertTrue($response['users'][0]['ulid'] === $user->ulid);
@@ -51,7 +53,11 @@ class SearchFormPaginateResponseServiceTest extends TestCase
 
     public function testPaginateRelations()
     {
-        $user = User::factory()->hasAttached(Role::factory(30)->create(['role' => 'user']), relationship: 'roles')->create()->first();
+        $user = User::factory()->hasAttached(Role::factory(30)->state(
+            new Sequence(
+                fn($sequence) => ['role' => 'role' . $sequence->index]
+            )
+        ), relationship: 'roles')->create()->first();
 
         $response = (new UserSearchFormService)->search([
             'email' => $user->email,

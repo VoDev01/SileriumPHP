@@ -24,39 +24,34 @@
                         <tr id="user">
                             <td>{{ $user->ulid }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ implode(', ', array_column($user->roles->all(), 'role')) }}</td>
+                            <td>
+                                <form action="/admin/user/roles/assign" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="user" value="{{ $user->email }}">
+                                    @foreach ($roles as $role)
+                                        @if ($role->role === 'user')
+                                            @continue
+                                        @endif
+                                        @if ($user->roles->where('role', $role->role)->isNotEmpty())
+                                            <label for="role[]">{{ $role->role }}</label>
+                                            <input type="checkbox" name="role[]" class="roles"
+                                                data-value="{{ $role->role }}" checked value="">
+                                        @else
+                                            <label for="role[]">{{ $role->role }}</label>
+                                            <input type="checkbox" name="role[]" class="roles"
+                                                data-value="{{ $role->role }}" value="">
+                                        @endif
+                                    @endforeach
+                                    <button class="btn btn-success" type="submit"><i class="bi bi-check"
+                                            style="color: #26d802"></i></button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
             <x-pagination :model="$users" />
         </div>
-        <p>
-            <a class="btn" data-bs-toggle="collapse" href="#roles" aria-expanded="false" aria-controls="roles">
-                <i class="bi bi-arrow-down" id="rolesArrow"></i> Роли
-            </a>
-        </p>
-        <div class="collapse" id="roles" style="width: 300px;">
-            <table class="table table-bordered mx-5">
-                <thead>
-                    <tr>
-                        <td>Id</td>
-                        <td>Роль</td>
-                    </tr>
-                </thead>
-                <tbody id="roles">
-                    @foreach ($roles as $role)
-                        <tr>
-                            <td>{{ $role->id }}</td>
-                            <td>{{ $role->role }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <x-pagination :model="$roles" />
-        </div>
-        <a class="btn btn-success" href="/admin/users/roles/add">Добавить новую роль</a>
-        <a class="btn btn-success" href="/admin/users/roles/assign">Управление ролями пользователей</a>
         <script type="module">
             $(document).ready(function() {
                 let foundUsers = document.getElementById('foundUsers');
@@ -68,14 +63,14 @@
                     $('#foundUsersArrow').addClass('bi-arrow-down');
                     $('#foundUsersArrow').removeClass('bi-arrow-up');
                 });
-                let roles = document.getElementById('roles');
-                roles.addEventListener('show.bs.collapse', function() {
-                    $('#rolesArrow').addClass('bi-arrow-up');
-                    $('#rolesArrow').removeClass('bi-arrow-down');
-                });
-                roles.addEventListener('hide.bs.collapse', function() {
-                    $('#rolesArrow').addClass('bi-arrow-down');
-                    $('#rolesArrow').removeClass('bi-arrow-up');
+
+                let roles = document.getElementsByClassName("roles");
+                roles.forEach(element => {
+                    if ($(element).prop("checked") == true) {
+                        $(element).val(element.getAttribute("data-value"));
+                    } else {
+                        $(element).val("");
+                    }
                 });
             });
         </script>

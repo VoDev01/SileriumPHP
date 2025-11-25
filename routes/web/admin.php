@@ -36,6 +36,10 @@ Route::middleware(['authorize.admin', 'banned'])->group(function ()
     {
         Route::get('index', 'index')->name('admin.users.index');
         Route::get('roles', 'roles')->name('admin.users.roles');
+        Route::get('roles/add', 'addRole');
+        Route::post('roles/add', 'postRole');
+        Route::get('roles/assign', 'assignRole');
+        Route::post('roles/assign', 'postAssignedRole');
         Route::get('orders', 'orders')->name('admin.users.orders');
         Route::post('orders', 'searchUserOrders');
         Route::get('reviews', 'reviews')->name('admin.users.reviews');

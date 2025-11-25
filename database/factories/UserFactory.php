@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,17 +29,17 @@ class UserFactory extends Factory
         return [
             'ulid' => Str::ulid()->toBase32(),
             'id' => self::$id,
-            'name' => fake()->firstName(),
-            'surname' => fake()->lastName(),
+            'name' => Crypt::encrypt(fake()->firstName()),
+            'surname' => Crypt::encrypt(fake()->lastName()),
             'email' => fake()->unique()->safeEmail(),
-            'password' => '1122334455',
+            'password' => Hash::make('1122334455', ['rounds' => 12]),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'birthDate' => fake()->dateTime(),
-            'country' => fake()->country(),
-            'city' => fake()->city(),
-            'homeAdress' => fake()->streetAddress(),
-            'phone' => fake()->phoneNumber(),
+            'country' => Crypt::encrypt(fake()->country()),
+            'city' => Crypt::encrypt(fake()->city()),
+            'homeAdress' => Crypt::encrypt(fake()->streetAddress()),
+            'phone' => Crypt::encrypt(fake()->phoneNumber()),
             'profilePicture' => '/media/images/pfp/default_user.png',
             'remember_token' => Str::random(10),
             'token' => Str::random(rand(16, 64)),

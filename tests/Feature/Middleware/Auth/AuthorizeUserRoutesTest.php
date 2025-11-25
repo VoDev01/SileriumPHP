@@ -19,10 +19,11 @@ class AuthorizeUserRoutesTest extends TestCase
      */
     public function testAuth()
     {
-        $userSeller = User::factory()->hasAttached(Role::factory()->create(['role' => 'user']), relationship: 'roles')
+        $userRole = Role::factory()->create(['role' => 'user']);
+        $userSeller = User::factory()->hasAttached([$userRole, Role::factory()->create(['role' => 'seller'])], relationship: 'roles')
         ->has(Seller::factory())->create(); 
         
-        $user = User::factory()->hasAttached(Role::factory()->create(['role' => 'user']), relationship: 'roles')->create();
+        $user = User::factory()->hasAttached($userRole, relationship: 'roles')->create();
 
         $admin = User::factory()->hasAttached(Role::factory()->create(['role' => 'admin']), relationship: 'roles')->create();
 

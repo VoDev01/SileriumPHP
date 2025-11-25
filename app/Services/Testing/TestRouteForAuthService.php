@@ -195,8 +195,6 @@ class TestRouteForAuthService
             $response->baseResponse->status() === 302
         );
 
-        Auth::guard('web')->logout();
-
         $response = call_user_func(
             $assert,
             $route,

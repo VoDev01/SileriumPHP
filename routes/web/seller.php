@@ -13,9 +13,13 @@ Route::middleware('banned')->group(function ()
     Route::controller(SellerController::class)->group(function ()
     {
         Route::get('/', 'index')->name("seller.index");
-        Route::get('/account', 'account')->name("seller.account")->middleware(['auth', 'authorize.seller']);
-        Route::get('/account/edit', 'editAccount')->middleware(['auth', 'authorize.seller']);
-        Route::post('/account/edit', 'postEditAccount');
+
+        Route::controller(SellerController::class)->middleware(['auth', 'authorize.seller'])->group(function ()
+        {
+            Route::get('/account', 'account')->name("seller.account");
+            Route::get('/account/edit', 'editAccount');
+            Route::post('/account/edit', 'postEditAccount');
+        });
     });
     Route::controller(SellerAuthController::class)->middleware('throttle:auth')->withoutMiddleware('auth.refresh.token')->group(function ()
     {

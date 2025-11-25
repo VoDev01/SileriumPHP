@@ -75,6 +75,36 @@ class UsersAdminPanelTest extends TestCase
         });
     }
 
+    public function testAddRole()
+    {
+        $admin = User::factory()->hasAttached(Role::factory()->create(['role' => 'admin']), relationship: 'roles')->create();
+
+        $response = TestRouteForAuthService::testWeb('/admin/users/roles/add', $this, $admin, TestRouteMethods::POST, ['role' => 'user']);
+
+        $this->assertDatabaseHas('roles', ['role' => 'user']);
+    }
+
+    public function testAssignRole()
+    {
+
+        $roles = collect([
+            Role::factory()->create(),
+            Role::factory()->create(['role' => 'admin']),
+            Role::factory()->create(['role' => 'seller']),
+            Role::factory()->create(['role' => 'moderator'])
+        ]);
+        $user = User::factory()->hasAttached($roles->where('role', 'user'), [], 'roles')->create();
+        $admin = User::factory()->hasAttached($roles->where('role', 'admin'), [], 'roles')->create();
+
+        $response = TestRouteForAuthService::testWeb('/admin/users/roles/assign', $this, $admin, TestRouteMethods::POST, [
+            'role' => ['seller', 'moderator'],
+            'user' => $user->email
+        ]);
+
+        $this->assertDatabaseHas('users_roles', ['user_id' => $user->id, 'role_id' => $roles->where('role', 'seller')->first()->id]);
+        $this->assertDatabaseHas('users_roles', ['user_id' => $user->id, 'role_id' => $roles->where('role', 'moderator')->first()->id]);
+    }
+
     public function testOrders()
     {
         Category::factory()->create();
@@ -84,7 +114,7 @@ class UsersAdminPanelTest extends TestCase
         $user = $users->first();
 
         $userSeller = User::factory()->hasAttached(Role::factory()->create(['role' => 'seller']), [], 'roles')
-        ->has(Seller::factory()->has(Product::factory(15)))->create();
+            ->has(Seller::factory()->has(Product::factory(15)))->create();
 
         $admin = User::factory()->hasAttached(Role::factory()->create(['role' => 'admin']), [], 'roles')->create();
 
@@ -184,8 +214,8 @@ class UsersAdminPanelTest extends TestCase
             ],
             'products'
         )
-        ->has(Payment::factory())
-        ->create();
+            ->has(Payment::factory())
+            ->create();
 
         $payment = Payment::where('order_id', $orders->first()->ulid)->get()->first();
 
