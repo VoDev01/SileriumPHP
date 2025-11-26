@@ -1,4 +1,3 @@
-
 services:
   web-app:
     build:
@@ -13,8 +12,10 @@ services:
       retries: 3
       start_period: 40s
     depends_on:
-      - db
-      - cache
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
     volumes:
       - /var/www/html/SileriumPHP/.env:/var/www/.env
     links:
@@ -22,21 +23,39 @@ services:
     networks:
       - backend
       - cache
-  phpmyadmin:
-    image: phpmyadmin
+  dbgate:
+    image: dbgate/dbgate
     restart: unless-stopped
     ports:
-      - 8081:80
+      - 8081:3000
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    environment:
+      CONNECTIONS: mysql
+
+      LABEL_mysql: MySql
+      SERVER_mysql: db
+      DATABASE_mysql: sileriumdb
+      USER_mysql: app
+      PASSWORD_mysql: SAmsuNG123sileriumdb
+      PORT_mysql: 3306
+      ENGINE_mysql: mysql@dbgate-plugin-mysql
+
+      LOGIN: app
+      PASSWORD: SAmsuNG123sileriumdb
+      LOGIN_PERMISSIONS_app: "~*,connections/*,dbops/sql-template/*,dbops/sql-dump/import,dbops/sql-dump/export,dbops/query,dbops/import,dbops/export,dbops/charts,dbops/profiler,settings/change,~widgets/*,widgets/database,widgets/history,widgets/plugins,plugins/install,dbops/model/view,dbops/model/compare,dbops/table/backup"
+
+    volumes:
+      - dbgate-data:/root/.dbgate
     networks:
       - backend
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   mailpit:
     image: axllent/mailpit
     restart: unless-stopped
@@ -52,7 +71,8 @@ services:
     networks:
       - backend
     depends_on:
-      - web-app
+      web-app:
+        condition: service_healthy
   db:
     image: mysql
     healthcheck:
@@ -88,3 +108,5 @@ networks:
   cache:
 volumes:
   backend-data:
+  dbgate-data:
+    driver: local
