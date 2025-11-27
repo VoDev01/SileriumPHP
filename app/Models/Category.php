@@ -45,12 +45,4 @@ class Category extends Model
     {
         return $this->hasMany(Subcategory::class);
     }
-
-    // protected function image(): Attribute
-    // {
-    //     return Attribute::get(function ($value)
-    //     {
-    //         return Storage::url($value);
-    //     });
-    // }
 }

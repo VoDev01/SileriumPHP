@@ -35,11 +35,4 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Product::class);
     }
-
-    // protected function imagePath() : Attribute
-    // {
-    //     return Attribute::get(function($value){
-    //         return Storage::url($value);
-    //     });
-    // }
 }

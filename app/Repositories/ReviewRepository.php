@@ -12,7 +12,7 @@ class ReviewRepository
 {
     public function index(int $itemsAtPage = 15)
     {
-        $reviews = Review::paginate($itemsAtPage); //SearchFormPaginateResponseService::paginate('products',  $request->page, 15) ?? Review::paginate(15);
+        $reviews = Review::paginate($itemsAtPage);
         return $reviews;
     }
 

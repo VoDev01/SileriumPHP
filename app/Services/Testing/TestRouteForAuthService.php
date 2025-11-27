@@ -81,11 +81,6 @@ class TestRouteForAuthService
             $testCase
         );
 
-        // if (($response->baseResponse->status() === 401 ||
-        //     $response->baseResponse->status() === 404 ||
-        //     $response->baseResponse->status() === 403) === false)
-        //     dump($response->baseResponse);
-
         $testCase->assertTrue(
             $response->baseResponse->status() === 401 ||
                 $response->baseResponse->status() === 404 ||
@@ -102,9 +97,6 @@ class TestRouteForAuthService
             ]),
             $testCase
         );
-
-        // if ($response->baseResponse->status() !== 200)
-        //     dump($response->baseResponse);
 
         $response->assertOk();
 

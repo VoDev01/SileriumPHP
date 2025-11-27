@@ -48,12 +48,4 @@ class Subcategory extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
-    // protected function imagePath(): Attribute
-    // {
-    //     return Attribute::get(function ($value)
-    //     {
-    //         return Storage::url($value);
-    //     });
-    // }
 }

@@ -25,10 +25,6 @@ class Authenticate extends Middleware
             {
                 return route('login', ['api' => 'api']);
             }
-            // else if($request->is('admin*'))
-            // {
-            //     abort(404);
-            // }
             else
                 return route('login');
         }

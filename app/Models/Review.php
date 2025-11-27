@@ -45,8 +45,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Review extends Model
 {
     use HasFactory, HasUlids;
-    
-    //protected $primaryKey = 'ulid';
 
     protected $casts = [
         'createdAt' => 'datetime',

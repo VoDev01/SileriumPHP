@@ -53,8 +53,6 @@ class Seller extends Model
 {
     use HasFactory, HasUlids;
 
-    //protected $primaryKey = 'ulid';
-
     protected $fillable = [
         'ulid',
         'name',
@@ -81,12 +79,4 @@ class Seller extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    // protected function logo(): Attribute
-    // {
-    //     return Attribute::get(function ($value)
-    //     {
-    //         return Storage::url($value);
-    //     });
-    // }
 }

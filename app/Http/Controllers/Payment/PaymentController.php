@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Events\Product\ProductBoughtEvent;
 use App\Models\Order;
+use App\Models\Refund;
 use App\Models\Payment;
 use Illuminate\Http\Request;
-use App\Services\PaymentService;
 use App\Http\Controllers\Controller;
+use App\Services\Products\PaymentService;
+use App\Events\Product\ProductBoughtEvent;
 use App\Http\Requests\Payment\PaymentRequest;
-use App\Models\Refund;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PaymentController extends Controller

@@ -53,8 +53,6 @@ class Product extends Model
 {
     use HasFactory, HasUlids;
 
-    //protected $primaryKey = 'ulid';
-
     public $timestamps = false;
 
     protected $casts = [

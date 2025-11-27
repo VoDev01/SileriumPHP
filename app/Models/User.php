@@ -2,19 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\Seller;
-use Illuminate\Support\Str;
-use App\Traits\PassportTokenPrint;
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Actions\EncodeImageBinaryToBase64Action;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -68,7 +60,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, HasUlids, Notifiable;
-    //protected $primaryKey = 'ulid';
 
     /**
      * The attributes that are mass assignable.
@@ -194,13 +185,6 @@ class User extends Authenticatable implements MustVerifyEmail
             get: fn($value) => Crypt::decryptString($value)
         );
     }
-
-    // protected function profilePicture() : Attribute
-    // {
-    //     return Attribute::get(function($value){
-    //         return Storage::url($value);
-    //     });
-    // }
 
     public function toArray()
     {

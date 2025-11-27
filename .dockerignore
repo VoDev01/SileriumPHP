@@ -6,8 +6,6 @@
 
 **/.classpath
 **/.dockerignore
-**/.env.development
-**/.env.testing
 **/.git
 **/.gitignore
 **/.project
@@ -18,7 +16,6 @@
 **/.phpdoc
 **/.next
 **/.cache
-**/.env
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
@@ -44,6 +41,9 @@
 **/storage/framework/views/*
 **/storage/logs/*
 **/bootstrap/cache/*
-**/docker
 LICENSE
 README.md
+.env.example
+tests/
+phpunit.xml
+phpunit.xml.dist

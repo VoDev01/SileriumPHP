@@ -2,12 +2,11 @@ services:
   web-app:
     build:
       context: .
-      dockerfile: docker/production/Dockerfile
+      dockerfile: docker/development/Dockerfile
     ports:
-      - 4443:443
       - 8080:80
     healthcheck:
-      test: ["CMD", "curl", "-kf", "https://localhost"]
+      test: ["CMD", "curl", "-kf", "http://localhost"]
       interval: 60s
       timeout: 10s
       retries: 3
@@ -19,19 +18,18 @@ services:
         condition: service_started
     volumes:
       - ./:/var/www/
-      - ./docker/cert/silerium.crt:/etc/apache2/cert/silerium.crt
-      - ./docker/cert/silerium.key:/etc/apache2/cert/silerium.key
-      - ./docker/silerium.conf:/etc/apache2/sites-enabled/silerium.conf:ro
+      - ./.env.testing:/var/www/.env
+      - ./docker/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/silerium-dev.conf:/etc/apache2/sites-enabled/silerium-dev.conf:ro
       - ./docker/mysql_custom.cnf:/etc/mysql/conf.d/mysql_custom.cnf:ro
-
     networks:
-      - backend
-      - cache
+      - backend-testing
+      - cache-testing
   dbgate:
     image: dbgate/dbgate
     restart: unless-stopped
     ports:
-      - 8003:3000
+      - 8081:3000
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
@@ -43,7 +41,7 @@ services:
 
       LABEL_mysql: MySql
       SERVER_mysql: db
-      DATABASE_mysql: sileriumdb
+      DATABASE_mysql: sileriumdb_testing
       USER_mysql: app
       PASSWORD_mysql: SAmsuNG123sileriumdb
       PORT_mysql: 3306
@@ -51,12 +49,12 @@ services:
 
       LOGIN: app
       PASSWORD: SAmsuNG123sileriumdb
-      LOGIN_PERMISSIONS_app: "~*,connections/*,dbops/sql-template/*,dbops/sql-dump/import,dbops/sql-dump/export,dbops/query,dbops/import,dbops/export,dbops/charts,dbops/profiler,settings/change,~widgets/*,widgets/database,widgets/history,widgets/plugins,plugins/install,dbops/model/view,dbops/model/compare,dbops/table/backup"
+      LOGIN_PERMISSIONS_app: "*"
 
     volumes:
-      - dbgate-data:/root/.dbgate
+      - dbgate-testing-data:/root/.dbgate
     networks:
-      - backend
+      - backend-testing
     depends_on:
       db:
         condition: service_healthy
@@ -73,7 +71,7 @@ services:
       - 8825:8025
       - 1125:1025
     networks:
-      - backend
+      - backend-testing
     depends_on:
       web-app:
         condition: service_healthy
@@ -87,17 +85,15 @@ services:
       start_period: 40s
     environment:
       - MYSQL_ROOT_PASSWORD=SAmsuNG123sileriumdb
-      - MYSQL_DATABASE=sileriumdb
-      - MYSQL_USER=app
-      - MYSQL_PASSWORD=SAmsuNG123sileriumdb
+      - MYSQL_DATABASE=sileriumdb_testing
       - LANG=C.UTF_8
     command: 
     - --character-set-server=utf8mb4 
     - --collation-server=utf8mb4_unicode_ci
     volumes:
-      - backend-data:/var/lib/mysql/
+      - backend-testing-data:/var/lib/mysql/
     networks:
-      - backend
+      - backend-testing
   cache:
     image: memcached:1.6.24
     restart: unless-stopped
@@ -108,9 +104,9 @@ services:
     networks:
       - cache
 networks:
-  backend:
-  cache:
+  backend-testing:
+  cache-testing:
 volumes:
-  backend-data:
-  dbgate-data:
+  backend-testing-data:
+  dbgate-testing-data:
     driver: local

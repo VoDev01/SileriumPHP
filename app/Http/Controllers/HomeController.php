@@ -22,22 +22,6 @@ class HomeController extends Controller
         }
         else
         {
-            // $images = [];
-            // foreach ($images as $image)
-            // {
-            //     $paths = explode('/',  $image);
-            //     $idExt = explode('_', $paths[count($paths) - 1])[1];
-            //     $categoryId = explode('.', $idExt)[0];
-            //     $categoryModel = Category::where('id', $categoryId)->get()->first();
-            //     if ($categoryModel !== null)
-            //     {
-            //         $images["$categoryModel->pageName"] = array(
-            //             'model' => $categoryModel,
-            //             'image' => $image
-            //         );
-            //     }
-            // }
-
             $categories = Category::all();
 
             return view('home', ['categories' => $categories]);
