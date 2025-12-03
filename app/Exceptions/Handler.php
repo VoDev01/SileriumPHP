@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -49,11 +50,7 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e)
         {
-            //
-        });
-
-        $this->reportable(function (NotFoundHttpException $e)
-        {
+            Log::error($e->getMessage());
         });
 
         $this->renderable(function (HttpException $e, $request)

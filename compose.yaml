@@ -17,6 +17,7 @@ services:
         condition: service_healthy
       cache:
         condition: service_started
+    user: "vodev:www-data"
     volumes:
       - ./:/var/www/
       - ./docker/cert/silerium.crt:/etc/apache2/cert/silerium.crt

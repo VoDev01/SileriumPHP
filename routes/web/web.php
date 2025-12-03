@@ -30,39 +30,42 @@ Route::withoutMiddleware('auth.refresh.token')->group(function ()
     {
         if (!App::environment('testing'))
         {
-            if (!is_file(storage_path(env('APP_MEDIA_PATH')) . $file))
+            if (!is_file(storage_path() . '/' . env('APP_MEDIA_PATH') . $file))
                 throw new NotFoundHttpException;
 
             foreach (explode(', ', env('APP_RESTRICTED_MEDIA_DIR')) as $dir)
             {
-                if (strpos($file, storage_path(env('APP_MEDIA_PATH') . '/' . $dir)) && !Auth::check())
+                if (strpos($file, storage_path() . '/' . env('APP_MEDIA_PATH') . $dir) && !Auth::check())
                     throw new NotFoundHttpException;
             }
         }
 
         $fileName = basename($file);
-        $lastModified = filemtime(storage_path(env('APP_MEDIA_PATH')) . $file);
-        $etag = md5_file(storage_path(env('APP_MEDIA_PATH')) . $file);
+        $lastModified = filemtime(storage_path() . '/' . env('APP_MEDIA_PATH') . $file);
+        $etag = md5_file(storage_path() . '/' . env('APP_MEDIA_PATH') . $file);
+        $expires = gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24 * 7));
 
         if ($request->hasHeader('Is-Modified-Since') || $request->hasHeader('If-None-Match'))
         {
             if ($request->header('Is-Modified-Since') === $lastModified || trim($request->header('If-None-Match')) === $etag)
             {
                 return response(status: 304, headers: [
-                    'Cache-Control' => 'public, no-cache, must-revalidate, max-age=2592000',
+                    'Cache-Control' => 'public, must-revalidate, no-cache, max-age=2592000',
+                    'Last-Modified' => $lastModified,
                     'ETag' => $etag,
-                    'Last-Modified' => $lastModified
+                    'Expires' => $expires
                 ]);
             }
         }
 
         return response(headers: [
-            'X-Sendfile' => storage_path(env('APP_MEDIA_PATH')) . $file,
-            'Cache-Control' => 'public, no-cache, must-revalidate, max-age=2592000',
+            'X-Sendfile' => storage_path() . '/' . env('APP_MEDIA_PATH') . $file,
+            'Cache-Control' => 'public, must-revalidate, no-cache, max-age=2592000',
             'Last-Modified' => $lastModified,
             'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => "attachment; filename=\"$fileName\"",
-            'ETag' => $etag
+            'ETag' => $etag,
+            'Expires' => $expires
         ]);
     })->where('file', '(.*)')->middleware('cache.media.headers');
 

@@ -39,17 +39,23 @@ RUN apt update && apt install -y --no-install-recommends \
 
 COPY . /var/www
 
+ARG UNAME=vodev
+ARG UID=1000
+RUN useradd -m -u $UID -o -s /bin/bash $UNAME && \
+usermod -a -G www-data $UNAME
+
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist && \
     npm install --dev && \
     npm run build && \
-    chown root:www-data -R . && \
+    chown $UNAME:www-data -R . && \
     find . -type f -exec chmod 640 {} + && \
     find . -type d -exec chmod 750 {} + && \
-    find storage -exec chmod 775 {} + && \
+    chmod 644 .env && \
+    find storage -type d -exec chmod 775 {} + && \
     find storage/* -type f -exec chmod 664 {} + && \
-    find bootstrap -exec chmod 755 {} + && \
-    find bootstrap/* -type f -exec chmod 644 {} + && \
-    find public -exec chmod 775 {} + && \
+    find bootstrap -type d -exec chmod 775 {} + && \
+    find bootstrap/* -type f -exec chmod 664 {} + && \
+    find public -type d -exec chmod 775 {} + && \
     find public/* -type f -exec chmod 664 {} +
 
 FROM build AS apache2
@@ -82,10 +88,10 @@ mkdir /etc/apache2/cert && \
 chown www-data:www-data /etc/apache2/cert && \
 chmod 750 /etc/apache2/cert
 
-USER www-data
-
 EXPOSE 4443
 
 ENTRYPOINT ["/usr/local/bin/prod.sh"]
+
+USER $UNAME
 
 CMD ["apachectl", "-D", "FOREGROUND"]
