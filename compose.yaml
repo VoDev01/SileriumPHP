@@ -19,7 +19,8 @@ services:
         condition: service_started
     user: "vodev:www-data"
     volumes:
-      - ./:/var/www/
+      - ./storage:/var/www/storage
+      - ./.env:/var/www/.env
       - ./docker/cert/silerium.crt:/etc/apache2/cert/silerium.crt
       - ./docker/cert/silerium.key:/etc/apache2/cert/silerium.key
       - ./docker/silerium.conf:/etc/apache2/sites-enabled/silerium.conf:ro

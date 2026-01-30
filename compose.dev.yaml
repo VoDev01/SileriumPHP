@@ -6,7 +6,7 @@ services:
     ports:
       - 8888:80
     healthcheck:
-      test: ["CMD", "curl", "-kf", "http://localhost"]
+      test: ["CMD", "curl", "-kf", "http://127.0.0.1"]
       interval: 60s
       timeout: 10s
       retries: 3
@@ -18,7 +18,11 @@ services:
         condition: service_started
     user: "vodev:www-data"
     volumes:
-      - ./:/var/www/
+      - ./app:/var/www/app
+      - ./resources:/var/www/resources
+      - ./routes:/var/www/routes
+      - ./storage:/var/www/storage
+      - ./database:/var/www/database
       - ./.env.development:/var/www/.env
       - ./docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./docker/silerium-dev.conf:/etc/apache2/sites-enabled/silerium-dev.conf:ro
@@ -87,7 +91,8 @@ services:
       retries: 3
       start_period: 40s
     environment:
-      - MYSQL_ROOT_PASSWORD=SAmsuNG123sileriumdb
+      - MYSQL_PASSWORD=SAmsuNG123sileriumdb
+      - MYSQL_USER=app
       - MYSQL_DATABASE=sileriumdb_development
       - LANG=C.UTF_8
     command: 

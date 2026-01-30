@@ -20,11 +20,13 @@ RUN apt update && apt install -y --no-install-recommends \
     libicu-dev \
     libzip-dev  && \
     install-php-extensions xdebug && \
-    composer install
+    composer install --dev
 
 COPY ./docker/silerium-dev.conf /etc/apache2/sites-available
+COPY ./docker/silerium_proxy.conf /etc/apache2/sites-available
 
 RUN a2dissite silerium && \
+    a2dissite 000-default && \
     a2ensite silerium-dev
 
 RUN /usr/local/bin/prod.sh && rm /usr/local/bin/prod.sh
