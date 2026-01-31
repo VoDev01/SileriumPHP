@@ -76,6 +76,7 @@ Route::withoutMiddleware('auth.refresh.token')->group(function ()
     Route::controller(PdfFormatterController::class)->prefix('format')->middleware(['auth', 'banned'])->group(function ()
     {
         Route::post('pdf', 'formatPDF')->name('format.pdf');
+        Route::post('pdf/cache-pdf-data', "cachePDFData");
     });
 
     Route::fallback(FallbackController::class);

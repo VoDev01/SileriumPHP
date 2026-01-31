@@ -60,13 +60,9 @@
                     </tbody>
                 </table>
             </div>
-            <form action="/format/pdf" method="POST" id="submitForm">
+            <form action="/format/pdf" method="POST" id="formatForm">
                 @csrf
-                <input hidden type="text" name="pageHtml" id="pageHtml" />
-                <input hidden type="text" name="tableHtml" id="tableHtml" />
-                <input hidden type="text" name="tableRowHtml" id="tableRowHtml" />
-                <input hidden type="text" name="insertAfterElement" id="insertAfterElement" />
-                <input hidden name="data[]" id="data" />
+                <input type="hidden" name="cacheKey" id="cacheKey" />
                 <button type="submit" id="formatButton" class="btn btn-primary">
                     Форматировать
                 </button>
@@ -74,5 +70,5 @@
             </form>
         @endif
     @endif
-    @vite(['resources/js/prepare-page-for-pdf-formatting.js', 'resources/js/hide-datepicker.js'])
+    @vite(['resources/js/prepare-page-for-pdf-formatting.js'])
 </x-seller-layout>

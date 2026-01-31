@@ -21,7 +21,7 @@ class SellerOrdersController extends Controller
     {
         try
         {
-            $orders = SearchFormPaginateResponseService::paginateRelations($request, 'products', 'orders', 15);
+            $orders = SearchFormPaginateResponseService::paginateRelations('products', 'orders', $request->page ?? 1, 15);
 
             if (Cache::get('products') == null)
             {

@@ -11,12 +11,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Payment\SearchPaymentsRequest;
+use App\Services\SearchForms\PaymentSearchFormService;
+use App\Services\SearchForms\ProductSearchFormService;
 use App\Services\SearchForms\FormInputData\SearchFormInput;
 use App\Http\Requests\API\Products\APIProductsSearchRequest;
+use App\Services\SearchForms\SearchFormPaginateResponseService;
 use App\Services\SearchForms\FormInputData\SearchFormQueryInput;
 use App\Services\SearchForms\FormInputData\SearchFormHiddenInput;
-use App\Services\SearchFormsForms\PaymentSearchFormService;
-use App\Services\SearchFormsForms\SearchFormPaginateResponseService;
 
 class SellerAccountingReportsController extends Controller
 {
@@ -26,7 +27,7 @@ class SellerAccountingReportsController extends Controller
     }
     public function paymentsReport(Request $request)
     {
-        $payments = SearchFormPaginateResponseService::paginate('payments', $request->page, 15) ?? Payment::with(['order', 'order.user'])->paginate(15); 
+        $payments = SearchFormPaginateResponseService::paginate('payments', $request->page ?? 1, 15) ?? Payment::with(['order', 'order.user'])->paginate(15); 
         $inputs = [
             new SearchFormInput('name', 'Имя заказчика', 'name', true),
             new SearchFormInput('surname', 'Фамилия заказчика', 'surname', true)
@@ -36,7 +37,7 @@ class SellerAccountingReportsController extends Controller
     }
     public function productsReports(Request $request)
     {
-        $products = SearchFormPaginateResponseService::paginate('products', $request->page, 15); 
+        $products = SearchFormPaginateResponseService::paginate('products', $request->page ?? 1, 15); 
 
         $currnetPage = isset($products) ? $products->currentPage() : null;
         $totalPages = isset($products) ? $products->lastPage() : null;
@@ -47,7 +48,7 @@ class SellerAccountingReportsController extends Controller
         $hiddenInputs = [
             new SearchFormHiddenInput('sellerId', 'sellerId', Seller::where('user_id', Auth::id())->get(['id'])->first()->id)
         ];
-        $queryInputs = new SearchFormQueryInput('/seller/accounting_reports/products/search', 'seller.accounting_reports.products');
+        $queryInputs = new SearchFormQueryInput('/seller/accounting_reports/products/search', 'seller.products');
 
         return view('seller.accounting_reports.products', [
             'inputs' => $inputs,
@@ -128,7 +129,7 @@ class SellerAccountingReportsController extends Controller
         if (!array_key_exists('loadWith', $validated))
             $validated['loadWith'] = null;
 
-        return (new PaymentSearchFormService)->search($validated);
+        return (new ProductSearchFormService)->search($validated, redirect: "/seller/accounting_reports/products");
     }
     public function searchPayments(SearchPaymentsRequest $request)
     {

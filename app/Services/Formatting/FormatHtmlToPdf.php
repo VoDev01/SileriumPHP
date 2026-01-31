@@ -35,25 +35,21 @@ class FormatHtmlToPdf
             $elementPart = array_slice($data, $i * $itemsAtPage, $itemsAtPage);
             //Setup initial html
             $finalPage[$i] = $htmlTablePerPage;
-            foreach ($elementPart as $element)
-            {
-                //Cast array to object
-                $element = (object) $element;
 
-                //Insert tr after tbody if there isn't any, or after the last tr
-                $insertAt = strrpos($finalPage[$i], '<tbody>') + strlen('<tbody>');
-                if(preg_match_all('/<tr>\s*?<td>\X*?<\/td>\s*?<\/tr>/mu', $finalPage[$i]))
-                    $insertAt = strrpos($finalPage[$i], '</tr>') + strlen('</tr>');
+            //Insert tr after tbody if there isn't any, or after the last tr
+            $insertAt = strrpos($finalPage[$i], '<tbody>') + strlen('<tbody>');
+            if (preg_match_all('/<tr>\s*?<td>\X*?<\/td>\s*?<\/tr>/mu', $finalPage[$i]))
+                $insertAt = strrpos($finalPage[$i], '</tr>') + strlen('</tr>');
 
-                //Hydrate td's with data
-                $finalPage[$i] = substr_replace($finalPage[$i], self::hydrateTableRow($htmlTableRow, $element), $insertAt, 0);
-            }
-            if(count($data) < $itemsAtPage)
+            //Hydrate td's with data
+            $finalPage[$i] = substr_replace($finalPage[$i], self::hydrateTableRow($htmlTableRow, $elementPart), $insertAt, 0);
+
+            if (count($data) < $itemsAtPage)
                 break;
         }
 
-        $finalPage = substr_replace($originalHtml, implode("\n", $finalPage), strpos($originalHtml, $insertPagesAfterHtmlElement) 
-        + strlen($insertPagesAfterHtmlElement), 0);
+        $finalPage = substr_replace($originalHtml, implode("\n", $finalPage), strpos($originalHtml, $insertPagesAfterHtmlElement)
+            + strlen($insertPagesAfterHtmlElement), 0);
 
         $pdf = Pdf::loadHTML($finalPage);
         $pdf->setOptions(['dpi' => 125], true);
@@ -67,12 +63,12 @@ class FormatHtmlToPdf
      * Injects data in td elements of the table rows
      *
      * @param string $html Row html with empty td elements
-     * @param object $data Data to hydrate with
+     * @param array $data Data to hydrate with
      * @return string
      */
-    private static function hydrateTableRow(string $html, object $data): string
-    {       
-        foreach($data as $dataVal)
+    private static function hydrateTableRow(string $html, array $data): string
+    {
+        foreach ($data as $dataVal)
         {
             $html = preg_replace("/<td><\/td>/", "<td>$dataVal</td>", $html, 1);
         }

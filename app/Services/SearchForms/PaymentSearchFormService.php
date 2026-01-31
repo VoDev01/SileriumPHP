@@ -25,8 +25,7 @@ class PaymentSearchFormService extends SearchFormBase implements SearchFormInter
         o.address FROM payments as p 
         INNER JOIN orders as o ON p.order_id = o.ulid
         INNER JOIN users as u ON o.user_id = u.id
-        WHERE u.email LIKE ? OR u.ulid = ?', [
-            '%' . $validated['email'] . '%',
+        WHERE u.ulid LIKE ?', [
             $validated['id']
         ]);
 

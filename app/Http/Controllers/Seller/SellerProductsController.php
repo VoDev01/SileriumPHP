@@ -22,7 +22,7 @@ class SellerProductsController extends Controller
     public function list(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-        $products = SearchFormPaginateResponseService::paginate('products',  $request->page, 15); 
+        $products = SearchFormPaginateResponseService::paginate('products',  $request->page ?? 1, 15); 
         if ($products == null)
             $products = Product::paginate(15);
         $inputs = [

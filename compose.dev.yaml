@@ -19,19 +19,25 @@ services:
     user: "vodev:www-data"
     volumes:
       - ./app:/var/www/app
-      - ./resources:/var/www/resources
       - ./routes:/var/www/routes
       - ./storage:/var/www/storage
       - ./database:/var/www/database
       - ./.env.development:/var/www/.env
+      - ./public:/var/www/public
       - ./docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./docker/silerium-dev.conf:/etc/apache2/sites-enabled/silerium-dev.conf:ro
       - ./docker/mysql_custom.cnf:/etc/mysql/conf.d/mysql_custom.cnf:ro
+    develop:
+      watch:
+        - action: sync+exec
+          path: ./resources
+          target: /var/www/resources
+          exec:
+            command: npm run build
+          initial_sync: true
     networks:
       - backend-dev
       - cache-dev
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
   dbgate:
     image: dbgate/dbgate
     restart: unless-stopped
@@ -49,12 +55,12 @@ services:
       LABEL_mysql: MySql
       SERVER_mysql: db
       DATABASE_mysql: sileriumdb_development
-      USER_mysql: app
+      USER_mysql: root
       PASSWORD_mysql: SAmsuNG123sileriumdb
       PORT_mysql: 3306
       ENGINE_mysql: mysql@dbgate-plugin-mysql
 
-      LOGIN: app
+      LOGIN: root
       PASSWORD: SAmsuNG123sileriumdb
       LOGIN_PERMISSIONS_app: "*"
 
