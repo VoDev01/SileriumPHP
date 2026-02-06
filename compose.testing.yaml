@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: docker/development/Dockerfile
+    entrypoint: /usr/local/bin/test.sh
+    command: ./vendor/bin/phpunit --coverage-html tests/reports/coverage
     ports:
       - 8080:80
     healthcheck:
@@ -17,11 +19,17 @@ services:
       cache:
         condition: service_started
     volumes:
-      - ./:/var/www/
+      - ./app:/var/www/app
+      - ./routes:/var/www/routes
+      - ./storage:/var/www/storage
+      - ./database:/var/www/database
       - ./.env.testing:/var/www/.env
       - ./docker/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/silerium-dev.conf:/etc/apache2/sites-enabled/silerium-dev.conf:ro
       - ./docker/mysql_custom.cnf:/etc/mysql/conf.d/mysql_custom.cnf:ro
+      - ./phpunit.xml:/var/www/phpunit.xml
+      - ./phpunit.xml.dist:/var/www/phpunit.xml.dist
+      - ./tests:/var/www/tests
     networks:
       - backend-testing
       - cache-testing
@@ -85,6 +93,7 @@ services:
       start_period: 40s
     environment:
       - MYSQL_ROOT_PASSWORD=SAmsuNG123sileriumdb
+      - MYSQL_USER=app
       - MYSQL_DATABASE=sileriumdb_testing
       - LANG=C.UTF_8
     command: 
@@ -102,7 +111,7 @@ services:
       - --threads=4
       - --memory-limit=4096
     networks:
-      - cache
+      - cache-testing
 networks:
   backend-testing:
   cache-testing:

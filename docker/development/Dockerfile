@@ -20,7 +20,7 @@ RUN apt update && apt install -y --no-install-recommends \
     libicu-dev \
     libzip-dev  && \
     install-php-extensions xdebug && \
-    composer install --dev
+    composer install
 
 COPY ./docker/silerium-dev.conf /etc/apache2/sites-available
 COPY ./docker/silerium_proxy.conf /etc/apache2/sites-available
@@ -32,7 +32,9 @@ RUN a2dissite silerium && \
 RUN /usr/local/bin/prod.sh && rm /usr/local/bin/prod.sh
 
 COPY ./docker/entrypoints/dev.sh /usr/local/bin
-RUN chmod 775 /usr/local/bin/dev.sh
+COPY ./docker/entrypoints/test.sh /usr/local/bin
+RUN chmod 775 /usr/local/bin/dev.sh && \
+chmod 775 /usr/local/bin/test.sh
 
 EXPOSE 8080
 

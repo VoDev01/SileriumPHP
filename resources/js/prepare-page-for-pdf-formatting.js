@@ -41,6 +41,7 @@ $('#formatButton').on('click', async function (e) {
     e.preventDefault();
     let html = prepareHtml();
     let table = document.getElementsByTagName("table")[0];
+    let tmpTable = table;
     let rows = $(table).children("tbody").children("tr").children("td").get();
     let data = extractDataFromRows(rows);
     let rowsHtml = new Array();
@@ -65,6 +66,8 @@ $('#formatButton').on('click', async function (e) {
         },
         body: JSON.stringify(htmlData)
     });
+
+    table = tmpTable;
 
     if (response.ok) {
         const responseData = await response.json();
